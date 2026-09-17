@@ -388,7 +388,7 @@
     </div>
   </header>
 
-  <div class="search-float">
+  <div class="search-float" id="searchFloat">
     <span style="font-size:15px; color:var(--muted);">🔍</span>
     <input id="searchInput" type="text" placeholder="دور على دواء أو منتج..." oninput="handleSearch()">
   </div>
@@ -706,6 +706,8 @@
     if(navBtn) navBtn.classList.add('active');
     const bottomNav = document.querySelector('nav.bottom');
     bottomNav.style.display = (tab === 'productDetail') ? 'none' : 'flex';
+    const searchFloat = document.getElementById('searchFloat');
+    searchFloat.style.display = (tab === 'home' || tab === 'categories') ? 'flex' : 'none';
     window.scrollTo(0,0);
   }
 
