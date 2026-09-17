@@ -793,7 +793,7 @@
     const searchFloat = document.getElementById('searchFloat');
     searchFloat.style.display = (tab === 'home' || tab === 'categories') ? 'flex' : 'none';
     const topHeader = document.getElementById('topHeader');
-    topHeader.style.display = (tab === 'account') ? 'none' : '';
+    topHeader.style.display = (tab === 'account' || tab === 'categoryPage') ? 'none' : '';
     window.scrollTo(0,0);
   }
 
