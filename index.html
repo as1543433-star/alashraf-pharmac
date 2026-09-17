@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <style>
   :root{
     --navy: #16324F;
@@ -195,10 +196,10 @@
     width:100%; height:78px; border-radius:11px; margin-bottom:10px;
     display:flex; align-items:center; justify-content:center; font-size:28px;
   }
-  .prod.a .img{ background:var(--chip-a-bg); }
-  .prod.b .img{ background:var(--chip-b-bg); }
-  .prod.c .img{ background:var(--chip-c-bg); }
-  .prod.d .img{ background:var(--chip-d-bg); }
+  .prod.a .img{ background:var(--chip-a-bg); color:var(--chip-a-ink); }
+  .prod.b .img{ background:var(--chip-b-bg); color:var(--chip-b-ink); }
+  .prod.c .img{ background:var(--chip-c-bg); color:var(--chip-c-ink); }
+  .prod.d .img{ background:var(--chip-d-bg); color:var(--chip-d-ink); }
   .prod .name{ font-size:13px; font-weight:500; margin:0 0 2px; }
   .prod .cat{ font-size:11px; color:var(--muted); margin:0 0 8px; }
   .prod .row{ display:flex; align-items:center; justify-content:space-between; }
@@ -352,11 +353,11 @@
   <header class="top">
     <div class="top-row">
       <div class="brand-mark">
-        <div class="logo">💊</div>
+        <div class="logo"><i class="ti ti-vaccine-bottle" style="font-size:19px; color:#fff;"></i></div>
         <div class="name brand">صيدلية الأشرف<span>رعايتك أولويتنا</span></div>
       </div>
       <div class="bell-wrap" onclick="alert('لا توجد إشعارات جديدة')">
-        <span style="font-size:20px;">🔔</span>
+        <i class="ti ti-bell" style="font-size:20px; color:#fff;"></i>
         <span class="dot"></span>
       </div>
     </div>
@@ -379,22 +380,22 @@
           <p>خصم 20% على الفيتامينات</p>
           <p>لحد آخر الشهر</p>
         </div>
-        <div class="ic">💊</div>
+        <div class="ic"><i class="ti ti-pill"></i></div>
       </div>
 
       <h2 class="section-title">الأقسام</h2>
       <div class="chips">
         <div class="chip d selected" onclick="filterCategory('أدوية', this)">
-          <div class="ic">💊</div><p>أدوية</p>
+          <div class="ic"><i class="ti ti-pill"></i></div><p>أدوية</p>
         </div>
         <div class="chip b" onclick="filterCategory('فيتامينات', this)">
-          <div class="ic">❤️</div><p>فيتامينات</p>
+          <div class="ic"><i class="ti ti-heart"></i></div><p>فيتامينات</p>
         </div>
         <div class="chip c" onclick="filterCategory('أطفال', this)">
-          <div class="ic">🍼</div><p>أطفال</p>
+          <div class="ic"><i class="ti ti-baby-carriage"></i></div><p>أطفال</p>
         </div>
         <div class="chip a" onclick="filterCategory('الكل', this)">
-          <div class="ic">⋯</div><p>الكل</p>
+          <div class="ic"><i class="ti ti-apps"></i></div><p>الكل</p>
         </div>
       </div>
 
@@ -407,19 +408,19 @@
       <h2 class="section-title">كل الأقسام</h2>
       <div class="cat-grid">
         <div class="cat-card" onclick="goToHomeFiltered('أدوية')">
-          <div class="ic" style="background:var(--chip-d-bg); color:var(--chip-d-ink);">💊</div>
+          <div class="ic" style="background:var(--chip-d-bg); color:var(--chip-d-ink);"><i class="ti ti-pill"></i></div>
           <p>أدوية</p>
         </div>
         <div class="cat-card" onclick="goToHomeFiltered('فيتامينات')">
-          <div class="ic" style="background:var(--chip-b-bg); color:var(--chip-b-ink);">❤️</div>
+          <div class="ic" style="background:var(--chip-b-bg); color:var(--chip-b-ink);"><i class="ti ti-heart"></i></div>
           <p>فيتامينات</p>
         </div>
         <div class="cat-card" onclick="goToHomeFiltered('أطفال')">
-          <div class="ic" style="background:var(--chip-c-bg); color:var(--chip-c-ink);">🍼</div>
+          <div class="ic" style="background:var(--chip-c-bg); color:var(--chip-c-ink);"><i class="ti ti-baby-carriage"></i></div>
           <p>أطفال</p>
         </div>
         <div class="cat-card" onclick="goToHomeFiltered('العناية')">
-          <div class="ic" style="background:var(--chip-a-bg); color:var(--chip-a-ink);">🧴</div>
+          <div class="ic" style="background:var(--chip-a-bg); color:var(--chip-a-ink);"><i class="ti ti-spray"></i></div>
           <p>العناية والجمال</p>
         </div>
       </div>
@@ -429,7 +430,7 @@
       <h2 class="section-title">عربة التسوق</h2>
       <div id="cartItems"></div>
       <div id="cartEmpty" class="empty-state" style="display:none;">
-        <div class="big">🛒</div>
+        <div class="big"><i class="ti ti-shopping-cart-off"></i></div>
         <p>العربة فاضية دلوقتي</p>
       </div>
       <div id="cartSummary" class="cart-summary" style="display:none;">
@@ -471,16 +472,16 @@
 
     <section id="account">
       <div class="acc-card">
-        <div class="avatar">👤</div>
+        <div class="avatar"><i class="ti ti-user"></i></div>
         <h3>أحمد محمد</h3>
         <p>ahmed.mohamed@email.com</p>
       </div>
       <div class="acc-list">
-        <div class="acc-row"><div class="ic">📦</div> طلباتي</div>
-        <div class="acc-row"><div class="ic">📍</div> العناوين المحفوظة</div>
-        <div class="acc-row"><div class="ic">💳</div> وسائل الدفع</div>
-        <div class="acc-row"><div class="ic">⚙️</div> الإعدادات</div>
-        <div class="acc-row"><div class="ic">🚪</div> تسجيل الخروج</div>
+        <div class="acc-row"><div class="ic"><i class="ti ti-package"></i></div> طلباتي</div>
+        <div class="acc-row"><div class="ic"><i class="ti ti-map-pin"></i></div> العناوين المحفوظة</div>
+        <div class="acc-row"><div class="ic"><i class="ti ti-credit-card"></i></div> وسائل الدفع</div>
+        <div class="acc-row"><div class="ic"><i class="ti ti-settings"></i></div> الإعدادات</div>
+        <div class="acc-row"><div class="ic"><i class="ti ti-logout"></i></div> تسجيل الخروج</div>
       </div>
     </section>
 
@@ -488,39 +489,40 @@
 
   <nav class="bottom">
     <button class="navbtn active" data-tab="home" onclick="switchTab('home')">
-      <span class="ic">🏠</span>الرئيسية
+      <span class="ic"><i class="ti ti-home"></i></span>الرئيسية
     </button>
     <button class="navbtn" data-tab="categories" onclick="switchTab('categories')">
-      <span class="ic">▦</span>الأقسام
+      <span class="ic"><i class="ti ti-layout-grid"></i></span>الأقسام
     </button>
     <button class="navbtn" data-tab="cart" onclick="switchTab('cart')">
-      <span class="ic">🛒</span>السلة
+      <span class="ic"><i class="ti ti-shopping-cart"></i></span>السلة
       <span class="badge" id="cartBadge" style="display:none;">0</span>
     </button>
     <button class="navbtn" data-tab="account" onclick="switchTab('account')">
-      <span class="ic">👤</span>حسابي
+      <span class="ic"><i class="ti ti-user"></i></span>حسابي
     </button>
   </nav>
+
 </div>
 
 <script>
   const products = [
-    { id:1, name:'فيتامين سي 1000mg', cat:'فيتامينات', price:45, emoji:'🧪', cls:'b',
+    { id:1, name:'فيتامين سي 1000mg', cat:'فيتامينات', price:45, icon:'flask', cls:'b',
       desc:'مكمل غذائي يحتوي على فيتامين سي بتركيز عالي، بيساعد على تقوية جهاز المناعة والحماية من نزلات البرد.',
       usage:'قرص واحد يومياً بعد الأكل، أو حسب إرشادات الصيدلي.' },
-    { id:2, name:'مسكن ألم بنادول', cat:'أدوية', price:18, emoji:'💊', cls:'d',
+    { id:2, name:'مسكن ألم بنادول', cat:'أدوية', price:18, icon:'pill', cls:'d',
       desc:'مسكن سريع المفعول لآلام الرأس والعضلات وخفض الحرارة الخفيفة.',
       usage:'قرص إلى قرصين كل 6 ساعات، بحد أقصى 8 أقراص يومياً للبالغين.' },
-    { id:3, name:'حليب أطفال نان 1', cat:'أطفال', price:210, emoji:'🍼', cls:'c',
+    { id:3, name:'حليب أطفال نان 1', cat:'أطفال', price:210, icon:'bottle', cls:'c',
       desc:'حليب صناعي متكامل للرضع من الولادة وحتى 6 شهور، مدعّم بالفيتامينات والمعادن الأساسية.',
       usage:'حسب الجدول الموضح على العلبة وعمر الطفل، أو حسب إرشادات طبيب الأطفال.' },
-    { id:4, name:'أوميجا 3 كبسولات', cat:'فيتامينات', price:120, emoji:'🐟', cls:'b',
+    { id:4, name:'أوميجا 3 كبسولات', cat:'فيتامينات', price:120, icon:'fish', cls:'b',
       desc:'كبسولات زيت سمك غنية بالأوميجا 3، بتدعم صحة القلب والدماغ.',
       usage:'كبسولة واحدة يومياً مع الوجبات.' },
-    { id:5, name:'شراب كحة للأطفال', cat:'أطفال', price:32, emoji:'🧴', cls:'c',
+    { id:5, name:'شراب كحة للأطفال', cat:'أطفال', price:32, icon:'droplet', cls:'c',
       desc:'شراب لطيف لتهدئة الكحة والحلق عند الأطفال، بمذاق مقبول للصغار.',
       usage:'حسب عمر ووزن الطفل، يرجى مراجعة النشرة الداخلية أو استشارة الطبيب.' },
-    { id:6, name:'خافض حرارة', cat:'أدوية', price:15, emoji:'🌡️', cls:'d',
+    { id:6, name:'خافض حرارة', cat:'أدوية', price:15, icon:'thermometer', cls:'d',
       desc:'خافض حرارة ومسكن آلام خفيفة إلى متوسطة، مناسب للبالغين والأطفال حسب التركيز.',
       usage:'حسب العمر والوزن، لا يتجاوز الجرعة الموصى بها في النشرة.' },
   ];
@@ -541,7 +543,7 @@
     document.getElementById('noResults').style.display = list.length ? 'none' : 'block';
     grid.innerHTML = list.map(p => `
       <div class="prod ${p.cls}">
-        <div class="img" onclick="openProduct(${p.id})">${p.emoji}</div>
+        <div class="img" onclick="openProduct(${p.id})"><i class="ti ti-${p.icon}"></i></div>
         <p class="name" onclick="openProduct(${p.id})">${p.name}</p>
         <p class="cat">${p.cat}</p>
         <div class="row">
@@ -560,7 +562,8 @@
     pdQty = 1;
     const p = products.find(x => x.id === id);
     document.getElementById('pdHero').style.background = `var(--chip-${p.cls}-bg)`;
-    document.getElementById('pdHero').textContent = p.emoji;
+    document.getElementById('pdHero').style.color = `var(--chip-${p.cls}-ink)`;
+    document.getElementById('pdHero').innerHTML = `<i class="ti ti-${p.icon}"></i>`;
     document.getElementById('pdCat').textContent = p.cat;
     document.getElementById('pdName').textContent = p.name;
     document.getElementById('pdPrice').textContent = p.price + ' ج.م';
@@ -570,7 +573,7 @@
     const related = products.filter(x => x.cat === p.cat && x.id !== p.id);
     document.getElementById('pdRelated').innerHTML = related.map(r => `
       <div class="rel-card" onclick="openProduct(${r.id})">
-        <div class="img" style="background:var(--chip-${r.cls}-bg);">${r.emoji}</div>
+        <div class="img" style="background:var(--chip-${r.cls}-bg); color:var(--chip-${r.cls}-ink);"><i class="ti ti-${r.icon}"></i></div>
         <p>${r.name}</p>
         <p class="p">${r.price} ج.م</p>
       </div>
@@ -650,7 +653,7 @@
       subtotal += p.price * qty;
       return `
         <div class="cart-item">
-          <div class="img" style="background:var(--chip-${p.cls}-bg);" onclick="openProduct(${p.id})">${p.emoji}</div>
+          <div class="img" style="background:var(--chip-${p.cls}-bg); color:var(--chip-${p.cls}-ink);" onclick="openProduct(${p.id})"><i class="ti ti-${p.icon}"></i></div>
           <div class="info" onclick="openProduct(${p.id})">
             <p>${p.name}</p>
             <p>${p.price} ج.م</p>
