@@ -300,15 +300,29 @@
   .pd-hero{
     width:100%; height:180px; border-radius:18px; margin-bottom:16px;
     display:flex; align-items:center; justify-content:center; font-size:64px;
+    position:relative;
   }
-  .pd-cat{ margin:0 0 4px; font-size:12px; color:var(--muted); }
+  .pd-tag{
+    position:absolute; top:14px; left:14px;
+    background:var(--card); color:var(--ink);
+    font-size:11px; font-weight:500;
+    padding:6px 14px; border-radius:20px;
+    box-shadow: var(--shadow);
+  }
   .pd-name{ margin:0 0 10px; font-size:19px; font-weight:700; }
   .pd-price-row{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
   .pd-price{ font-size:20px; font-weight:800; color:var(--navy); font-family:'Cairo'; }
-  .pd-stock{ font-size:11px; background:var(--success-bg); color:var(--success-ink); padding:4px 10px; border-radius:20px; font-weight:500; }
+  .pd-stock{ font-size:11px; background:var(--success-bg); color:var(--success-ink); padding:4px 10px; border-radius:20px; font-weight:500; display:inline-flex; align-items:center; gap:4px; }
   .pd-divider{ height:1px; background:var(--line); margin:16px 0; }
   .pd-sub{ font-size:14px; font-weight:700; margin:0 0 8px; }
   .pd-desc{ font-size:13px; line-height:1.9; color:var(--muted); margin:0 0 4px; }
+  .pd-usage-box{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:14px 16px; margin-top:10px;
+  }
+  .pd-usage-box .pd-sub{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+  .pd-usage-box .pd-sub i{ color:var(--success-ink); font-size:16px; }
+  .pd-usage-box .pd-desc{ margin:0; }
   .pd-related{ display:flex; gap:10px; overflow-x:auto; padding-bottom:80px; scrollbar-width:none; }
   .pd-related::-webkit-scrollbar{ display:none; }
   .pd-related .rel-card{
@@ -328,8 +342,9 @@
   .pd-qty{ background:var(--cream); border-radius:12px; padding:8px 12px; }
   .pd-qty button{ background:var(--card); }
   .pd-add-btn{
-    flex:1; border:none; border-radius:12px; padding:13px; background:var(--gold);
+    flex:1; border:none; border-radius:12px; padding:13px; background:var(--success-ink);
     color:#fff; font-family:'Tajawal'; font-weight:700; font-size:14px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:8px;
   }
   #productDetail{ padding-bottom:70px; }
 
@@ -442,19 +457,22 @@
 
     <section id="productDetail">
       <button class="back-btn" onclick="switchTab('home')">→ رجوع</button>
-      <div class="pd-hero" id="pdHero"></div>
+      <div class="pd-hero" id="pdHero">
+        <span class="pd-tag" id="pdTag"></span>
+      </div>
       <div class="pd-body">
-        <p class="pd-cat" id="pdCat"></p>
         <h2 class="pd-name" id="pdName"></h2>
         <div class="pd-price-row">
           <span class="pd-price" id="pdPrice"></span>
-          <span class="pd-stock">متوفر بالمخزون</span>
+          <span class="pd-stock"><i class="ti ti-check"></i>متوفر بالمخزون</span>
         </div>
         <div class="pd-divider"></div>
         <h3 class="pd-sub">الوصف</h3>
         <p class="pd-desc" id="pdDesc"></p>
-        <h3 class="pd-sub">الجرعة والاستخدام</h3>
-        <p class="pd-desc" id="pdUsage"></p>
+        <div class="pd-usage-box">
+          <h3 class="pd-sub">الجرعة والاستخدام<i class="ti ti-clock"></i></h3>
+          <p class="pd-desc" id="pdUsage"></p>
+        </div>
         <div class="pd-divider"></div>
         <h3 class="pd-sub">منتجات مشابهة</h3>
         <div class="pd-related" id="pdRelated"></div>
@@ -465,7 +483,7 @@
           <span id="pdQty">1</span>
           <button onclick="pdChangeQty(-1)">−</button>
         </div>
-        <button class="pd-add-btn" onclick="pdAddToCart()">إضافة للعربة</button>
+        <button class="pd-add-btn" onclick="pdAddToCart()"><i class="ti ti-shopping-cart"></i>إضافة للعربة</button>
       </div>
     </section>
 
@@ -562,8 +580,7 @@
     const p = products.find(x => x.id === id);
     document.getElementById('pdHero').style.background = `var(--chip-${p.cls}-bg)`;
     document.getElementById('pdHero').style.color = `var(--chip-${p.cls}-ink)`;
-    document.getElementById('pdHero').innerHTML = `<i class="ti ti-${p.icon}"></i>`;
-    document.getElementById('pdCat').textContent = p.cat;
+    document.getElementById('pdHero').innerHTML = `<span class="pd-tag" id="pdTag">${p.cat}</span><i class="ti ti-${p.icon}"></i>`;
     document.getElementById('pdName').textContent = p.name;
     document.getElementById('pdPrice').textContent = p.price + ' ج.م';
     document.getElementById('pdDesc').textContent = p.desc;
@@ -591,9 +608,9 @@
     renderCart();
     renderProducts();
     const btn = document.querySelector('.pd-add-btn');
-    const original = btn.textContent;
-    btn.textContent = 'تمت الإضافة ✓';
-    setTimeout(() => { btn.textContent = original; }, 900);
+    const original = btn.innerHTML;
+    btn.innerHTML = 'تمت الإضافة <i class="ti ti-check"></i>';
+    setTimeout(() => { btn.innerHTML = original; }, 900);
   }
 
   function filterCategory(cat, el){
