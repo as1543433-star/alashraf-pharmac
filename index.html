@@ -462,35 +462,42 @@
     <section id="categories">
       <h2 class="section-title">كل الأقسام</h2>
       <div class="cat-grid">
-        <div class="cat-card" onclick="goToHomeFiltered('أدوية')">
+        <div class="cat-card" onclick="openCategory('أدوية')">
           <div class="ic" style="background:var(--chip-d-bg); color:var(--chip-d-ink);"><i class="ti ti-pill"></i></div>
           <p>أدوية</p>
         </div>
-        <div class="cat-card" onclick="goToHomeFiltered('فيتامينات')">
+        <div class="cat-card" onclick="openCategory('فيتامينات')">
           <div class="ic" style="background:var(--chip-b-bg); color:var(--chip-b-ink);"><i class="ti ti-heart"></i></div>
           <p>فيتامينات</p>
         </div>
-        <div class="cat-card" onclick="goToHomeFiltered('أطفال')">
+        <div class="cat-card" onclick="openCategory('أطفال')">
           <div class="ic" style="background:var(--chip-c-bg); color:var(--chip-c-ink);"><i class="ti ti-baby-carriage"></i></div>
           <p>أطفال</p>
         </div>
-        <div class="cat-card" onclick="goToHomeFiltered('العناية')">
+        <div class="cat-card" onclick="openCategory('العناية')">
           <div class="ic" style="background:var(--chip-a-bg); color:var(--chip-a-ink);"><i class="ti ti-spray"></i></div>
           <p>العناية والجمال</p>
         </div>
-        <div class="cat-card" onclick="goToHomeFiltered('إسعافات أولية')">
+        <div class="cat-card" onclick="openCategory('إسعافات أولية')">
           <div class="ic" style="background:var(--chip-e-bg); color:var(--chip-e-ink);"><i class="ti ti-first-aid-kit"></i></div>
           <p>إسعافات أولية</p>
         </div>
-        <div class="cat-card" onclick="goToHomeFiltered('العناية الشخصية')">
+        <div class="cat-card" onclick="openCategory('العناية الشخصية')">
           <div class="ic" style="background:var(--chip-f-bg); color:var(--chip-f-ink); font-size:22px;">🙂</div>
           <p>العناية الشخصية</p>
         </div>
-        <div class="cat-card" onclick="goToHomeFiltered('الأم والحمل')">
+        <div class="cat-card" onclick="openCategory('الأم والحمل')">
           <div class="ic" style="background:var(--chip-g-bg); color:var(--chip-g-ink); font-size:22px;">🤰</div>
           <p>الأم والحمل</p>
         </div>
       </div>
+    </section>
+
+    <section id="categoryPage">
+      <button class="back-btn" onclick="switchTab('categories')">→ رجوع</button>
+      <h2 class="section-title" id="categoryPageTitle" style="font-size:18px; text-align:center; margin-bottom:16px;"></h2>
+      <div class="grid" id="categoryGrid"></div>
+      <p class="no-results" id="categoryNoResults" style="display:none;">لا توجد منتجات في هذا القسم حالياً</p>
     </section>
 
     <section id="cart">
@@ -624,6 +631,20 @@
   let cart = {};
   let currentCategory = 'أدوية';
 
+  function buildProductCards(list){
+    return list.map(p => `
+      <div class="prod ${p.cls}">
+        <div class="img" onclick="openProduct(${p.id})"><i class="ti ti-${p.icon}"></i></div>
+        <p class="name" onclick="openProduct(${p.id})">${p.name}</p>
+        <p class="cat">${p.cat}</p>
+        <div class="row">
+          <span class="price">${p.price} ج.م</span>
+          <button class="addbtn" onclick="addToCart(${p.id}, this)">${cart[p.id] ? '✓' : '+'}</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
   function renderProducts(){
     const grid = document.getElementById('productGrid');
     const term = document.getElementById('searchInput').value.trim();
@@ -635,17 +656,15 @@
       list = list.filter(p => p.name.includes(term));
     }
     document.getElementById('noResults').style.display = list.length ? 'none' : 'block';
-    grid.innerHTML = list.map(p => `
-      <div class="prod ${p.cls}">
-        <div class="img" onclick="openProduct(${p.id})"><i class="ti ti-${p.icon}"></i></div>
-        <p class="name" onclick="openProduct(${p.id})">${p.name}</p>
-        <p class="cat">${p.cat}</p>
-        <div class="row">
-          <span class="price">${p.price} ج.م</span>
-          <button class="addbtn" onclick="addToCart(${p.id}, this)">${cart[p.id] ? '✓' : '+'}</button>
-        </div>
-      </div>
-    `).join('');
+    grid.innerHTML = buildProductCards(list);
+  }
+
+  function openCategory(cat){
+    document.getElementById('categoryPageTitle').textContent = cat;
+    const list = products.filter(p => p.cat === cat);
+    document.getElementById('categoryNoResults').style.display = list.length ? 'none' : 'block';
+    document.getElementById('categoryGrid').innerHTML = buildProductCards(list);
+    switchTab('categoryPage');
   }
 
   let pdCurrentId = null;
