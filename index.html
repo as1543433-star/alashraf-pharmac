@@ -71,7 +71,12 @@
     --navdock-border: rgba(255,255,255,0.08);
   }
 
-  *{box-sizing:border-box;}
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+  button, .chip, .prod .img, .prod .name, .cart-item .img, .cart-item .info, .cat-card, .acc-row, .rel-card, .bell-wrap{
+    outline:none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  button:focus{ outline:none; }
   html,body{margin:0;padding:0;}
   body{
     background: var(--cream);
