@@ -27,6 +27,9 @@
     --chip-b-bg: #FBF1E4; --chip-b-ink: #A8721E;
     --chip-c-bg: #FCEFEF; --chip-c-ink: #B2453A;
     --chip-d-bg: #EDF6F1; --chip-d-ink: #2F7D57;
+    --chip-e-bg: #FDEFE0; --chip-e-ink: #C1691E;
+    --chip-f-bg: #E9F5F3; --chip-f-ink: #2C8C82;
+    --chip-g-bg: #FBEAF1; --chip-g-ink: #B23C74;
     --shadow: 0 8px 24px rgba(22,50,79,0.08);
     --navdock-bg: rgba(255,255,255,0.82);
     --navdock-border: rgba(22,50,79,0.08);
@@ -47,6 +50,9 @@
       --chip-b-bg: #2A2213; --chip-b-ink: #E3B565;
       --chip-c-bg: #2A1917; --chip-c-ink: #E28A7C;
       --chip-d-bg: #16261D; --chip-d-ink: #6FBE93;
+      --chip-e-bg: #2A2013; --chip-e-ink: #E8A868;
+      --chip-f-bg: #142623; --chip-f-ink: #6FC9BE;
+      --chip-g-bg: #2A1620; --chip-g-ink: #E38AB4;
       --shadow: 0 8px 24px rgba(0,0,0,0.4);
       --navdock-bg: rgba(26,34,44,0.82);
       --navdock-border: rgba(255,255,255,0.08);
@@ -67,6 +73,9 @@
     --chip-b-bg: #2A2213; --chip-b-ink: #E3B565;
     --chip-c-bg: #2A1917; --chip-c-ink: #E28A7C;
     --chip-d-bg: #16261D; --chip-d-ink: #6FBE93;
+    --chip-e-bg: #2A2013; --chip-e-ink: #E8A868;
+    --chip-f-bg: #142623; --chip-f-ink: #6FC9BE;
+    --chip-g-bg: #2A1620; --chip-g-ink: #E38AB4;
     --shadow: 0 8px 24px rgba(0,0,0,0.4);
     --navdock-bg: rgba(26,34,44,0.82);
     --navdock-border: rgba(255,255,255,0.08);
@@ -184,6 +193,9 @@
   .chip.b .ic{ background:var(--chip-b-bg); color:var(--chip-b-ink); }
   .chip.c .ic{ background:var(--chip-c-bg); color:var(--chip-c-ink); }
   .chip.d .ic{ background:var(--chip-d-bg); color:var(--chip-d-ink); }
+  .chip.e .ic{ background:var(--chip-e-bg); color:var(--chip-e-ink); }
+  .chip.f .ic{ background:var(--chip-f-bg); color:var(--chip-f-ink); }
+  .chip.g .ic{ background:var(--chip-g-bg); color:var(--chip-g-ink); }
   .chip p{ margin:0; font-size:11px; color:var(--ink); }
 
   .grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
@@ -200,6 +212,9 @@
   .prod.b .img{ background:var(--chip-b-bg); color:var(--chip-b-ink); }
   .prod.c .img{ background:var(--chip-c-bg); color:var(--chip-c-ink); }
   .prod.d .img{ background:var(--chip-d-bg); color:var(--chip-d-ink); }
+  .prod.e .img{ background:var(--chip-e-bg); color:var(--chip-e-ink); }
+  .prod.f .img{ background:var(--chip-f-bg); color:var(--chip-f-ink); }
+  .prod.g .img{ background:var(--chip-g-bg); color:var(--chip-g-ink); }
   .prod .name{ font-size:13px; font-weight:500; margin:0 0 2px; }
   .prod .cat{ font-size:11px; color:var(--muted); margin:0 0 8px; }
   .prod .row{ display:flex; align-items:center; justify-content:space-between; }
@@ -425,6 +440,15 @@
         <div class="chip c" onclick="filterCategory('أطفال', this)">
           <div class="ic"><i class="ti ti-baby-carriage"></i></div><p>أطفال</p>
         </div>
+        <div class="chip e" onclick="filterCategory('إسعافات أولية', this)">
+          <div class="ic"><i class="ti ti-first-aid-kit"></i></div><p>إسعافات أولية</p>
+        </div>
+        <div class="chip f" onclick="filterCategory('العناية الشخصية', this)">
+          <div class="ic"><i class="ti ti-shower"></i></div><p>العناية الشخصية</p>
+        </div>
+        <div class="chip g" onclick="filterCategory('الأم والحمل', this)">
+          <div class="ic"><i class="ti ti-baby"></i></div><p>الأم والحمل</p>
+        </div>
         <div class="chip a" onclick="filterCategory('الكل', this)">
           <div class="ic"><i class="ti ti-apps"></i></div><p>الكل</p>
         </div>
@@ -454,6 +478,18 @@
           <div class="ic" style="background:var(--chip-a-bg); color:var(--chip-a-ink);"><i class="ti ti-spray"></i></div>
           <p>العناية والجمال</p>
         </div>
+        <div class="cat-card" onclick="goToHomeFiltered('إسعافات أولية')">
+          <div class="ic" style="background:var(--chip-e-bg); color:var(--chip-e-ink);"><i class="ti ti-first-aid-kit"></i></div>
+          <p>إسعافات أولية</p>
+        </div>
+        <div class="cat-card" onclick="goToHomeFiltered('العناية الشخصية')">
+          <div class="ic" style="background:var(--chip-f-bg); color:var(--chip-f-ink);"><i class="ti ti-shower"></i></div>
+          <p>العناية الشخصية</p>
+        </div>
+        <div class="cat-card" onclick="goToHomeFiltered('الأم والحمل')">
+          <div class="ic" style="background:var(--chip-g-bg); color:var(--chip-g-ink);"><i class="ti ti-baby"></i></div>
+          <p>الأم والحمل</p>
+        </div>
       </div>
     </section>
 
@@ -463,7 +499,7 @@
       <div id="cartEmpty" class="empty-state" style="display:none;">
         <div class="big"><i class="ti ti-shopping-cart-off"></i></div>
         <p>العربة فاضية دلوقتي</p>
-        <button class="empty-cta" onclick="switchTab('home')">تسوق دلوقتي</button>
+        <button class="empty-cta" onclick="switchTab('home')">تسوق الآن</button>
       </div>
       <div id="cartSummary" class="cart-summary" style="display:none;">
         <div class="line"><span>الإجمالي الفرعي</span><span id="subtotal">0 ج.م</span></div>
@@ -565,6 +601,24 @@
     { id:6, name:'خافض حرارة', cat:'أدوية', price:15, icon:'thermometer', cls:'d',
       desc:'خافض حرارة ومسكن آلام خفيفة إلى متوسطة، مناسب للبالغين والأطفال حسب التركيز.',
       usage:'حسب العمر والوزن، لا يتجاوز الجرعة الموصى بها في النشرة.' },
+    { id:7, name:'شنطة إسعافات أولية منزلية', cat:'إسعافات أولية', price:150, icon:'first-aid-kit', cls:'e',
+      desc:'شنطة متكاملة للإسعافات الأولية تحتوي على الأساسيات لعلاج الجروح والحروق البسيطة في المنزل.',
+      usage:'تُحفظ في مكان بارد وجاف بعيداً عن متناول الأطفال، ويُراجع تاريخ الصلاحية دورياً.' },
+    { id:8, name:'بلاستر جروح طبي', cat:'إسعافات أولية', price:12, icon:'bandage', cls:'e',
+      desc:'لاصق طبي معقم لتضميد الجروح والخدوش البسيطة، مقاوم للماء ومريح للجلد.',
+      usage:'يُنظف الجرح جيداً قبل اللصق، ويُستبدل كل 24 ساعة أو عند البلل.' },
+    { id:9, name:'شامبو مضاد للقشرة', cat:'العناية الشخصية', price:65, icon:'shower', cls:'f',
+      desc:'شامبو علاجي يساعد على التخلص من القشرة وتهدئة فروة الرأس المتهيجة.',
+      usage:'يُستخدم 2-3 مرات أسبوعياً، يُدلك في الشعر المبلل ويُترك لدقيقتين قبل الشطف.' },
+    { id:10, name:'صابون طبي مطهر', cat:'العناية الشخصية', price:20, icon:'droplet', cls:'f',
+      desc:'صابون مطهر لطيف على البشرة، مناسب للاستخدام اليومي ومقاوم للبكتيريا.',
+      usage:'يُستخدم عند الاستحمام أو غسل اليدين حسب الحاجة.' },
+    { id:11, name:'فيتامينات ما قبل وأثناء الحمل', cat:'الأم والحمل', price:180, icon:'baby', cls:'g',
+      desc:'مكمل غذائي متكامل يحتوي على حمض الفوليك والحديد والفيتامينات الأساسية لصحة الأم والجنين.',
+      usage:'قرص واحد يومياً مع الطعام، أو حسب إرشادات الطبيب المتابع للحمل.' },
+    { id:12, name:'كريم علاج تشققات الحمل', cat:'الأم والحمل', price:95, icon:'heart', cls:'g',
+      desc:'كريم مرطب يساعد على تحسين مرونة الجلد وتقليل ظهور علامات التمدد أثناء الحمل.',
+      usage:'يُدهن على البطن والصدر مرتين يومياً بحركات دائرية لطيفة.' },
   ];
 
   let cart = {};
