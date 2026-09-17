@@ -313,6 +313,13 @@
   .pd-price-row{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
   .pd-price{ font-size:20px; font-weight:800; color:var(--navy); font-family:'Cairo'; }
   .pd-stock{ font-size:11px; background:var(--success-bg); color:var(--success-ink); padding:4px 10px; border-radius:20px; font-weight:500; display:inline-flex; align-items:center; gap:4px; }
+  .pd-info-row{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:16px; }
+  .pd-info-row .box{
+    background:var(--card); border:1px solid var(--line); border-radius:13px;
+    padding:12px 6px; text-align:center;
+  }
+  .pd-info-row .box i{ font-size:18px; color:var(--navy); display:block; margin-bottom:6px; }
+  .pd-info-row .box span{ font-size:10.5px; color:var(--muted); }
   .pd-divider{ height:1px; background:var(--line); margin:16px 0; }
   .pd-sub{ font-size:14px; font-weight:700; margin:0 0 8px; }
   .pd-desc{ font-size:13px; line-height:1.9; color:var(--muted); margin:0 0 4px; }
@@ -465,6 +472,11 @@
         <div class="pd-price-row">
           <span class="pd-price" id="pdPrice"></span>
           <span class="pd-stock"><i class="ti ti-check"></i>متوفر بالمخزون</span>
+        </div>
+        <div class="pd-info-row">
+          <div class="box"><i class="ti ti-rotate"></i><span>استرجاع سهل</span></div>
+          <div class="box"><i class="ti ti-shield-check"></i><span>أصلي 100%</span></div>
+          <div class="box"><i class="ti ti-truck"></i><span>توصيل سريع</span></div>
         </div>
         <div class="pd-divider"></div>
         <h3 class="pd-sub">الوصف</h3>
