@@ -36,8 +36,16 @@
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --cream: #12181F; --card: #1A222C; --ink: #EDEFF2; --muted: #93A0AC; --line: #2A3440; --navy: #3E6E9C;
-      --success-bg: #16261D; --success-ink: #6FBE93; --danger-bg: #2A1917; --danger-ink: #E28A7C;
+      --cream: #12181F;
+      --card: #1A222C;
+      --ink: #EDEFF2;
+      --muted: #93A0AC;
+      --line: #2A3440;
+      --navy: #3E6E9C;
+      --success-bg: #16261D;
+      --success-ink: #6FBE93;
+      --danger-bg: #2A1917;
+      --danger-ink: #E28A7C;
       --chip-a-bg: #1B2733; --chip-a-ink: #9DC0E4;
       --chip-b-bg: #2A2213; --chip-b-ink: #E3B565;
       --chip-c-bg: #2A1917; --chip-c-ink: #E28A7C;
@@ -46,44 +54,141 @@
       --chip-f-bg: #142623; --chip-f-ink: #6FC9BE;
       --chip-g-bg: #2A1620; --chip-g-ink: #E38AB4;
       --shadow: 0 8px 24px rgba(0,0,0,0.4);
-      --navdock-bg: rgba(26,34,44,0.82); --navdock-border: rgba(255,255,255,0.08);
+      --navdock-bg: rgba(26,34,44,0.82);
+      --navdock-border: rgba(255,255,255,0.08);
     }
   }
+  :root[data-theme="dark"]{
+    --cream: #12181F;
+    --card: #1A222C;
+    --ink: #EDEFF2;
+    --muted: #93A0AC;
+    --line: #2A3440;
+    --navy: #3E6E9C;
+    --success-bg: #16261D;
+    --success-ink: #6FBE93;
+    --danger-bg: #2A1917;
+    --danger-ink: #E28A7C;
+    --chip-a-bg: #1B2733; --chip-a-ink: #9DC0E4;
+    --chip-b-bg: #2A2213; --chip-b-ink: #E3B565;
+    --chip-c-bg: #2A1917; --chip-c-ink: #E28A7C;
+    --chip-d-bg: #16261D; --chip-d-ink: #6FBE93;
+    --chip-e-bg: #2A2013; --chip-e-ink: #E8A868;
+    --chip-f-bg: #142623; --chip-f-ink: #6FC9BE;
+    --chip-g-bg: #2A1620; --chip-g-ink: #E38AB4;
+    --shadow: 0 8px 24px rgba(0,0,0,0.4);
+    --navdock-bg: rgba(26,34,44,0.82);
+    --navdock-border: rgba(255,255,255,0.08);
+  }
+
   *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
-  button, .chip, .prod .img, .prod .name, .cart-item .img, .cart-item .info, .cat-card, .acc-row, .rel-card, .bell-wrap{ outline:none; -webkit-tap-highlight-color: transparent; }
+  button, .chip, .prod .img, .prod .name, .cart-item .img, .cart-item .info, .cat-card, .acc-row, .rel-card, .bell-wrap{
+    outline:none;
+    -webkit-tap-highlight-color: transparent;
+  }
   button:focus{ outline:none; }
   html,body{margin:0;padding:0;}
-  body{ background: var(--cream); color: var(--ink); font-family:'Tajawal', sans-serif; -webkit-font-smoothing:antialiased; min-height:100vh; }
+  body{
+    background: var(--cream);
+    color: var(--ink);
+    font-family:'Tajawal', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
   h1,h2,h3,.brand{ font-family:'Cairo', sans-serif; }
-  .app{ max-width: 430px; margin: 0 auto; min-height: 100vh; background: var(--cream); display:flex; flex-direction:column; position:relative; overflow-x:hidden; }
-  header.top{ background: var(--navy); background-image: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%); padding: 14px 18px 30px; color:#fff; position:relative; }
-  .top-row{ display:flex; align-items:center; justify-content:space-between; }
+
+  .app{
+    max-width: 430px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: var(--cream);
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  header.top{
+    background: var(--navy);
+    background-image: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%);
+    padding: 14px 18px 30px;
+    color:#fff;
+    position:relative;
+  }
+  .top-row{
+    display:flex; align-items:center; justify-content:space-between;
+  }
   .brand-mark{ display:flex; align-items:center; gap:10px; }
-  .brand-mark .logo{ width:38px; height:38px; border-radius:11px; background: var(--gold); display:flex; align-items:center; justify-content:center; font-size:19px; }
+  .brand-mark .logo{
+    width:38px; height:38px; border-radius:11px;
+    background: var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    font-size:19px;
+  }
   .brand-mark .name{ font-size:15px; font-weight:700; }
   .brand-mark .name span{ display:block; font-size:11px; font-weight:400; opacity:0.75; font-family:'Tajawal'; }
   .bell-wrap{ position:relative; cursor:pointer; }
-  .bell-wrap .dot{ position:absolute; top:-2px; left:-2px; width:8px; height:8px; border-radius:50%; background: var(--gold); border:1.5px solid var(--navy-deep); }
+  .bell-wrap .dot{
+    position:absolute; top:-2px; left:-2px; width:8px; height:8px; border-radius:50%;
+    background: var(--gold); border:1.5px solid var(--navy-deep);
+  }
   .greet{ margin-top:12px; }
   .greet p{ margin:0; font-size:12px; opacity:0.75; }
   .greet h1{ margin:2px 0 0; font-size:20px; font-weight:700; }
-  .search-float{ margin: -24px 16px 0; background: var(--card); border-radius: 14px; box-shadow: var(--shadow); display:flex; align-items:center; gap:10px; padding: 0 14px; height:48px; position:relative; z-index:2; }
-  .search-float input{ border:none; outline:none; background:transparent; flex:1; font-family:'Tajawal'; font-size:14px; color:var(--ink); }
+
+  .search-float{
+    margin: -24px 16px 0;
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    display:flex; align-items:center; gap:10px;
+    padding: 0 14px; height:48px;
+    position:relative; z-index:2;
+  }
+  .search-float input{
+    border:none; outline:none; background:transparent; flex:1;
+    font-family:'Tajawal'; font-size:14px; color:var(--ink);
+  }
   .search-float input::placeholder{ color: var(--muted); }
+
   main{ flex:1; padding: 20px 16px 90px; }
+
   section{ display:none; }
   section.active{ display:block; }
-  .banner{ border-radius:16px; padding:18px 20px; margin-bottom:22px; display:flex; align-items:center; justify-content:space-between; background: linear-gradient(120deg, #EFDBB3 0%, var(--gold) 120%); color: var(--navy-deep); }
+
+  .banner{
+    border-radius:16px;
+    padding:18px 20px;
+    margin-bottom:22px;
+    display:flex; align-items:center; justify-content:space-between;
+    background: linear-gradient(120deg, #EFDBB3 0%, var(--gold) 120%);
+    color: var(--navy-deep);
+  }
   .banner .txt p:first-child{ margin:0 0 4px; font-size:16px; font-weight:700; font-family:'Cairo'; }
   .banner .txt p:last-child{ margin:0; font-size:12px; opacity:0.85; }
-  .banner .ic{ width:46px; height:46px; border-radius:50%; background: rgba(255,255,255,0.4); display:flex; align-items:center; justify-content:center; font-size:22px; }
+  .banner .ic{
+    width:46px; height:46px; border-radius:50%;
+    background: rgba(255,255,255,0.4);
+    display:flex; align-items:center; justify-content:center; font-size:22px;
+  }
+
   h2.section-title{ font-size:15px; font-weight:700; margin: 0 0 12px; }
+
   .chips{ display:flex; gap:10px; overflow-x:auto; padding-bottom:4px; margin-bottom:24px; scrollbar-width:none; }
   .chips::-webkit-scrollbar{ display:none; }
-  .chip{ flex:0 0 auto; min-width:74px; border-radius:14px; padding:12px 8px 10px; text-align:center; cursor:pointer; border:1px solid var(--line); transition: transform .15s ease; background: var(--card); }
+  .chip{
+    flex:0 0 auto; min-width:74px;
+    border-radius:14px; padding:12px 8px 10px;
+    text-align:center; cursor:pointer; border:1px solid var(--line);
+    transition: transform .15s ease;
+    background: var(--card);
+  }
   .chip.selected{ border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold) inset; }
   .chip:active{ transform: scale(0.96); }
-  .chip .ic{ width:38px; height:38px; border-radius:11px; margin:0 auto 6px; display:flex; align-items:center; justify-content:center; font-size:18px; }
+  .chip .ic{
+    width:38px; height:38px; border-radius:11px; margin:0 auto 6px;
+    display:flex; align-items:center; justify-content:center; font-size:18px;
+  }
   .chip.a .ic{ background:var(--chip-a-bg); color:var(--chip-a-ink); }
   .chip.b .ic{ background:var(--chip-b-bg); color:var(--chip-b-ink); }
   .chip.c .ic{ background:var(--chip-c-bg); color:var(--chip-c-ink); }
@@ -92,9 +197,17 @@
   .chip.f .ic{ background:var(--chip-f-bg); color:var(--chip-f-ink); }
   .chip.g .ic{ background:var(--chip-g-bg); color:var(--chip-g-ink); }
   .chip p{ margin:0; font-size:11px; color:var(--ink); }
+
   .grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-  .prod{ background: var(--card); border:1px solid var(--line); border-radius:16px; padding:12px; }
-  .prod .img{ width:100%; height:78px; border-radius:11px; margin-bottom:10px; display:flex; align-items:center; justify-content:center; font-size:28px; overflow:hidden; }
+  .prod{
+    background: var(--card);
+    border:1px solid var(--line);
+    border-radius:16px; padding:12px;
+  }
+  .prod .img{
+    width:100%; height:78px; border-radius:11px; margin-bottom:10px;
+    display:flex; align-items:center; justify-content:center; font-size:28px;
+  }
   .prod.a .img{ background:var(--chip-a-bg); color:var(--chip-a-ink); }
   .prod.b .img{ background:var(--chip-b-bg); color:var(--chip-b-ink); }
   .prod.c .img{ background:var(--chip-c-bg); color:var(--chip-c-ink); }
@@ -106,25 +219,56 @@
   .prod .cat{ font-size:11px; color:var(--muted); margin:0 0 8px; }
   .prod .row{ display:flex; align-items:center; justify-content:space-between; }
   .prod .price{ font-size:14px; font-weight:700; color:var(--navy); font-family:'Cairo'; }
-  .addbtn{ width:28px; height:28px; border-radius:50%; border:none; background: var(--gold); color:#fff; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition: background .15s ease, transform .15s ease; }
+  .addbtn{
+    width:28px; height:28px; border-radius:50%; border:none;
+    background: var(--gold); color:#fff; font-size:16px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition: background .15s ease, transform .15s ease;
+  }
   .addbtn:active{ transform: scale(0.9); background:var(--gold-deep); }
   .addbtn.added{ background: var(--success-ink); }
-  .cart-item{ display:flex; align-items:center; gap:12px; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:10px; margin-bottom:10px; }
-  .cart-item .img{ width:48px;height:48px;border-radius:10px; display:flex;align-items:center;justify-content:center; font-size:20px; flex-shrink:0; overflow:hidden; }
+
+  .cart-item{
+    display:flex; align-items:center; gap:12px;
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:10px; margin-bottom:10px;
+  }
+  .cart-item .img{ width:48px;height:48px;border-radius:10px; display:flex;align-items:center;justify-content:center; font-size:20px; flex-shrink:0; }
   .cart-item .info{ flex:1; }
   .cart-item .info p:first-child{ margin:0 0 3px; font-size:13px; font-weight:500; }
   .cart-item .info p:last-child{ margin:0; font-size:12px; color:var(--navy); font-weight:700; font-family:'Cairo'; }
   .qty{ display:flex; align-items:center; gap:8px; }
-  .qty button{ width:24px; height:24px; border-radius:50%; border:1px solid var(--line); background:var(--card); cursor:pointer; font-size:14px; color:var(--ink); display:flex; align-items:center; justify-content:center; }
+  .qty button{
+    width:24px; height:24px; border-radius:50%; border:1px solid var(--line);
+    background:var(--card); cursor:pointer; font-size:14px; color:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+  }
   .qty span{ font-size:13px; min-width:14px; text-align:center; }
-  .cart-summary{ margin-top:16px; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; }
+
+  .cart-summary{
+    margin-top:16px; background:var(--card); border:1px solid var(--line);
+    border-radius:14px; padding:16px;
+  }
   .cart-summary .line{ display:flex; justify-content:space-between; font-size:13px; color:var(--muted); margin-bottom:8px; }
   .cart-summary .total{ display:flex; justify-content:space-between; font-size:16px; font-weight:700; font-family:'Cairo'; color:var(--ink); border-top:1px solid var(--line); padding-top:10px; margin-top:4px; }
-  .checkout-btn{ width:100%; margin-top:14px; padding:13px; border:none; border-radius:12px; background: var(--navy); color:#fff; font-family:'Tajawal'; font-weight:700; font-size:14px; cursor:pointer; }
+  .checkout-btn{
+    width:100%; margin-top:14px; padding:13px; border:none; border-radius:12px;
+    background: var(--navy); color:#fff; font-family:'Tajawal'; font-weight:700; font-size:14px;
+    cursor:pointer;
+  }
   .empty-state{ text-align:center; padding:50px 20px 20px; color:var(--muted); }
-  .empty-state .big{ width:78px; height:78px; border-radius:50%; margin:0 auto 16px; background:var(--chip-a-bg); color:var(--chip-a-ink); display:flex; align-items:center; justify-content:center; font-size:34px; }
+  .empty-state .big{
+    width:78px; height:78px; border-radius:50%; margin:0 auto 16px;
+    background:var(--chip-a-bg); color:var(--chip-a-ink);
+    display:flex; align-items:center; justify-content:center; font-size:34px;
+  }
   .empty-state p{ margin:0 0 20px; font-size:13px; }
-  .empty-cta{ border:none; border-radius:12px; padding:13px 28px; background:var(--navy); color:#fff; font-family:'Tajawal'; font-weight:700; font-size:13px; cursor:pointer; }
+  .empty-cta{
+    border:none; border-radius:12px; padding:13px 28px;
+    background:var(--navy); color:#fff; font-family:'Tajawal'; font-weight:700; font-size:13px;
+    cursor:pointer;
+  }
+
   .acc-card{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; text-align:center; margin-bottom:16px; }
   .acc-card .avatar{ width:60px;height:60px;border-radius:50%; background:var(--navy); color:#fff; display:flex;align-items:center;justify-content:center; font-size:24px; margin:0 auto 10px; }
   .acc-card h3{ margin:0 0 3px; font-size:15px; }
@@ -133,53 +277,130 @@
   .acc-row{ display:flex; align-items:center; gap:12px; padding:14px; font-size:13px; border-bottom:1px solid var(--line); cursor:pointer; }
   .acc-row:last-child{ border-bottom:none; }
   .acc-row .ic{ width:32px;height:32px;border-radius:9px; background:var(--chip-a-bg); color:var(--chip-a-ink); display:flex;align-items:center;justify-content:center; font-size:15px; }
+
   .cat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
   .cat-card{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 10px; text-align:center; cursor:pointer; }
   .cat-card .ic{ width:50px;height:50px;border-radius:14px; margin:0 auto 10px; display:flex;align-items:center;justify-content:center; font-size:22px; }
   .cat-card p{ margin:0; font-size:12px; font-weight:500; }
-  nav.bottom{ position:fixed; left:50%; bottom:18px; transform:translateX(-50%); width:calc(100% - 32px); max-width:360px; background: var(--navdock-bg); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); border:1px solid var(--navdock-border); border-radius:999px; box-shadow: 0 14px 34px rgba(22,50,79,0.18); display:flex; justify-content:space-around; align-items:center; padding: 8px 10px; z-index:30; }
-  .nav-indicator{ position:absolute; top:8px; bottom:8px; left:0; opacity:0; z-index:0; transition: left .5s cubic-bezier(.34,1.56,.64,1), width .5s cubic-bezier(.34,1.56,.64,1), opacity .2s ease; will-change: left, width; }
-  .nav-indicator .blob{ position:absolute; inset:0; border-radius:999px; background: var(--navy); box-shadow: 0 4px 10px rgba(22,50,79,0.35); transform-origin:center; animation: navBlobFloat 2.6s ease-in-out infinite; }
-  @keyframes navBlobFloat{ 0%, 100%{ transform:scale(1); border-radius:999px; } 50%{ transform:scale(1.06); border-radius:46% 54% 52% 48% / 54% 46% 54% 46%; } }
-  .navbtn{ background:none; border:none; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:2px; color: var(--muted); font-family:'Tajawal'; font-size:10px; position:relative; z-index:1; padding:7px 14px; border-radius:999px; transition: color .2s ease; }
+
+  nav.bottom{
+    position:fixed;
+    left:50%;
+    bottom:18px;
+    transform:translateX(-50%);
+    width:calc(100% - 32px);
+    max-width:360px;
+    background: var(--navdock-bg);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    border:1px solid var(--navdock-border);
+    border-radius:999px;
+    box-shadow: 0 14px 34px rgba(22,50,79,0.18);
+    display:flex; justify-content:space-around; align-items:center;
+    padding: 8px 10px;
+    z-index:30;
+  }
+  .nav-indicator{
+    position:absolute; top:8px; bottom:8px; left:0;
+    opacity:0;
+    z-index:0;
+    transition: left .5s cubic-bezier(.34,1.56,.64,1),
+                width .5s cubic-bezier(.34,1.56,.64,1),
+                opacity .2s ease;
+    will-change: left, width;
+  }
+  .nav-indicator .blob{
+    position:absolute; inset:0;
+    border-radius:999px;
+    background: var(--navy);
+    box-shadow: 0 4px 10px rgba(22,50,79,0.35);
+    transform-origin:center;
+    animation: navBlobFloat 2.6s ease-in-out infinite;
+  }
+  @keyframes navBlobFloat{
+    0%, 100%{ transform:scale(1); border-radius:999px; }
+    50%{ transform:scale(1.06); border-radius:46% 54% 52% 48% / 54% 46% 54% 46%; }
+  }
+  .navbtn{
+    background:none; border:none; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; gap:2px;
+    color: var(--muted); font-family:'Tajawal'; font-size:10px;
+    position:relative; z-index:1; padding:7px 14px; border-radius:999px;
+    transition: color .2s ease;
+  }
   .navbtn .ic{ font-size:18px; }
   .navbtn.active{ color:#fff; }
-  .navbtn .badge{ position:absolute; top:0px; left:6px; background:var(--gold); color:#fff; font-size:9px; font-weight:700; min-width:15px; height:15px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:1.5px solid var(--navdock-bg); }
+  .navbtn .badge{
+    position:absolute; top:0px; left:6px;
+    background:var(--gold); color:#fff; font-size:9px; font-weight:700;
+    min-width:15px; height:15px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    border:1.5px solid var(--navdock-bg);
+  }
+
   .no-results{ text-align:center; color:var(--muted); font-size:13px; padding:30px 0; }
-  .back-btn{ background:none; border:none; color:var(--navy); font-family:'Tajawal'; font-weight:700; font-size:13px; cursor:pointer; padding:0 0 14px; display:flex; align-items:center; gap:4px; }
-  .pd-hero{ width:100%; height:180px; border-radius:18px; margin-bottom:16px; display:flex; align-items:center; justify-content:center; font-size:64px; position:relative; overflow:hidden; }
-  .pd-tag{ position:absolute; top:14px; left:14px; background:var(--card); color:var(--ink); font-size:11px; font-weight:500; padding:6px 14px; border-radius:20px; box-shadow: var(--shadow); }
+
+  .back-btn{
+    background:none; border:none; color:var(--navy); font-family:'Tajawal'; font-weight:700;
+    font-size:13px; cursor:pointer; padding:0 0 14px; display:flex; align-items:center; gap:4px;
+  }
+  .pd-hero{
+    width:100%; height:180px; border-radius:18px; margin-bottom:16px;
+    display:flex; align-items:center; justify-content:center; font-size:64px;
+    position:relative;
+  }
+  .pd-tag{
+    position:absolute; top:14px; left:14px;
+    background:var(--card); color:var(--ink);
+    font-size:11px; font-weight:500;
+    padding:6px 14px; border-radius:20px;
+    box-shadow: var(--shadow);
+  }
   .pd-name{ margin:0 0 10px; font-size:19px; font-weight:700; }
   .pd-price-row{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
   .pd-price{ font-size:20px; font-weight:800; color:var(--navy); font-family:'Cairo'; }
-  .pd-oldprice{ font-size:13px; color:var(--muted); text-decoration:line-through; font-weight:400; margin-left:6px; }
   .pd-stock{ font-size:11px; background:var(--success-bg); color:var(--success-ink); padding:4px 10px; border-radius:20px; font-weight:500; display:inline-flex; align-items:center; gap:4px; }
   .pd-info-row{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:16px; }
-  .pd-info-row .box{ background:var(--card); border:1px solid var(--line); border-radius:13px; padding:12px 6px; text-align:center; }
+  .pd-info-row .box{
+    background:var(--card); border:1px solid var(--line); border-radius:13px;
+    padding:12px 6px; text-align:center;
+  }
   .pd-info-row .box i{ font-size:18px; color:var(--navy); display:block; margin-bottom:6px; }
   .pd-info-row .box span{ font-size:10.5px; color:var(--muted); }
   .pd-divider{ height:1px; background:var(--line); margin:16px 0; }
   .pd-sub{ font-size:14px; font-weight:700; margin:0 0 8px; }
   .pd-desc{ font-size:13px; line-height:1.9; color:var(--muted); margin:0 0 4px; }
-  .pd-usage-box{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; margin-top:10px; }
+  .pd-usage-box{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:14px 16px; margin-top:10px;
+  }
   .pd-usage-box .pd-sub{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
   .pd-usage-box .pd-sub i{ color:var(--success-ink); font-size:16px; }
   .pd-usage-box .pd-desc{ margin:0; }
   .pd-related{ display:flex; gap:10px; overflow-x:auto; padding-bottom:80px; scrollbar-width:none; }
   .pd-related::-webkit-scrollbar{ display:none; }
-  .pd-related .rel-card{ flex:0 0 auto; width:110px; background:var(--card); border:1px solid var(--line); border-radius:13px; padding:10px; cursor:pointer; }
-  .pd-related .rel-card .img{ width:100%; height:50px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:22px; margin-bottom:6px; overflow:hidden; }
+  .pd-related .rel-card{
+    flex:0 0 auto; width:110px; background:var(--card); border:1px solid var(--line);
+    border-radius:13px; padding:10px; cursor:pointer;
+  }
+  .pd-related .rel-card .img{ width:100%; height:50px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:22px; margin-bottom:6px; }
   .pd-related .rel-card p{ margin:0; font-size:11px; }
   .pd-related .rel-card .p{ font-weight:700; color:var(--navy); font-family:'Cairo'; margin-top:3px; }
   .prod .img, .cart-item .img{ cursor:pointer; }
   .prod .name{ cursor:pointer; }
-  .pd-bar{ position:fixed; bottom:0; left:0; right:0; max-width:430px; margin:0 auto; background:var(--card); border-top:1px solid var(--line); display:flex; align-items:center; gap:12px; padding:12px 16px 24px; z-index:5; }
+  .pd-bar{
+    position:fixed; bottom:0; left:0; right:0; max-width:430px; margin:0 auto;
+    background:var(--card); border-top:1px solid var(--line);
+    display:flex; align-items:center; gap:12px; padding:12px 16px 24px; z-index:5;
+  }
   .pd-qty{ background:var(--cream); border-radius:12px; padding:8px 12px; }
   .pd-qty button{ background:var(--card); }
-  .pd-add-btn{ flex:1; border:none; border-radius:12px; padding:13px; background:var(--success-ink); color:#fff; font-family:'Tajawal'; font-weight:700; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; }
+  .pd-add-btn{
+    flex:1; border:none; border-radius:12px; padding:13px; background:var(--success-ink);
+    color:#fff; font-family:'Tajawal'; font-weight:700; font-size:14px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
   #productDetail{ padding-bottom:70px; }
-  .loading-msg{ text-align:center; padding:40px 0; color:var(--muted); font-size:13px; }
-  img{ width:100%; height:100%; object-fit:cover; }
+
   @media (min-width: 700px){
     .app{ max-width: 1100px; box-shadow: 0 0 40px rgba(0,0,0,0.06); }
     header.top{ padding: 16px 36px 32px; }
@@ -201,8 +422,7 @@
     <div class="top-row">
       <div class="brand-mark">
         <div class="logo"><i class="ti ti-vaccine-bottle" style="font-size:19px; color:#fff;"></i></div>
-        <div class="name brand">صيدلية الأشرف<span>رعايتك أولويتنا</span><span style="font-size:10px; opacity:0.6; margin-top:2px;">إدارة د. عواطف أشرف أبو الخير</span></div>
-      </div>
+       <div class="name brand">صيدلية الأشرف<span>رعايتك أولويتنا</span><span style="font-size:10px; opacity:0.6; margin-top:2px;">إدارة د. عواطف أشرف أبو الخير</span></div>      </div>
       <div class="bell-wrap" onclick="alert('لا توجد إشعارات جديدة')">
         <i class="ti ti-bell" style="font-size:20px; color:#fff;"></i>
         <span class="dot"></span>
@@ -224,23 +444,74 @@
     <section id="home" class="active">
       <div class="banner">
         <div class="txt">
-          <p id="bannerTitle">خصم 20% على الفيتامينات</p>
-          <p id="bannerSub">لحد آخر الشهر</p>
+          <p>خصم 20% على الفيتامينات</p>
+          <p>لحد آخر الشهر</p>
         </div>
         <div class="ic"><i class="ti ti-pill"></i></div>
       </div>
 
       <h2 class="section-title">الأقسام</h2>
-      <div class="chips" id="chipsContainer"></div>
+      <div class="chips">
+        <div class="chip a selected" onclick="filterCategory('الكل', this)">
+          <div class="ic"><i class="ti ti-apps"></i></div><p>الكل</p>
+        </div>
+        <div class="chip d" onclick="filterCategory('أدوية', this)">
+          <div class="ic"><i class="ti ti-pill"></i></div><p>أدوية</p>
+        </div>
+        <div class="chip b" onclick="filterCategory('فيتامينات', this)">
+          <div class="ic"><i class="ti ti-heart"></i></div><p>فيتامينات</p>
+        </div>
+        <div class="chip c" onclick="filterCategory('أطفال', this)">
+          <div class="ic"><i class="ti ti-baby-carriage"></i></div><p>أطفال</p>
+        </div>
+        <div class="chip e" onclick="filterCategory('إسعافات أولية', this)">
+          <div class="ic"><i class="ti ti-first-aid-kit"></i></div><p>إسعافات أولية</p>
+        </div>
+        <div class="chip f" onclick="filterCategory('العناية الشخصية', this)">
+          <div class="ic">🙂</div><p>العناية الشخصية</p>
+        </div>
+        <div class="chip g" onclick="filterCategory('الأم والحمل', this)">
+          <div class="ic">🤰</div><p>الأم والحمل</p>
+        </div>
+      </div>
 
       <h2 class="section-title">الأكتر طلباً</h2>
-      <div class="grid" id="productGrid"><p class="loading-msg">جاري تحميل المنتجات...</p></div>
+      <div class="grid" id="productGrid"></div>
       <p class="no-results" id="noResults" style="display:none;">مفيش منتجات مطابقة للبحث</p>
     </section>
 
     <section id="categories">
       <h2 class="section-title">كل الأقسام</h2>
-      <div class="cat-grid" id="catGrid"></div>
+      <div class="cat-grid">
+        <div class="cat-card" onclick="openCategory('أدوية')">
+          <div class="ic" style="background:var(--chip-d-bg); color:var(--chip-d-ink);"><i class="ti ti-pill"></i></div>
+          <p>أدوية</p>
+        </div>
+        <div class="cat-card" onclick="openCategory('فيتامينات')">
+          <div class="ic" style="background:var(--chip-b-bg); color:var(--chip-b-ink);"><i class="ti ti-heart"></i></div>
+          <p>فيتامينات</p>
+        </div>
+        <div class="cat-card" onclick="openCategory('أطفال')">
+          <div class="ic" style="background:var(--chip-c-bg); color:var(--chip-c-ink);"><i class="ti ti-baby-carriage"></i></div>
+          <p>أطفال</p>
+        </div>
+        <div class="cat-card" onclick="openCategory('العناية')">
+          <div class="ic" style="background:var(--chip-a-bg); color:var(--chip-a-ink);"><i class="ti ti-spray"></i></div>
+          <p>العناية والجمال</p>
+        </div>
+        <div class="cat-card" onclick="openCategory('إسعافات أولية')">
+          <div class="ic" style="background:var(--chip-e-bg); color:var(--chip-e-ink);"><i class="ti ti-first-aid-kit"></i></div>
+          <p>إسعافات أولية</p>
+        </div>
+        <div class="cat-card" onclick="openCategory('العناية الشخصية')">
+          <div class="ic" style="background:var(--chip-f-bg); color:var(--chip-f-ink); font-size:22px;">🙂</div>
+          <p>العناية الشخصية</p>
+        </div>
+        <div class="cat-card" onclick="openCategory('الأم والحمل')">
+          <div class="ic" style="background:var(--chip-g-bg); color:var(--chip-g-ink); font-size:22px;">🤰</div>
+          <p>الأم والحمل</p>
+        </div>
+      </div>
     </section>
 
     <section id="categoryPage">
@@ -262,7 +533,7 @@
         <div class="line"><span>الإجمالي الفرعي</span><span id="subtotal">0 ج.م</span></div>
         <div class="line"><span>التوصيل</span><span>20 ج.م</span></div>
         <div class="total"><span>الإجمالي</span><span id="totalPrice">0 ج.م</span></div>
-        <button class="checkout-btn" onclick="submitOrder()">إتمام الطلب</button>
+        <button class="checkout-btn" onclick="alert('تم إرسال الطلب بنجاح! هيتم التواصل معاك لتأكيد التوصيل.')">إتمام الطلب</button>
       </div>
     </section>
 
@@ -275,7 +546,7 @@
         <h2 class="pd-name" id="pdName"></h2>
         <div class="pd-price-row">
           <span class="pd-price" id="pdPrice"></span>
-          <span class="pd-stock" id="pdStock"><i class="ti ti-check"></i>متوفر بالمخزون</span>
+          <span class="pd-stock"><i class="ti ti-check"></i>متوفر بالمخزون</span>
         </div>
         <div class="pd-info-row">
           <div class="box"><i class="ti ti-rotate"></i><span>استرجاع سهل</span></div>
@@ -339,60 +610,58 @@
 
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyCoYdxryBFUNmEv6V_aoUw7pJNhEDoF00Q",
-    authDomain: "alashraf-pharmacy.firebaseapp.com",
-    projectId: "alashraf-pharmacy",
-    storageBucket: "alashraf-pharmacy.firebasestorage.app",
-    messagingSenderId: "486283006265",
-    appId: "1:486283006265:web:307ed704c57eead2b498e8"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
+  const products = [
+    { id:1, name:'فيتامين سي 1000mg', cat:'فيتامينات', price:45, icon:'flask', cls:'b',
+      desc:'مكمل غذائي يحتوي على فيتامين سي بتركيز عالي، بيساعد على تقوية جهاز المناعة والحماية من نزلات البرد.',
+      usage:'قرص واحد يومياً بعد الأكل، أو حسب إرشادات الصيدلي.' },
+    { id:2, name:'مسكن ألم بنادول', cat:'أدوية', price:18, icon:'pill', cls:'d',
+      desc:'مسكن سريع المفعول لآلام الرأس والعضلات وخفض الحرارة الخفيفة.',
+      usage:'قرص إلى قرصين كل 6 ساعات، بحد أقصى 8 أقراص يومياً للبالغين.' },
+    { id:3, name:'حليب أطفال نان 1', cat:'أطفال', price:210, icon:'bottle', cls:'c',
+      desc:'حليب صناعي متكامل للرضع من الولادة وحتى 6 شهور، مدعّم بالفيتامينات والمعادن الأساسية.',
+      usage:'حسب الجدول الموضح على العلبة وعمر الطفل، أو حسب إرشادات طبيب الأطفال.' },
+    { id:4, name:'أوميجا 3 كبسولات', cat:'فيتامينات', price:120, icon:'fish', cls:'b',
+      desc:'كبسولات زيت سمك غنية بالأوميجا 3، بتدعم صحة القلب والدماغ.',
+      usage:'كبسولة واحدة يومياً مع الوجبات.' },
+    { id:5, name:'شراب كحة للأطفال', cat:'أطفال', price:32, icon:'droplet', cls:'c',
+      desc:'شراب لطيف لتهدئة الكحة والحلق عند الأطفال، بمذاق مقبول للصغار.',
+      usage:'حسب عمر ووزن الطفل، يرجى مراجعة النشرة الداخلية أو استشارة الطبيب.' },
+    { id:6, name:'خافض حرارة', cat:'أدوية', price:15, icon:'thermometer', cls:'d',
+      desc:'خافض حرارة ومسكن آلام خفيفة إلى متوسطة، مناسب للبالغين والأطفال حسب التركيز.',
+      usage:'حسب العمر والوزن، لا يتجاوز الجرعة الموصى بها في النشرة.' },
+    { id:7, name:'شنطة إسعافات أولية منزلية', cat:'إسعافات أولية', price:150, icon:'first-aid-kit', cls:'e',
+      desc:'شنطة متكاملة للإسعافات الأولية تحتوي على الأساسيات لعلاج الجروح والحروق البسيطة في المنزل.',
+      usage:'تُحفظ في مكان بارد وجاف بعيداً عن متناول الأطفال، ويُراجع تاريخ الصلاحية دورياً.' },
+    { id:8, name:'بلاستر جروح طبي', cat:'إسعافات أولية', price:12, icon:'bandage', cls:'e',
+      desc:'لاصق طبي معقم لتضميد الجروح والخدوش البسيطة، مقاوم للماء ومريح للجلد.',
+      usage:'يُنظف الجرح جيداً قبل اللصق، ويُستبدل كل 24 ساعة أو عند البلل.' },
+    { id:9, name:'شامبو مضاد للقشرة', cat:'العناية الشخصية', price:65, icon:'shower', cls:'f',
+      desc:'شامبو علاجي يساعد على التخلص من القشرة وتهدئة فروة الرأس المتهيجة.',
+      usage:'يُستخدم 2-3 مرات أسبوعياً، يُدلك في الشعر المبلل ويُترك لدقيقتين قبل الشطف.' },
+    { id:10, name:'صابون طبي مطهر', cat:'العناية الشخصية', price:20, icon:'droplet', cls:'f',
+      desc:'صابون مطهر لطيف على البشرة، مناسب للاستخدام اليومي ومقاوم للبكتيريا.',
+      usage:'يُستخدم عند الاستحمام أو غسل اليدين حسب الحاجة.' },
+    { id:11, name:'فيتامينات ما قبل وأثناء الحمل', cat:'الأم والحمل', price:180, icon:'flask', cls:'g',
+      desc:'مكمل غذائي متكامل يحتوي على حمض الفوليك والحديد والفيتامينات الأساسية لصحة الأم والجنين.',
+      usage:'قرص واحد يومياً مع الطعام، أو حسب إرشادات الطبيب المتابع للحمل.' },
+    { id:12, name:'كريم علاج تشققات الحمل', cat:'الأم والحمل', price:95, icon:'heart', cls:'g',
+      desc:'كريم مرطب يساعد على تحسين مرونة الجلد وتقليل ظهور علامات التمدد أثناء الحمل.',
+      usage:'يُدهن على البطن والصدر مرتين يومياً بحركات دائرية لطيفة.' },
+  ];
 
-  let categories = [];
-  let products = [];
   let cart = {};
   let currentCategory = 'الكل';
-
-  function productImgHtml(p){
-    if(p.imageUrl) return `<img src="${p.imageUrl}" alt="">`;
-    return `<i class="ti ti-${p.icon || 'pill'}"></i>`;
-  }
-
-  function renderChips(){
-    const wrap = document.getElementById('chipsContainer');
-    let html = `<div class="chip a selected" onclick="filterCategory('الكل', this)"><div class="ic"><i class="ti ti-apps"></i></div><p>الكل</p></div>`;
-    html += categories.map(c => `
-      <div class="chip ${c.cls}" onclick="filterCategory('${c.name}', this)">
-        <div class="ic"><i class="ti ti-${c.icon}"></i></div><p>${c.name}</p>
-      </div>
-    `).join('');
-    wrap.innerHTML = html;
-  }
-
-  function renderCatGrid(){
-    const wrap = document.getElementById('catGrid');
-    wrap.innerHTML = categories.map(c => `
-      <div class="cat-card" onclick="openCategory('${c.name}')">
-        <div class="ic" style="background:var(--chip-${c.cls}-bg); color:var(--chip-${c.cls}-ink);"><i class="ti ti-${c.icon}"></i></div>
-        <p>${c.name}</p>
-      </div>
-    `).join('');
-  }
 
   function buildProductCards(list){
     return list.map(p => `
       <div class="prod ${p.cls}">
-        <div class="img" onclick="openProduct('${p.id}')">${productImgHtml(p)}</div>
-        <p class="name" onclick="openProduct('${p.id}')">${p.name}</p>
+        <div class="img" onclick="openProduct(${p.id})"><i class="ti ti-${p.icon}"></i></div>
+        <p class="name" onclick="openProduct(${p.id})">${p.name}</p>
         <p class="cat">${p.cat}</p>
         <div class="row">
-          <span class="price">${p.oldPrice ? `<s style="color:var(--muted);font-weight:400;font-size:11px;">${p.oldPrice}</s> ` : ''}${p.price} ج.م</span>
-          <button class="addbtn" onclick="addToCart('${p.id}', this)">${cart[p.id] ? '✓' : '+'}</button>
+          <span class="price">${p.price} ج.م</span>
+          <button class="addbtn" onclick="addToCart(${p.id}, this)">${cart[p.id] ? '✓' : '+'}</button>
         </div>
       </div>
     `).join('');
@@ -402,8 +671,12 @@
     const grid = document.getElementById('productGrid');
     const term = document.getElementById('searchInput').value.trim();
     let list = products;
-    if(currentCategory !== 'الكل') list = list.filter(p => p.cat === currentCategory);
-    if(term) list = list.filter(p => p.name.includes(term));
+    if(currentCategory !== 'الكل'){
+      list = list.filter(p => p.cat === currentCategory);
+    }
+    if(term){
+      list = list.filter(p => p.name.includes(term));
+    }
     document.getElementById('noResults').style.display = list.length ? 'none' : 'block';
     grid.innerHTML = buildProductCards(list);
   }
@@ -425,17 +698,16 @@
     const p = products.find(x => x.id === id);
     document.getElementById('pdHero').style.background = `var(--chip-${p.cls}-bg)`;
     document.getElementById('pdHero').style.color = `var(--chip-${p.cls}-ink)`;
-    document.getElementById('pdHero').innerHTML = `<span class="pd-tag" id="pdTag">${p.cat}</span>` + productImgHtml(p);
+    document.getElementById('pdHero').innerHTML = `<span class="pd-tag" id="pdTag">${p.cat}</span><i class="ti ti-${p.icon}"></i>`;
     document.getElementById('pdName').textContent = p.name;
-    document.getElementById('pdPrice').innerHTML = (p.oldPrice ? `<span class="pd-oldprice">${p.oldPrice} ج.م</span>` : '') + p.price + ' ج.م';
-    document.getElementById('pdStock').innerHTML = `<i class="ti ti-check"></i>${p.available || 'متوفر بالمخزون'}`;
+    document.getElementById('pdPrice').textContent = p.price + ' ج.م';
     document.getElementById('pdDesc').textContent = p.desc;
     document.getElementById('pdUsage').textContent = p.usage;
     document.getElementById('pdQty').textContent = pdQty;
     const related = products.filter(x => x.cat === p.cat && x.id !== p.id);
     document.getElementById('pdRelated').innerHTML = related.map(r => `
-      <div class="rel-card" onclick="openProduct('${r.id}')">
-        <div class="img" style="background:var(--chip-${r.cls}-bg); color:var(--chip-${r.cls}-ink);">${productImgHtml(r)}</div>
+      <div class="rel-card" onclick="openProduct(${r.id})">
+        <div class="img" style="background:var(--chip-${r.cls}-bg); color:var(--chip-${r.cls}-ink);"><i class="ti ti-${r.icon}"></i></div>
         <p>${r.name}</p>
         <p class="p">${r.price} ج.م</p>
       </div>
@@ -463,6 +735,12 @@
     currentCategory = cat;
     document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
+    renderProducts();
+  }
+
+  function goToHomeFiltered(cat){
+    currentCategory = 'الكل';
+    switchTab('home');
     renderProducts();
   }
 
@@ -504,20 +782,20 @@
     document.getElementById('cartSummary').style.display = 'block';
     let subtotal = 0;
     wrap.innerHTML = ids.map(id => {
-      const p = products.find(x => x.id === id);
+      const p = products.find(x => x.id == id);
       const qty = cart[id];
       subtotal += p.price * qty;
       return `
         <div class="cart-item">
-          <div class="img" style="background:var(--chip-${p.cls}-bg); color:var(--chip-${p.cls}-ink);" onclick="openProduct('${p.id}')">${productImgHtml(p)}</div>
-          <div class="info" onclick="openProduct('${p.id}')">
+          <div class="img" style="background:var(--chip-${p.cls}-bg); color:var(--chip-${p.cls}-ink);" onclick="openProduct(${p.id})"><i class="ti ti-${p.icon}"></i></div>
+          <div class="info" onclick="openProduct(${p.id})">
             <p>${p.name}</p>
             <p>${p.price} ج.م</p>
           </div>
           <div class="qty">
-            <button onclick="changeQty('${p.id}', 1)">+</button>
+            <button onclick="changeQty(${p.id}, 1)">+</button>
             <span>${qty}</span>
-            <button onclick="changeQty('${p.id}', -1)">−</button>
+            <button onclick="changeQty(${p.id}, -1)">−</button>
           </div>
         </div>
       `;
@@ -526,32 +804,12 @@
     document.getElementById('totalPrice').textContent = (subtotal + 20) + ' ج.م';
   }
 
-  async function submitOrder(){
-    const ids = Object.keys(cart);
-    if(ids.length === 0) return;
-    const items = ids.map(id => {
-      const p = products.find(x => x.id === id);
-      return { id, name: p.name, price: p.price, qty: cart[id] };
-    });
-    const subtotal = items.reduce((s,i) => s + i.price * i.qty, 0);
-    try{
-      await db.collection('orders').add({
-        items, subtotal, delivery: 20, total: subtotal + 20,
-        status: 'new',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      cart = {};
-      updateCartBadge();
-      renderCart();
-      alert('تم إرسال الطلب بنجاح! هيتم التواصل معاك لتأكيد التوصيل.');
-    } catch(e){
-      alert('حصل خطأ أثناء إرسال الطلب، حاول تاني.');
-    }
-  }
-
   function updateNavIndicator(navBtn){
     const indicator = document.getElementById('navIndicator');
-    if(!navBtn){ indicator.style.opacity = '0'; return; }
+    if(!navBtn){
+      indicator.style.opacity = '0';
+      return;
+    }
     const nav = document.querySelector('nav.bottom');
     const navRect = nav.getBoundingClientRect();
     const btnRect = navBtn.getBoundingClientRect();
@@ -576,24 +834,7 @@
     window.scrollTo(0,0);
   }
 
-  async function loadData(){
-    const bannerDoc = await db.collection('settings').doc('banner').get();
-    if(bannerDoc.exists){
-      const b = bannerDoc.data();
-      if(b.title) document.getElementById('bannerTitle').textContent = b.title;
-      if(b.subtitle) document.getElementById('bannerSub').textContent = b.subtitle;
-    }
-    const catSnap = await db.collection('categories').orderBy('order').get();
-    categories = catSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-    renderChips();
-    renderCatGrid();
-
-    const prodSnap = await db.collection('products').orderBy('createdAt', 'desc').get();
-    products = prodSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-    renderProducts();
-  }
-
-  loadData();
+  renderProducts();
   updateCartBadge();
   renderCart();
   requestAnimationFrame(() => updateNavIndicator(document.querySelector('.navbtn.active')));
