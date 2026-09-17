@@ -300,6 +300,621 @@
   .pd-hero{
     width:100%; height:180px; border-radius:18px; margin-bottom:16px;
     display:flex; align-items:center; justify-content:center; font-size:64px;
+  }
+  .pd-cat{ margin:0 0 4px; font-size:12px; color:var(--muted); }
+  .pd-name{ margin:0 0 10px; font-size:19px; font-weight:700; }
+  .pd-price-row{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+  .pd-price{ font-size:20px; font-weight:800; color:var(--navy); font-family:'Cairo'; }
+  .pd-stock{ font-size:11px; background:var(--success-bg); color:var(--success-ink); padding:4px 10px; border-radius:20px; font-weight:500; }
+  .pd-divider{ height:1px; background:var(--line); margin:16px 0; }
+  .pd-sub{ font-size:14px; font-weight:700; margin:0 0 8px; }
+  .pd-desc{ font-size:13px; line-height:1.9; color:var(--muted); margin:0 0 4px; }
+  .pd-related{ display:flex; gap:10px; overflow-x:auto; padding-bottom:80px; scrollbar-width:none; }
+  .pd-related::-webkit-scrollbar{ display:none; }
+  .pd-related .rel-card{
+    flex:0 0 auto; width:110px; background:var(--card); border:1px solid var(--line);
+    border-radius:13px; padding:10px; cursor:pointer;
+  }
+  .pd-related .rel-card .img{ width:100%; height:50px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:22px; margin-bottom:6px; }
+  .pd-related .rel-card p{ margin:0; font-size:11px; }
+  .pd-related .rel-card .p{ font-weight:700; color:var(--navy); font-family:'Cairo'; margin-top:3px; }
+  .prod .img, .cart-item .img{ cursor:pointer; }
+  .prod .name{ cursor:pointer; }
+  .pd-bar{
+    position:fixed; bottom:0; left:0; right:0; max-width:430px; margin:0 auto;
+    background:var(--card); border-top:1px solid var(--line);
+    display:flex; align-items:center; gap:12px; padding:12px 16px 24px; z-index:5;
+  }
+  .pd-qty{ background:var(--cream); border-radius:12px; padding:8px 12px; }
+  .pd-qty button{ background:var(--card); }
+  .pd-add-btn{
+    flex:1; border:none; border-radius:12px; padding:13px; background:var(--gold);
+    color:#fff; font-family:'Tajawal'; font-weight:700; font-size:14px; cursor:pointer;
+  }
+  #productDetail{ padding-bottom:70px; }
+
+  @media (min-width: 700px){
+    .app{ max-width: 1100px; box-shadow: 0 0 40px rgba(0,0,0,0.06); }
+    header.top{ padding: 22px 36px 46px; }
+    .search-float{ margin: -24px 36px 0; max-width: 420px; }
+    main{ padding: 24px 36px 90px; }
+    .grid{ grid-template-columns: repeat(4, 1fr); }
+    .cat-grid{ grid-template-columns: repeat(4, 1fr); }
+    .chips{ overflow-x: visible; flex-wrap: wrap; }
+    .pd-bar{ max-width: 1100px; padding: 12px 36px 24px; }
+    .pd-body{ max-width: 640px; }
+    .pd-hero{ height: 260px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="top">
+    <div class="top-row">
+      <div class="brand-mark">
+        <div class="logo"><i class="ti ti-vaccine-bottle" style="font-size:19px; color:#fff;"></i></div>
+       <div class="name brand">صيدلية الأشرف<span>رعايتك أولويتنا</span><span style="font-size:10px; opacity:0.6; margin-top:2px;">إدارة د. عواطف أشرف أبو الخير</span></div>      </div>
+      <div class="bell-wrap" onclick="alert('لا توجد إشعارات جديدة')">
+        <i class="ti ti-bell" style="font-size:20px; color:#fff;"></i>
+        <span class="dot"></span>
+      </div>
+    </div>
+    <div class="greet">
+      <p>أهلاً بيك</p>
+      <h1>أحمد محمد</h1>
+    </div>
+  </header>
+
+  <div class="search-float">
+    <span style="font-size:15px; color:var(--muted);">🔍</span>
+    <input id="searchInput" type="text" placeholder="دور على دواء أو منتج..." oninput="handleSearch()">
+  </div>
+
+  <main>
+
+    <section id="home" class="active">
+      <div class="banner">
+        <div class="txt">
+          <p>خصم 20% على الفيتامينات</p>
+          <p>لحد آخر الشهر</p>
+        </div>
+        <div class="ic"><i class="ti ti-pill"></i></div>
+      </div>
+
+      <h2 class="section-title">الأقسام</h2>
+      <div class="chips">
+        <div class="chip d selected" onclick="filterCategory('أدوية', this)">
+          <div class="ic"><i class="ti ti-pill"></i></div><p>أدوية</p>
+        </div>
+        <div class="chip b" onclick="filterCategory('فيتامينات', this)">
+          <div class="ic"><i class="ti ti-heart"></i></div><p>فيتامينات</p>
+        </div>
+        <div class="chip c" onclick="filterCategory('أطفال', this)">
+          <div class="ic"><i class="ti ti-baby-carriage"></i></div><p>أطفال</p>
+        </div>
+        <div class="chip a" onclick="filterCategory('الكل', this)">
+          <div class="ic"><i class="ti ti-apps"></i></div><p>الكل</p>
+        </div>
+      </div>
+
+      <h2 class="section-title">الأكتر طلباً</h2>
+      <div class="grid" id="productGrid"></div>
+      <p class="no-results" id="noResults" style="display:none;">مفيش منتجات مطابقة للبحث</p>
+    </section>
+
+    <section id="categories">
+      <h2 class="section-title">كل الأقسام</h2>
+      <div class="cat-grid">
+        <div class="cat-card" onclick="goToHomeFiltered('أدوية')">
+          <div class="ic" style="background:var(--chip-d-bg); color:var(--chip-d-ink);"><i class="ti ti-pill"></i></div>
+          <p>أدوية</p>
+        </div>
+        <div class="cat-card" onclick="goToHomeFiltered('فيتامينات')">
+          <div class="ic" style="background:var(--chip-b-bg); color:var(--chip-b-ink);"><i class="ti ti-heart"></i></div>
+          <p>فيتامينات</p>
+        </div>
+        <div class="cat-card" onclick="goToHomeFiltered('أطفال')">
+          <div class="ic" style="background:var(--chip-c-bg); color:var(--chip-c-ink);"><i class="ti ti-baby-carriage"></i></div>
+          <p>أطفال</p>
+        </div>
+        <div class="cat-card" onclick="goToHomeFiltered('العناية')">
+          <div class="ic" style="background:var(--chip-a-bg); color:var(--chip-a-ink);"><i class="ti ti-spray"></i></div>
+          <p>العناية والجمال</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="cart">
+      <h2 class="section-title">عربة التسوق</h2>
+      <div id="cartItems"></div>
+      <div id="cartEmpty" class="empty-state" style="display:none;">
+        <div class="big"><i class="ti ti-shopping-cart-off"></i></div>
+        <p>العربة فاضية دلوقتي</p>
+      </div>
+      <div id="cartSummary" class="cart-summary" style="display:none;">
+        <div class="line"><span>الإجمالي الفرعي</span><span id="subtotal">0 ج.م</span></div>
+        <div class="line"><span>التوصيل</span><span>20 ج.م</span></div>
+        <div class="total"><span>الإجمالي</span><span id="totalPrice">0 ج.م</span></div>
+        <button class="checkout-btn" onclick="alert('تم إرسال الطلب بنجاح! هيتم التواصل معاك لتأكيد التوصيل.')">إتمام الطلب</button>
+      </div>
+    </section>
+
+    <section id="productDetail">
+      <button class="back-btn" onclick="switchTab('home')">→ رجوع</button>
+      <div class="pd-hero" id="pdHero"></div>
+      <div class="pd-body">
+        <p class="pd-cat" id="pdCat"></p>
+        <h2 class="pd-name" id="pdName"></h2>
+        <div class="pd-price-row">
+          <span class="pd-price" id="pdPrice"></span>
+          <span class="pd-stock">متوفر بالمخزون</span>
+        </div>
+        <div class="pd-divider"></div>
+        <h3 class="pd-sub">الوصف</h3>
+        <p class="pd-desc" id="pdDesc"></p>
+        <h3 class="pd-sub">الجرعة والاستخدام</h3>
+        <p class="pd-desc" id="pdUsage"></p>
+        <div class="pd-divider"></div>
+        <h3 class="pd-sub">منتجات مشابهة</h3>
+        <div class="pd-related" id="pdRelated"></div>
+      </div>
+      <div class="pd-bar">
+        <div class="qty pd-qty">
+          <button onclick="pdChangeQty(1)">+</button>
+          <span id="pdQty">1</span>
+          <button onclick="pdChangeQty(-1)">−</button>
+        </div>
+        <button class="pd-add-btn" onclick="pdAddToCart()">إضافة للعربة</button>
+      </div>
+    </section>
+
+    <section id="account">
+      <div class="acc-card">
+        <div class="avatar"><i class="ti ti-user"></i></div>
+        <h3>أحمد محمد</h3>
+        <p>ahmed.mohamed@email.com</p>
+      </div>
+      <div class="acc-list">
+        <div class="acc-row"><div class="ic"><i class="ti ti-package"></i></div> طلباتي</div>
+        <div class="acc-row"><div class="ic"><i class="ti ti-map-pin"></i></div> العناوين المحفوظة</div>
+        <div class="acc-row"><div class="ic"><i class="ti ti-credit-card"></i></div> وسائل الدفع</div>
+        <div class="acc-row"><div class="ic"><i class="ti ti-settings"></i></div> الإعدادات</div>
+        <div class="acc-row"><div class="ic"><i class="ti ti-logout"></i></div> تسجيل الخروج</div>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="bottom">
+    <button class="navbtn active" data-tab="home" onclick="switchTab('home')">
+      <span class="ic"><i class="ti ti-home"></i></span>الرئيسية
+    </button>
+    <button class="navbtn" data-tab="categories" onclick="switchTab('categories')">
+      <span class="ic"><i class="ti ti-layout-grid"></i></span>الأقسام
+    </button>
+    <button class="navbtn" data-tab="cart" onclick="switchTab('cart')">
+      <span class="ic"><i class="ti ti-shopping-cart"></i></span>السلة
+      <span class="badge" id="cartBadge" style="display:none;">0</span>
+    </button>
+    <button class="navbtn" data-tab="account" onclick="switchTab('account')">
+      <span class="ic"><i class="ti ti-user"></i></span>حسابي
+    </button>
+  </nav>
+
+</div>
+
+<script>
+  const products = [
+    { id:1, name:'فيتامين سي 1000mg', cat:'فيتامينات', price:45, icon:'flask', cls:'b',
+      desc:'مكمل غذائي يحتوي على فيتامين سي بتركيز عالي، بيساعد على تقوية جهاز المناعة والحماية من نزلات البرد.',
+      usage:'قرص واحد يومياً بعد الأكل، أو حسب إرشادات الصيدلي.' },
+    { id:2, name:'مسكن ألم بنادول', cat:'أدوية', price:18, icon:'pill', cls:'d',
+      desc:'مسكن سريع المفعول لآلام الرأس والعضلات وخفض الحرارة الخفيفة.',
+      usage:'قرص إلى قرصين كل 6 ساعات، بحد أقصى 8 أقراص يومياً للبالغين.' },
+    { id:3, name:'حليب أطفال نان 1', cat:'أطفال', price:210, icon:'bottle', cls:'c',
+      desc:'حليب صناعي متكامل للرضع من الولادة وحتى 6 شهور، مدعّم بالفيتامينات والمعادن الأساسية.',
+      usage:'حسب الجدول الموضح على العلبة وعمر الطفل، أو حسب إرشادات طبيب الأطفال.' },
+    { id:4, name:'أوميجا 3 كبسولات', cat:'فيتامينات', price:120, icon:'fish', cls:'b',
+      desc:'كبسولات زيت سمك غنية بالأوميجا 3، بتدعم صحة القلب والدماغ.',
+      usage:'كبسولة واحدة يومياً مع الوجبات.' },
+    { id:5, name:'شراب كحة للأطفال', cat:'أطفال', price:32, icon:'droplet', cls:'c',
+      desc:'شراب لطيف لتهدئة الكحة والحلق عند الأطفال، بمذاق مقبول للصغار.',
+      usage:'حسب عمر ووزن الطفل، يرجى مراجعة النشرة الداخلية أو استشارة الطبيب.' },
+    { id:6, name:'خافض حرارة', cat:'أدوية', price:15, icon:'thermometer', cls:'d',
+      desc:'خافض حرارة ومسكن آلام خفيفة إلى متوسطة، مناسب للبالغين والأطفال حسب التركيز.',
+      usage:'حسب العمر والوزن، لا يتجاوز الجرعة الموصى بها في النشرة.' },
+  ];
+
+  let cart = {};
+  let currentCategory = 'أدوية';
+
+  function renderProducts(){
+    const grid = document.getElementById('productGrid');
+    const term = document.getElementById('searchInput').value.trim();
+    let list = products;
+    if(currentCategory !== 'الكل'){
+      list = list.filter(p => p.cat === currentCategory);
+    }
+    if(term){
+      list = list.filter(p => p.name.includes(term));
+    }
+    document.getElementById('noResults').style.display = list.length ? 'none' : 'block';
+    grid.innerHTML = list.map(p => `
+      <div class="prod ${p.cls}">
+        <div class="img" onclick="openProduct(${p.id})"><i class="ti ti-${p.icon}"></i></div>
+        <p class="name" onclick="openProduct(${p.id})">${p.name}</p>
+        <p class="cat">${p.cat}</p>
+        <div class="row">
+          <span class="price">${p.price} ج.م</span>
+          <button class="addbtn" onclick="addToCart(${p.id}, this)">${cart[p.id] ? '✓' : '+'}</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  let pdCurrentId = null;
+  let pdQty = 1;
+
+  function openProduct(id){
+    pdCurrentId = id;
+    pdQty = 1;
+    const p = products.find(x => x.id === id);
+    document.getElementById('pdHero').style.background = `var(--chip-${p.cls}-bg)`;
+    document.getElementById('pdHero').style.color = `var(--chip-${p.cls}-ink)`;
+    document.getElementById('pdHero').innerHTML = `<i class="ti ti-${p.icon}"></i>`;
+    document.getElementById('pdCat').textContent = p.cat;
+    document.getElementById('pdName').textContent = p.name;
+    document.getElementById('pdPrice').textContent = p.price + ' ج.م';
+    document.getElementById('pdDesc').textContent = p.desc;
+    document.getElementById('pdUsage').textContent = p.usage;
+    document.getElementById('pdQty').textContent = pdQty;
+    const related = products.filter(x => x.cat === p.cat && x.id !== p.id);
+    document.getElementById('pdRelated').innerHTML = related.map(r => `
+      <div class="rel-card" onclick="openProduct(${r.id})">
+        <div class="img" style="background:var(--chip-${r.cls}-bg); color:var(--chip-${r.cls}-ink);"><i class="ti ti-${r.icon}"></i></div>
+        <p>${r.name}</p>
+        <p class="p">${r.price} ج.م</p>
+      </div>
+    `).join('') || '<p style="font-size:12px;color:var(--muted);">مفيش منتجات مشابهة دلوقتي</p>';
+    switchTab('productDetail');
+  }
+
+  function pdChangeQty(delta){
+    pdQty = Math.max(1, pdQty + delta);
+    document.getElementById('pdQty').textContent = pdQty;
+  }
+
+  function pdAddToCart(){
+    cart[pdCurrentId] = (cart[pdCurrentId] || 0) + pdQty;
+    updateCartBadge();
+    renderCart();
+    renderProducts();
+    const btn = document.querySelector('.pd-add-btn');
+    const original = btn.textContent;
+    btn.textContent = 'تمت الإضافة ✓';
+    setTimeout(() => { btn.textContent = original; }, 900);
+  }
+
+  function filterCategory(cat, el){
+    currentCategory = cat;
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    renderProducts();
+  }
+
+  function goToHomeFiltered(cat){
+    currentCategory = 'الكل';
+    switchTab('home');
+    renderProducts();
+  }
+
+  function handleSearch(){ renderProducts(); }
+
+  function addToCart(id, btn){
+    cart[id] = (cart[id] || 0) + 1;
+    btn.textContent = '✓';
+    btn.classList.add('added');
+    updateCartBadge();
+    renderCart();
+    setTimeout(() => { btn.textContent = '+'; btn.classList.remove('added'); }, 700);
+  }
+
+  function changeQty(id, delta){
+    cart[id] = (cart[id] || 0) + delta;
+    if(cart[id] <= 0) delete cart[id];
+    updateCartBadge();
+    renderCart();
+  }
+
+  function updateCartBadge(){
+    const count = Object.values(cart).reduce((a,b) => a+b, 0);
+    const badge = document.getElementById('cartBadge');
+    badge.textContent = count;
+    badge.style.display = count > 0 ? 'flex' : 'none';
+  }
+
+  function renderCart(){
+    const wrap = document.getElementById('cartItems');
+    const ids = Object.keys(cart);
+    if(ids.length === 0){
+      wrap.innerHTML = '';
+      document.getElementById('cartEmpty').style.display = 'block';
+      document.getElementById('cartSummary').style.display = 'none';
+      return;
+    }
+    document.getElementById('cartEmpty').style.display = 'none';
+    document.getElementById('cartSummary').style.display = 'block';
+    let subtotal = 0;
+    wrap.innerHTML = ids.map(id => {
+      const p = products.find(x => x.id == id);
+      const qty = cart[id];
+      subtotal += p.price * qty;
+      return `
+        <div class="cart-item">
+          <div class="img" style="background:var(--chip-${p.cls}-bg); color:var(--chip-${p.cls}-ink);" onclick="openProduct(${p.id})"><i class="ti ti-${p.icon}"></i></div>
+          <div class="info" onclick="openProduct(${p.id})">
+            <p>${p.name}</p>
+            <p>${p.price} ج.م</p>
+          </div>
+          <div class="qty">
+            <button onclick="changeQty(${p.id}, 1)">+</button>
+            <span>${qty}</span>
+            <button onclick="changeQty(${p.id}, -1)">−</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+    document.getElementById('subtotal').textContent = subtotal + ' ج.م';
+    document.getElementById('totalPrice').textContent = (subtotal + 20) + ' ج.م';
+  }
+
+  function switchTab(tab){
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    document.getElementById(tab).classList.add('active');
+    document.querySelectorAll('.navbtn').forEach(b => b.classList.remove('active'));
+    const navBtn = document.querySelector(`.navbtn[data-tab="${tab}"]`);
+    if(navBtn) navBtn.classList.add('active');
+    const bottomNav = document.querySelector('nav.bottom');
+    bottomNav.style.display = (tab === 'productDetail') ? 'none' : 'flex';
+    window.scrollTo(0,0);
+  }
+
+  renderProducts();
+  updateCartBadge();
+  renderCart();
+</script>
+</body>
+</html>  }
+
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+  button, .chip, .prod .img, .prod .name, .cart-item .img, .cart-item .info, .cat-card, .acc-row, .rel-card, .bell-wrap{
+    outline:none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  button:focus{ outline:none; }
+  html,body{margin:0;padding:0;}
+  body{
+    background: var(--cream);
+    color: var(--ink);
+    font-family:'Tajawal', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  h1,h2,h3,.brand{ font-family:'Cairo', sans-serif; }
+
+  .app{
+    max-width: 430px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: var(--cream);
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  header.top{
+    background: var(--navy);
+    background-image: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%);
+    padding: 18px 18px 42px;
+    color:#fff;
+    position:relative;
+  }
+  .top-row{
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand-mark{ display:flex; align-items:center; gap:10px; }
+  .brand-mark .logo{
+    width:38px; height:38px; border-radius:11px;
+    background: var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    font-size:19px;
+  }
+  .brand-mark .name{ font-size:15px; font-weight:700; }
+  .brand-mark .name span{ display:block; font-size:11px; font-weight:400; opacity:0.75; font-family:'Tajawal'; }
+  .bell-wrap{ position:relative; cursor:pointer; }
+  .bell-wrap .dot{
+    position:absolute; top:-2px; left:-2px; width:8px; height:8px; border-radius:50%;
+    background: var(--gold); border:1.5px solid var(--navy-deep);
+  }
+  .greet{ margin-top:22px; }
+  .greet p{ margin:0; font-size:12px; opacity:0.75; }
+  .greet h1{ margin:2px 0 0; font-size:20px; font-weight:700; }
+
+  .search-float{
+    margin: -24px 16px 0;
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    display:flex; align-items:center; gap:10px;
+    padding: 0 14px; height:48px;
+    position:relative; z-index:2;
+  }
+  .search-float input{
+    border:none; outline:none; background:transparent; flex:1;
+    font-family:'Tajawal'; font-size:14px; color:var(--ink);
+  }
+  .search-float input::placeholder{ color: var(--muted); }
+
+  main{ flex:1; padding: 20px 16px 90px; }
+
+  section{ display:none; }
+  section.active{ display:block; }
+
+  .banner{
+    border-radius:16px;
+    padding:18px 20px;
+    margin-bottom:22px;
+    display:flex; align-items:center; justify-content:space-between;
+    background: linear-gradient(120deg, #EFDBB3 0%, var(--gold) 120%);
+    color: var(--navy-deep);
+  }
+  .banner .txt p:first-child{ margin:0 0 4px; font-size:16px; font-weight:700; font-family:'Cairo'; }
+  .banner .txt p:last-child{ margin:0; font-size:12px; opacity:0.85; }
+  .banner .ic{
+    width:46px; height:46px; border-radius:50%;
+    background: rgba(255,255,255,0.4);
+    display:flex; align-items:center; justify-content:center; font-size:22px;
+  }
+
+  h2.section-title{ font-size:15px; font-weight:700; margin: 0 0 12px; }
+
+  .chips{ display:flex; gap:10px; overflow-x:auto; padding-bottom:4px; margin-bottom:24px; scrollbar-width:none; }
+  .chips::-webkit-scrollbar{ display:none; }
+  .chip{
+    flex:0 0 auto; min-width:74px;
+    border-radius:14px; padding:12px 8px 10px;
+    text-align:center; cursor:pointer; border:1px solid var(--line);
+    transition: transform .15s ease;
+    background: var(--card);
+  }
+  .chip.selected{ border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold) inset; }
+  .chip:active{ transform: scale(0.96); }
+  .chip .ic{
+    width:38px; height:38px; border-radius:11px; margin:0 auto 6px;
+    display:flex; align-items:center; justify-content:center; font-size:18px;
+  }
+  .chip.a .ic{ background:var(--chip-a-bg); color:var(--chip-a-ink); }
+  .chip.b .ic{ background:var(--chip-b-bg); color:var(--chip-b-ink); }
+  .chip.c .ic{ background:var(--chip-c-bg); color:var(--chip-c-ink); }
+  .chip.d .ic{ background:var(--chip-d-bg); color:var(--chip-d-ink); }
+  .chip p{ margin:0; font-size:11px; color:var(--ink); }
+
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .prod{
+    background: var(--card);
+    border:1px solid var(--line);
+    border-radius:16px; padding:12px;
+  }
+  .prod .img{
+    width:100%; height:78px; border-radius:11px; margin-bottom:10px;
+    display:flex; align-items:center; justify-content:center; font-size:28px;
+  }
+  .prod.a .img{ background:var(--chip-a-bg); color:var(--chip-a-ink); }
+  .prod.b .img{ background:var(--chip-b-bg); color:var(--chip-b-ink); }
+  .prod.c .img{ background:var(--chip-c-bg); color:var(--chip-c-ink); }
+  .prod.d .img{ background:var(--chip-d-bg); color:var(--chip-d-ink); }
+  .prod .name{ font-size:13px; font-weight:500; margin:0 0 2px; }
+  .prod .cat{ font-size:11px; color:var(--muted); margin:0 0 8px; }
+  .prod .row{ display:flex; align-items:center; justify-content:space-between; }
+  .prod .price{ font-size:14px; font-weight:700; color:var(--navy); font-family:'Cairo'; }
+  .addbtn{
+    width:28px; height:28px; border-radius:50%; border:none;
+    background: var(--gold); color:#fff; font-size:16px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition: background .15s ease, transform .15s ease;
+  }
+  .addbtn:active{ transform: scale(0.9); background:var(--gold-deep); }
+  .addbtn.added{ background: var(--success-ink); }
+
+  .cart-item{
+    display:flex; align-items:center; gap:12px;
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:10px; margin-bottom:10px;
+  }
+  .cart-item .img{ width:48px;height:48px;border-radius:10px; display:flex;align-items:center;justify-content:center; font-size:20px; flex-shrink:0; }
+  .cart-item .info{ flex:1; }
+  .cart-item .info p:first-child{ margin:0 0 3px; font-size:13px; font-weight:500; }
+  .cart-item .info p:last-child{ margin:0; font-size:12px; color:var(--navy); font-weight:700; font-family:'Cairo'; }
+  .qty{ display:flex; align-items:center; gap:8px; }
+  .qty button{
+    width:24px; height:24px; border-radius:50%; border:1px solid var(--line);
+    background:var(--card); cursor:pointer; font-size:14px; color:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .qty span{ font-size:13px; min-width:14px; text-align:center; }
+
+  .cart-summary{
+    margin-top:16px; background:var(--card); border:1px solid var(--line);
+    border-radius:14px; padding:16px;
+  }
+  .cart-summary .line{ display:flex; justify-content:space-between; font-size:13px; color:var(--muted); margin-bottom:8px; }
+  .cart-summary .total{ display:flex; justify-content:space-between; font-size:16px; font-weight:700; font-family:'Cairo'; color:var(--ink); border-top:1px solid var(--line); padding-top:10px; margin-top:4px; }
+  .checkout-btn{
+    width:100%; margin-top:14px; padding:13px; border:none; border-radius:12px;
+    background: var(--navy); color:#fff; font-family:'Tajawal'; font-weight:700; font-size:14px;
+    cursor:pointer;
+  }
+  .empty-state{ text-align:center; padding:50px 20px; color:var(--muted); }
+  .empty-state .big{ font-size:40px; margin-bottom:10px; }
+
+  .acc-card{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; text-align:center; margin-bottom:16px; }
+  .acc-card .avatar{ width:60px;height:60px;border-radius:50%; background:var(--navy); color:#fff; display:flex;align-items:center;justify-content:center; font-size:24px; margin:0 auto 10px; }
+  .acc-card h3{ margin:0 0 3px; font-size:15px; }
+  .acc-card p{ margin:0; font-size:12px; color:var(--muted); }
+  .acc-list{ background:var(--card); border:1px solid var(--line); border-radius:16px; overflow:hidden; }
+  .acc-row{ display:flex; align-items:center; gap:12px; padding:14px; font-size:13px; border-bottom:1px solid var(--line); cursor:pointer; }
+  .acc-row:last-child{ border-bottom:none; }
+  .acc-row .ic{ width:32px;height:32px;border-radius:9px; background:var(--chip-a-bg); color:var(--chip-a-ink); display:flex;align-items:center;justify-content:center; font-size:15px; }
+
+  .cat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .cat-card{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 10px; text-align:center; cursor:pointer; }
+  .cat-card .ic{ width:50px;height:50px;border-radius:14px; margin:0 auto 10px; display:flex;align-items:center;justify-content:center; font-size:22px; }
+  .cat-card p{ margin:0; font-size:12px; font-weight:500; }
+
+  nav.bottom{
+    position:fixed;
+    left:50%;
+    bottom:18px;
+    transform:translateX(-50%);
+    width:calc(100% - 32px);
+    max-width:360px;
+    background: var(--navdock-bg);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    border:1px solid var(--navdock-border);
+    border-radius:999px;
+    box-shadow: 0 14px 34px rgba(22,50,79,0.18);
+    display:flex; justify-content:space-around; align-items:center;
+    padding: 8px 10px;
+    z-index:30;
+  }
+  .navbtn{
+    background:none; border:none; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; gap:2px;
+    color: var(--muted); font-family:'Tajawal'; font-size:10px;
+    position:relative; padding:7px 14px; border-radius:999px;
+    transition: background .2s ease, color .2s ease;
+  }
+  .navbtn .ic{ font-size:18px; }
+  .navbtn.active{ color:#fff; background: var(--navy); }
+  .navbtn .badge{
+    position:absolute; top:0px; left:6px;
+    background:var(--gold); color:#fff; font-size:9px; font-weight:700;
+    min-width:15px; height:15px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    border:1.5px solid var(--navdock-bg);
+  }
+
+  .no-results{ text-align:center; color:var(--muted); font-size:13px; padding:30px 0; }
+
+  .back-btn{
+    background:none; border:none; color:var(--navy); font-family:'Tajawal'; font-weight:700;
+    font-size:13px; cursor:pointer; padding:0 0 14px; display:flex; align-items:center; gap:4px;
+  }
+  .pd-hero{
+    width:100%; height:180px; border-radius:18px; margin-bottom:16px;
+    display:flex; align-items:center; justify-content:center; font-size:64px;
     position:relative;
   }
   .pd-tag{
