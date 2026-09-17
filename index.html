@@ -300,15 +300,36 @@
     padding: 8px 10px;
     z-index:30;
   }
+  .nav-indicator{
+    position:absolute; top:8px; bottom:8px; left:0;
+    opacity:0;
+    z-index:0;
+    transition: left .5s cubic-bezier(.34,1.56,.64,1),
+                width .5s cubic-bezier(.34,1.56,.64,1),
+                opacity .2s ease;
+    will-change: left, width;
+  }
+  .nav-indicator .blob{
+    position:absolute; inset:0;
+    border-radius:999px;
+    background: var(--navy);
+    box-shadow: 0 4px 10px rgba(22,50,79,0.35);
+    transform-origin:center;
+    animation: navBlobFloat 2.6s ease-in-out infinite;
+  }
+  @keyframes navBlobFloat{
+    0%, 100%{ transform:scale(1); border-radius:999px; }
+    50%{ transform:scale(1.06); border-radius:46% 54% 52% 48% / 54% 46% 54% 46%; }
+  }
   .navbtn{
     background:none; border:none; cursor:pointer;
     display:flex; flex-direction:column; align-items:center; gap:2px;
     color: var(--muted); font-family:'Tajawal'; font-size:10px;
-    position:relative; padding:7px 14px; border-radius:999px;
-    transition: background .2s ease, color .2s ease;
+    position:relative; z-index:1; padding:7px 14px; border-radius:999px;
+    transition: color .2s ease;
   }
   .navbtn .ic{ font-size:18px; }
-  .navbtn.active{ color:#fff; background: var(--navy); }
+  .navbtn.active{ color:#fff; }
   .navbtn .badge{
     position:absolute; top:0px; left:6px;
     background:var(--gold); color:#fff; font-size:9px; font-weight:700;
@@ -571,6 +592,7 @@
   </main>
 
   <nav class="bottom">
+    <div class="nav-indicator" id="navIndicator"><span class="blob"></span></div>
     <button class="navbtn active" data-tab="home" onclick="switchTab('home')">
       <span class="ic"><i class="ti ti-home"></i></span>الرئيسية
     </button>
@@ -782,12 +804,27 @@
     document.getElementById('totalPrice').textContent = (subtotal + 20) + ' ج.م';
   }
 
+  function updateNavIndicator(navBtn){
+    const indicator = document.getElementById('navIndicator');
+    if(!navBtn){
+      indicator.style.opacity = '0';
+      return;
+    }
+    const nav = document.querySelector('nav.bottom');
+    const navRect = nav.getBoundingClientRect();
+    const btnRect = navBtn.getBoundingClientRect();
+    indicator.style.opacity = '1';
+    indicator.style.width = btnRect.width + 'px';
+    indicator.style.left = (btnRect.left - navRect.left) + 'px';
+  }
+
   function switchTab(tab){
     document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
     document.getElementById(tab).classList.add('active');
     document.querySelectorAll('.navbtn').forEach(b => b.classList.remove('active'));
     const navBtn = document.querySelector(`.navbtn[data-tab="${tab}"]`);
     if(navBtn) navBtn.classList.add('active');
+    updateNavIndicator(navBtn);
     const bottomNav = document.querySelector('nav.bottom');
     bottomNav.style.display = (tab === 'productDetail') ? 'none' : 'flex';
     const searchFloat = document.getElementById('searchFloat');
@@ -800,6 +837,8 @@
   renderProducts();
   updateCartBadge();
   renderCart();
+  requestAnimationFrame(() => updateNavIndicator(document.querySelector('.navbtn.active')));
+  window.addEventListener('resize', () => updateNavIndicator(document.querySelector('.navbtn.active')));
 </script>
 </body>
 </html>
