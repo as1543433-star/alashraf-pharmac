@@ -333,38 +333,37 @@
       </div>
     </section>
 
-   
-<section id="account">
+    <section id="account">
       <div id="accountLoggedOut">
         <div class="auth-card">
-      <h2 class="auth-title" id="authTitle">تسجيل الدخول</h2>
-      <div id="authNameField" style="display:none;">
-        <label class="auth-label">الاسم</label>
-        <input id="authName" type="text" class="auth-input" placeholder="اكتب اسمك" autocomplete="name">
-      </div>
-      <label class="auth-label">الإيميل</label>
-      <input id="authEmail" type="email" class="auth-input" placeholder="example@email.com" autocomplete="email">
-      <label class="auth-label">كلمة المرور</label>
-      <div class="pass-wrap">
-        <input id="authPass" type="password" class="auth-input" placeholder="••••••••" autocomplete="current-password">
-        <i class="ti ti-eye pass-toggle" onclick="togglePassVisibility('authPass', this)"></i>
-      </div>
-      <div id="authConfirmField" style="display:none;">
-        <label class="auth-label">تأكيد كلمة المرور</label>
-        <div class="pass-wrap">
-          <input id="authConfirmPass" type="password" class="auth-input" placeholder="••••••••" autocomplete="new-password">
-          <i class="ti ti-eye pass-toggle" onclick="togglePassVisibility('authConfirmPass', this)"></i>
+          <h2 class="auth-title" id="authTitle">تسجيل الدخول</h2>
+          <div id="authNameField" style="display:none;">
+            <label class="auth-label">الاسم</label>
+            <input id="authName" type="text" class="auth-input" placeholder="اكتب اسمك" autocomplete="name">
+          </div>
+          <label class="auth-label">الإيميل</label>
+          <input id="authEmail" type="email" class="auth-input" placeholder="example@email.com" autocomplete="email">
+          <label class="auth-label">كلمة المرور</label>
+          <div class="pass-wrap">
+            <input id="authPass" type="password" class="auth-input" placeholder="••••••••" autocomplete="current-password">
+            <i class="ti ti-eye pass-toggle" onclick="togglePassVisibility('authPass', this)"></i>
+          </div>
+          <div id="authConfirmField" style="display:none;">
+            <label class="auth-label">تأكيد كلمة المرور</label>
+            <div class="pass-wrap">
+              <input id="authConfirmPass" type="password" class="auth-input" placeholder="••••••••" autocomplete="new-password">
+              <i class="ti ti-eye pass-toggle" onclick="togglePassVisibility('authConfirmPass', this)"></i>
+            </div>
+          </div>
+          <p class="auth-forgot" id="forgotPassLink" onclick="handleForgotPassword()">نسيت كلمة المرور؟</p>
+          <button class="auth-submit" id="authSubmitBtn" onclick="handleAuthSubmit()">دخول</button>
+          <div class="auth-divider"><span>أو</span></div>
+          <button class="auth-google-btn" onclick="handleGoogleSignIn()">
+            <i class="ti ti-brand-google"></i> تسجيل الدخول بجوجل
+          </button>
+          <p class="auth-toggle" onclick="toggleAuthMode()">مالكش حساب؟ <span>سجل دلوقتي</span></p>
+          <p class="auth-msg" id="authMsg"></p>
         </div>
-      </div>
-      <p class="auth-forgot" id="forgotPassLink" onclick="handleForgotPassword()">نسيت كلمة المرور؟</p>
-      <button class="auth-submit" id="authSubmitBtn" onclick="handleAuthSubmit()">دخول</button>
-      <div class="auth-divider"><span>أو</span></div>
-      <button class="auth-google-btn" onclick="handleGoogleSignIn()">
-        <i class="ti ti-brand-google"></i> تسجيل الدخول بجوجل
-      </button>
-      <p class="auth-toggle" onclick="toggleAuthMode()">مالكش حساب؟ <span>سجل دلوقتي</span></p>
-      <p class="auth-msg" id="authMsg"></p>
-    </div>
       </div>
       <div id="accountLoggedIn" style="display:none;">
         <div class="acc-card">
@@ -380,7 +379,9 @@
           <div class="acc-row" onclick="customerLogout()"><div class="ic"><i class="ti ti-logout"></i></div> تسجيل الخروج</div>
         </div>
       </div>
-    </section>  </main>
+    </section>
+
+  </main>
 
   <nav class="bottom">
     <div class="nav-indicator" id="navIndicator"><span class="blob"></span></div>
@@ -413,11 +414,23 @@
     messagingSenderId: "486283006265",
     appId: "1:486283006265:web:307ed704c57eead2b498e8"
   };
- firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
   const auth = firebase.auth();
 
- let isSignupMode = false;
+  let categories = [];
+  let products = [];
+  let cart = JSON.parse(localStorage.getItem('pharmacyCart') || '{}');
+  let currentCategory = 'الكل';
+  let currentUserId = null;
+  let isSignupMode = false;
+
+  function persistCart(){
+    localStorage.setItem('pharmacyCart', JSON.stringify(cart));
+    if(currentUserId){
+      db.collection('userCarts').doc(currentUserId).set({ cart, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+    }
+  }
 
   function toggleAuthMode(){
     isSignupMode = !isSignupMode;
@@ -488,12 +501,13 @@
 
   function customerLogout(){ auth.signOut(); }
 
-  auth.onAuthStateChanged(user => {
+  auth.onAuthStateChanged(async user => {
     const loggedOutGreet = document.getElementById('greetLoggedOut');
     const loggedInGreet = document.getElementById('greetLoggedIn');
     const loggedOutAcc = document.getElementById('accountLoggedOut');
     const loggedInAcc = document.getElementById('accountLoggedIn');
     if(user){
+      currentUserId = user.uid;
       loggedOutGreet.style.display = 'none';
       loggedInGreet.style.display = 'block';
       document.getElementById('greetName').textContent = user.displayName || 'صديق الصيدلية';
@@ -501,18 +515,29 @@
       loggedInAcc.style.display = 'block';
       document.getElementById('accName').textContent = user.displayName || 'مستخدم';
       document.getElementById('accEmail').textContent = user.email;
+
+      try{
+        const cartDoc = await db.collection('userCarts').doc(user.uid).get();
+        if(cartDoc.exists && cartDoc.data().cart){
+          const savedCart = cartDoc.data().cart;
+          const localCart = { ...cart };
+          cart = { ...savedCart };
+          Object.keys(localCart).forEach(id => {
+            cart[id] = (cart[id] || 0) + localCart[id];
+          });
+        }
+        persistCart();
+        updateCartBadge();
+        renderCart();
+      } catch(e){}
     } else {
+      currentUserId = null;
       loggedOutGreet.style.display = 'block';
       loggedInGreet.style.display = 'none';
       loggedOutAcc.style.display = 'block';
       loggedInAcc.style.display = 'none';
     }
   });
-
-  let categories = [];
-  let products = [];
-  let cart = {};
-  let currentCategory = 'الكل';
 
   function productImgHtml(p){
     if(p.imageUrl) return `<img src="${p.imageUrl}" alt="">`;
@@ -606,6 +631,7 @@
 
   function pdAddToCart(){
     cart[pdCurrentId] = (cart[pdCurrentId] || 0) + pdQty;
+    persistCart();
     updateCartBadge();
     renderCart();
     renderProducts();
@@ -622,11 +648,11 @@
     renderProducts();
   }
 
-
   function handleSearch(){ renderProducts(); }
 
   function addToCart(id, btn){
     cart[id] = (cart[id] || 0) + 1;
+    persistCart();
     btn.textContent = '✓';
     btn.classList.add('added');
     updateCartBadge();
@@ -637,6 +663,7 @@
   function changeQty(id, delta){
     cart[id] = (cart[id] || 0) + delta;
     if(cart[id] <= 0) delete cart[id];
+    persistCart();
     updateCartBadge();
     renderCart();
   }
@@ -662,6 +689,7 @@
     let subtotal = 0;
     wrap.innerHTML = ids.map(id => {
       const p = products.find(x => x.id === id);
+      if(!p) return '';
       const qty = cart[id];
       subtotal += p.price * qty;
       return `
@@ -698,6 +726,7 @@
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
       cart = {};
+      persistCart();
       updateCartBadge();
       renderCart();
       alert('تم إرسال الطلب بنجاح! هيتم التواصل معاك لتأكيد التوصيل.');
