@@ -125,6 +125,15 @@
   .empty-state .big{ width:78px; height:78px; border-radius:50%; margin:0 auto 16px; background:var(--chip-a-bg); color:var(--chip-a-ink); display:flex; align-items:center; justify-content:center; font-size:34px; }
   .empty-state p{ margin:0 0 20px; font-size:13px; }
   .empty-cta{ border:none; border-radius:12px; padding:13px 28px; background:var(--navy); color:#fff; font-family:'Tajawal'; font-weight:700; font-size:13px; cursor:pointer; }
+ .login-btn-header{ margin-top:6px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:#fff; padding:8px 16px; border-radius:10px; font-family:'Tajawal'; font-size:12px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:6px; }
+  .auth-card{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px; }
+  .auth-title{ font-size:17px; margin-bottom:16px; text-align:center; }
+  .auth-label{ font-size:12px; color:var(--muted); display:block; margin-bottom:5px; }
+  .auth-input{ width:100%; padding:11px 14px; border:1px solid var(--line); border-radius:10px; font-family:'Tajawal'; font-size:13px; margin-bottom:12px; background:var(--cream); color:var(--ink); }
+  .auth-submit{ width:100%; border:none; border-radius:10px; padding:13px; background:var(--navy); color:#fff; font-family:'Tajawal'; font-weight:700; font-size:14px; cursor:pointer; }
+  .auth-toggle{ text-align:center; font-size:12px; color:var(--muted); margin-top:14px; cursor:pointer; }
+  .auth-toggle span{ color:var(--navy); font-weight:700; }
+  .auth-msg{ text-align:center; font-size:12px; color:var(--danger-ink); margin-top:8px; }
   .acc-card{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; text-align:center; margin-bottom:16px; }
   .acc-card .avatar{ width:60px;height:60px;border-radius:50%; background:var(--navy); color:#fff; display:flex;align-items:center;justify-content:center; font-size:24px; margin:0 auto 10px; }
   .acc-card h3{ margin:0 0 3px; font-size:15px; }
@@ -208,9 +217,17 @@
         <span class="dot"></span>
       </div>
     </div>
-    <div class="greet">
-      <p>أهلاً بيك</p>
-      <h1>أحمد محمد</h1>
+   <div class="greet">
+      <div id="greetLoggedOut">
+        <p>مرحباً بيك في صيدلية الأشرف</p>
+        <button class="login-btn-header" onclick="switchTab('account')">
+          <i class="ti ti-login"></i> تسجيل الدخول
+        </button>
+      </div>
+      <div id="greetLoggedIn" style="display:none;">
+        <p>أهلاً بيك</p>
+        <h1 id="greetName"></h1>
+      </div>
     </div>
   </header>
 
@@ -303,22 +320,39 @@
       </div>
     </section>
 
-    <section id="account">
-      <div class="acc-card">
-        <div class="avatar"><i class="ti ti-user"></i></div>
-        <h3>أحمد محمد</h3>
-        <p>ahmed.mohamed@email.com</p>
+   
+<section id="account">
+      <div id="accountLoggedOut">
+        <div class="auth-card">
+          <h2 class="auth-title" id="authTitle">تسجيل الدخول</h2>
+          <div id="authNameField" style="display:none;">
+            <label class="auth-label">الاسم</label>
+            <input id="authName" type="text" class="auth-input" placeholder="اكتب اسمك">
+          </div>
+          <label class="auth-label">الإيميل</label>
+          <input id="authEmail" type="email" class="auth-input" placeholder="example@email.com">
+          <label class="auth-label">كلمة المرور</label>
+          <input id="authPass" type="password" class="auth-input" placeholder="••••••••">
+          <button class="auth-submit" id="authSubmitBtn" onclick="handleAuthSubmit()">دخول</button>
+          <p class="auth-toggle" onclick="toggleAuthMode()">مالكش حساب؟ <span>سجل دلوقتي</span></p>
+          <p class="auth-msg" id="authMsg"></p>
+        </div>
       </div>
-      <div class="acc-list">
-        <div class="acc-row"><div class="ic"><i class="ti ti-package"></i></div> طلباتي</div>
-        <div class="acc-row"><div class="ic"><i class="ti ti-map-pin"></i></div> العناوين المحفوظة</div>
-        <div class="acc-row"><div class="ic"><i class="ti ti-credit-card"></i></div> وسائل الدفع</div>
-        <div class="acc-row"><div class="ic"><i class="ti ti-settings"></i></div> الإعدادات</div>
-        <div class="acc-row"><div class="ic"><i class="ti ti-logout"></i></div> تسجيل الخروج</div>
+      <div id="accountLoggedIn" style="display:none;">
+        <div class="acc-card">
+          <div class="avatar"><i class="ti ti-user"></i></div>
+          <h3 id="accName"></h3>
+          <p id="accEmail"></p>
+        </div>
+        <div class="acc-list">
+          <div class="acc-row"><div class="ic"><i class="ti ti-package"></i></div> طلباتي</div>
+          <div class="acc-row"><div class="ic"><i class="ti ti-map-pin"></i></div> العناوين المحفوظة</div>
+          <div class="acc-row"><div class="ic"><i class="ti ti-credit-card"></i></div> وسائل الدفع</div>
+          <div class="acc-row"><div class="ic"><i class="ti ti-settings"></i></div> الإعدادات</div>
+          <div class="acc-row" onclick="customerLogout()"><div class="ic"><i class="ti ti-logout"></i></div> تسجيل الخروج</div>
+        </div>
       </div>
-    </section>
-
-  </main>
+    </section>  </main>
 
   <nav class="bottom">
     <div class="nav-indicator" id="navIndicator"><span class="blob"></span></div>
@@ -338,8 +372,8 @@
   </nav>
 
 </div>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
   const firebaseConfig = {
@@ -350,8 +384,65 @@
     messagingSenderId: "486283006265",
     appId: "1:486283006265:web:307ed704c57eead2b498e8"
   };
-  firebase.initializeApp(firebaseConfig);
+ firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
+  const auth = firebase.auth();
+
+  let isSignupMode = false;
+
+  function toggleAuthMode(){
+    isSignupMode = !isSignupMode;
+    document.getElementById('authNameField').style.display = isSignupMode ? 'block' : 'none';
+    document.getElementById('authTitle').textContent = isSignupMode ? 'حساب جديد' : 'تسجيل الدخول';
+    document.getElementById('authSubmitBtn').textContent = isSignupMode ? 'إنشاء الحساب' : 'دخول';
+    document.querySelector('.auth-toggle').innerHTML = isSignupMode
+      ? 'عندك حساب؟ <span>سجل الدخول</span>'
+      : 'مالكش حساب؟ <span>سجل دلوقتي</span>';
+    document.getElementById('authMsg').textContent = '';
+  }
+
+  async function handleAuthSubmit(){
+    const email = document.getElementById('authEmail').value.trim();
+    const pass = document.getElementById('authPass').value;
+    const msgEl = document.getElementById('authMsg');
+    msgEl.textContent = '';
+    if(!email || !pass){ msgEl.textContent = 'من فضلك املأ كل الحقول'; return; }
+    try{
+      if(isSignupMode){
+        const name = document.getElementById('authName').value.trim();
+        if(!name){ msgEl.textContent = 'اكتب اسمك'; return; }
+        const cred = await auth.createUserWithEmailAndPassword(email, pass);
+        await cred.user.updateProfile({ displayName: name });
+      } else {
+        await auth.signInWithEmailAndPassword(email, pass);
+      }
+    } catch(e){
+      msgEl.textContent = 'حصل خطأ: تأكد من الإيميل وكلمة المرور';
+    }
+  }
+
+  function customerLogout(){ auth.signOut(); }
+
+  auth.onAuthStateChanged(user => {
+    const loggedOutGreet = document.getElementById('greetLoggedOut');
+    const loggedInGreet = document.getElementById('greetLoggedIn');
+    const loggedOutAcc = document.getElementById('accountLoggedOut');
+    const loggedInAcc = document.getElementById('accountLoggedIn');
+    if(user){
+      loggedOutGreet.style.display = 'none';
+      loggedInGreet.style.display = 'block';
+      document.getElementById('greetName').textContent = user.displayName || 'صديق الصيدلية';
+      loggedOutAcc.style.display = 'none';
+      loggedInAcc.style.display = 'block';
+      document.getElementById('accName').textContent = user.displayName || 'مستخدم';
+      document.getElementById('accEmail').textContent = user.email;
+    } else {
+      loggedOutGreet.style.display = 'block';
+      loggedInGreet.style.display = 'none';
+      loggedOutAcc.style.display = 'block';
+      loggedInAcc.style.display = 'none';
+    }
+  });
 
   let categories = [];
   let products = [];
