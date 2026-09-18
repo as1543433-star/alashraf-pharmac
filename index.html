@@ -54,16 +54,15 @@ h1,h2,h3,p{margin:0}
 .screen::-webkit-scrollbar{display:none}
 
 /* ---------- home header (brand, no delivery line) ---------- */
-.top{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 0}
+.top{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 0}
 .brand{display:flex;align-items:center;gap:10px}
-.brand .logo{width:42px;height:42px;border-radius:14px;background:var(--mint);color:var(--accent-ink);display:grid;place-items:center}
-.brand b{font-weight:700;font-size:17px}
-.round{width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;position:relative}
-.round .dot{position:absolute;top:9px;left:9px;width:8px;height:8px;border-radius:50%;background:var(--coral);border:2px solid var(--surface)}
-.hello{padding:20px 20px 0}
-.hello h1{font-size:26px;font-weight:600;line-height:1.3}
-.hello p{color:var(--muted);margin-top:2px}
-.search{margin:16px 20px 0;display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:0 16px;height:54px;box-shadow:var(--shadow);color:var(--muted)}
+.brand .logo{width:38px;height:38px;border-radius:12px;background:var(--mint);color:var(--accent-ink);display:grid;place-items:center}
+.brandText{display:flex;flex-direction:column;gap:1px}
+.brand b{font-weight:700;font-size:16px;line-height:1.2}
+.brandSub{font-family:'Readex Pro','IBM Plex Sans Arabic',sans-serif;font-size:10px;font-weight:600;color:var(--accent-ink);letter-spacing:.2px;opacity:.85}
+.round{width:40px;height:40px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;position:relative}
+.round .dot{position:absolute;top:8px;left:8px;width:8px;height:8px;border-radius:50%;background:var(--coral);border:2px solid var(--surface)}
+.search{margin:12px 20px 0;display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:0 16px;height:54px;box-shadow:var(--shadow);color:var(--muted)}
 .search:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 22%,transparent)}
 .search input{flex:1;min-width:0;border:0;background:none;outline:none;font:inherit;font-size:16px;color:var(--ink)}
 .search input::placeholder{color:var(--muted)}
@@ -293,15 +292,13 @@ h1,h2,h3,p{margin:0}
       <header class="top">
         <div class="brand">
           <span class="logo"><i class="ti ti-vaccine-bottle"></i></span>
-          <b>صيدلية الأشرف</b>
+          <div class="brandText">
+            <b>صيدلية الأشرف</b>
+            <small class="brandSub">إدارة د. عواطف اشرف ابو الخير</small>
+          </div>
         </div>
         <button class="round" data-act="bell" aria-label="الإشعارات"><svg class="i" aria-hidden="true"><use href="#i-bell"/></svg><span class="dot"></span></button>
       </header>
-
-      <div class="hello">
-        <h1 id="greetH1">أهلاً بيك</h1>
-        <p>محتاج إيه النهارده؟</p>
-      </div>
 
       <label class="search">
         <svg class="i" aria-hidden="true"><use href="#i-search"/></svg>
@@ -807,7 +804,6 @@ $('#app').addEventListener('click', e => {
 auth.onAuthStateChanged(async user => {
   if (user) {
     state.userId = user.uid; state.userName = user.displayName || 'صديق الصيدلية'; state.userEmail = user.email || '';
-    $('#greetH1').textContent = 'أهلاً بيك يا ' + state.userName;
     try {
       const doc = await db.collection('userCarts').doc(user.uid).get();
       if (doc.exists && doc.data().cart) {
@@ -819,7 +815,6 @@ auth.onAuthStateChanged(async user => {
     save(); refresh();
   } else {
     state.userId = null; state.userName = ''; state.userEmail = '';
-    $('#greetH1').textContent = 'أهلاً بيك';
   }
   if (state.tab === 'me') renderMe();
 });
