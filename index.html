@@ -134,6 +134,13 @@
   .auth-toggle{ text-align:center; font-size:12px; color:var(--muted); margin-top:14px; cursor:pointer; }
   .auth-toggle span{ color:var(--navy); font-weight:700; }
   .auth-msg{ text-align:center; font-size:12px; color:var(--danger-ink); margin-top:8px; }
+  .pass-wrap{ position:relative; }
+  .pass-wrap .auth-input{ padding-left:38px; }
+  .pass-toggle{ position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:16px; color:var(--muted); cursor:pointer; }
+  .auth-forgot{ text-align:left; font-size:11.5px; color:var(--navy); margin:-4px 0 14px; cursor:pointer; }
+  .auth-divider{ display:flex; align-items:center; gap:10px; margin:16px 0; color:var(--muted); font-size:11px; }
+  .auth-divider::before, .auth-divider::after{ content:''; flex:1; height:1px; background:var(--line); }
+  .auth-google-btn{ width:100%; border:1px solid var(--line); border-radius:10px; padding:12px; background:#fff; color:var(--ink); font-family:'Tajawal'; font-weight:500; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:14px; }
   .acc-card{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; text-align:center; margin-bottom:16px; }
   .acc-card .avatar{ width:60px;height:60px;border-radius:50%; background:var(--navy); color:#fff; display:flex;align-items:center;justify-content:center; font-size:24px; margin:0 auto 10px; }
   .acc-card h3{ margin:0 0 3px; font-size:15px; }
@@ -188,6 +195,8 @@
   .pd-add-btn{ flex:1; border:none; border-radius:12px; padding:13px; background:var(--success-ink); color:#fff; font-family:'Tajawal'; font-weight:700; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; }
   #productDetail{ padding-bottom:70px; }
   .loading-msg{ text-align:center; padding:40px 0; color:var(--muted); font-size:13px; }
+  .load-error{ text-align:center; padding:40px 20px; color:var(--muted); }
+  .load-error button{ margin-top:12px; border:none; border-radius:10px; padding:10px 20px; background:var(--navy); color:#fff; font-family:'Tajawal'; font-weight:700; font-size:13px; cursor:pointer; }
   img{ width:100%; height:100%; object-fit:cover; }
   @media (min-width: 700px){
     .app{ max-width: 1100px; box-shadow: 0 0 40px rgba(0,0,0,0.06); }
@@ -233,7 +242,7 @@
 
   <div class="search-float" id="searchFloat">
     <span style="font-size:15px; color:var(--muted);">🔍</span>
-    <input id="searchInput" type="text" placeholder="دور على دواء أو منتج..." oninput="handleSearch()">
+   <input id="searchInput" type="text" placeholder="دور على دواء أو منتج..." oninput="handleSearch()" autocomplete="off">
   </div>
 
   <main>
@@ -250,10 +259,13 @@
       <h2 class="section-title">الأقسام</h2>
       <div class="chips" id="chipsContainer"></div>
 
-      <h2 class="section-title">الأكتر طلباً</h2>
+     <h2 class="section-title">الأكتر طلباً</h2>
       <div class="grid" id="productGrid"><p class="loading-msg">جاري تحميل المنتجات...</p></div>
       <p class="no-results" id="noResults" style="display:none;">مفيش منتجات مطابقة للبحث</p>
-    </section>
+      <div id="loadError" class="load-error" style="display:none;">
+        <p>تعذر تحميل المنتجات، تأكد من الاتصال بالإنترنت</p>
+        <button onclick="loadData()">إعادة المحاولة</button>
+      </div>
 
     <section id="categories">
       <h2 class="section-title">كل الأقسام</h2>
@@ -324,19 +336,34 @@
 <section id="account">
       <div id="accountLoggedOut">
         <div class="auth-card">
-          <h2 class="auth-title" id="authTitle">تسجيل الدخول</h2>
-          <div id="authNameField" style="display:none;">
-            <label class="auth-label">الاسم</label>
-            <input id="authName" type="text" class="auth-input" placeholder="اكتب اسمك">
-          </div>
-          <label class="auth-label">الإيميل</label>
-          <input id="authEmail" type="email" class="auth-input" placeholder="example@email.com">
-          <label class="auth-label">كلمة المرور</label>
-          <input id="authPass" type="password" class="auth-input" placeholder="••••••••">
-          <button class="auth-submit" id="authSubmitBtn" onclick="handleAuthSubmit()">دخول</button>
-          <p class="auth-toggle" onclick="toggleAuthMode()">مالكش حساب؟ <span>سجل دلوقتي</span></p>
-          <p class="auth-msg" id="authMsg"></p>
+      <h2 class="auth-title" id="authTitle">تسجيل الدخول</h2>
+      <div id="authNameField" style="display:none;">
+        <label class="auth-label">الاسم</label>
+        <input id="authName" type="text" class="auth-input" placeholder="اكتب اسمك" autocomplete="name">
+      </div>
+      <label class="auth-label">الإيميل</label>
+      <input id="authEmail" type="email" class="auth-input" placeholder="example@email.com" autocomplete="email">
+      <label class="auth-label">كلمة المرور</label>
+      <div class="pass-wrap">
+        <input id="authPass" type="password" class="auth-input" placeholder="••••••••" autocomplete="current-password">
+        <i class="ti ti-eye pass-toggle" onclick="togglePassVisibility('authPass', this)"></i>
+      </div>
+      <div id="authConfirmField" style="display:none;">
+        <label class="auth-label">تأكيد كلمة المرور</label>
+        <div class="pass-wrap">
+          <input id="authConfirmPass" type="password" class="auth-input" placeholder="••••••••" autocomplete="new-password">
+          <i class="ti ti-eye pass-toggle" onclick="togglePassVisibility('authConfirmPass', this)"></i>
         </div>
+      </div>
+      <p class="auth-forgot" id="forgotPassLink" onclick="handleForgotPassword()">نسيت كلمة المرور؟</p>
+      <button class="auth-submit" id="authSubmitBtn" onclick="handleAuthSubmit()">دخول</button>
+      <div class="auth-divider"><span>أو</span></div>
+      <button class="auth-google-btn" onclick="handleGoogleSignIn()">
+        <i class="ti ti-brand-google"></i> تسجيل الدخول بجوجل
+      </button>
+      <p class="auth-toggle" onclick="toggleAuthMode()">مالكش حساب؟ <span>سجل دلوقتي</span></p>
+      <p class="auth-msg" id="authMsg"></p>
+    </div>
       </div>
       <div id="accountLoggedIn" style="display:none;">
         <div class="acc-card">
@@ -376,6 +403,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
+
   const firebaseConfig = {
     apiKey: "AIzaSyCoYdxryBFUNmEv6V_aoUw7pJNhEDoF00Q",
     authDomain: "alashraf-pharmacy.firebaseapp.com",
@@ -388,11 +416,13 @@
   const db = firebase.firestore();
   const auth = firebase.auth();
 
-  let isSignupMode = false;
+ let isSignupMode = false;
 
   function toggleAuthMode(){
     isSignupMode = !isSignupMode;
     document.getElementById('authNameField').style.display = isSignupMode ? 'block' : 'none';
+    document.getElementById('authConfirmField').style.display = isSignupMode ? 'block' : 'none';
+    document.getElementById('forgotPassLink').style.display = isSignupMode ? 'none' : 'block';
     document.getElementById('authTitle').textContent = isSignupMode ? 'حساب جديد' : 'تسجيل الدخول';
     document.getElementById('authSubmitBtn').textContent = isSignupMode ? 'إنشاء الحساب' : 'دخول';
     document.querySelector('.auth-toggle').innerHTML = isSignupMode
@@ -401,16 +431,27 @@
     document.getElementById('authMsg').textContent = '';
   }
 
+  function togglePassVisibility(inputId, icon){
+    const input = document.getElementById(inputId);
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    icon.classList.toggle('ti-eye', !isHidden);
+    icon.classList.toggle('ti-eye-off', isHidden);
+  }
+
   async function handleAuthSubmit(){
     const email = document.getElementById('authEmail').value.trim();
     const pass = document.getElementById('authPass').value;
     const msgEl = document.getElementById('authMsg');
+    msgEl.style.color = '';
     msgEl.textContent = '';
     if(!email || !pass){ msgEl.textContent = 'من فضلك املأ كل الحقول'; return; }
     try{
       if(isSignupMode){
         const name = document.getElementById('authName').value.trim();
+        const confirmPass = document.getElementById('authConfirmPass').value;
         if(!name){ msgEl.textContent = 'اكتب اسمك'; return; }
+        if(pass !== confirmPass){ msgEl.textContent = 'كلمة المرور وتأكيدها مش متطابقين'; return; }
         const cred = await auth.createUserWithEmailAndPassword(email, pass);
         await cred.user.updateProfile({ displayName: name });
       } else {
@@ -418,6 +459,29 @@
       }
     } catch(e){
       msgEl.textContent = 'حصل خطأ: تأكد من الإيميل وكلمة المرور';
+    }
+  }
+
+  async function handleForgotPassword(){
+    const email = document.getElementById('authEmail').value.trim();
+    const msgEl = document.getElementById('authMsg');
+    msgEl.style.color = '';
+    if(!email){ msgEl.textContent = 'اكتب إيميلك الأول عشان نبعتلك رابط الاستعادة'; return; }
+    try{
+      await auth.sendPasswordResetEmail(email);
+      msgEl.style.color = 'var(--success-ink)';
+      msgEl.textContent = 'تم إرسال رابط إعادة تعيين كلمة المرور على إيميلك';
+    } catch(e){
+      msgEl.textContent = 'تعذر إرسال الرابط، تأكد من صحة الإيميل';
+    }
+  }
+
+  async function handleGoogleSignIn(){
+    const provider = new firebase.auth.GoogleAuthProvider();
+    try{
+      await auth.signInWithPopup(provider);
+    } catch(e){
+      document.getElementById('authMsg').textContent = 'تعذر تسجيل الدخول بجوجل، حاول تاني';
     }
   }
 
@@ -557,6 +621,7 @@
     renderProducts();
   }
 
+
   function handleSearch(){ renderProducts(); }
 
   function addToCart(id, btn){
@@ -667,12 +732,13 @@
     window.scrollTo(0,0);
   }
 
-  async function loadData(){
+  async function fetchFreshData(){
     const bannerDoc = await db.collection('settings').doc('banner').get();
+    let bannerData = null;
     if(bannerDoc.exists){
-      const b = bannerDoc.data();
-      if(b.title) document.getElementById('bannerTitle').textContent = b.title;
-      if(b.subtitle) document.getElementById('bannerSub').textContent = b.subtitle;
+      bannerData = bannerDoc.data();
+      if(bannerData.title) document.getElementById('bannerTitle').textContent = bannerData.title;
+      if(bannerData.subtitle) document.getElementById('bannerSub').textContent = bannerData.subtitle;
     }
     const catSnap = await db.collection('categories').orderBy('order').get();
     categories = catSnap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -682,6 +748,36 @@
     const prodSnap = await db.collection('products').orderBy('createdAt', 'desc').get();
     products = prodSnap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderProducts();
+
+    localStorage.setItem('pharmacyCache', JSON.stringify({ categories, products, banner: bannerData }));
+  }
+
+  async function loadData(){
+    document.getElementById('loadError').style.display = 'none';
+    const cached = localStorage.getItem('pharmacyCache');
+    if(cached){
+      try{
+        const c = JSON.parse(cached);
+        if(c.categories) categories = c.categories;
+        if(c.products) products = c.products;
+        if(c.banner){
+          if(c.banner.title) document.getElementById('bannerTitle').textContent = c.banner.title;
+          if(c.banner.subtitle) document.getElementById('bannerSub').textContent = c.banner.subtitle;
+        }
+        renderChips();
+        renderCatGrid();
+        renderProducts();
+      } catch(e){}
+    }
+    const timeout = (ms) => new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms));
+    try{
+      await Promise.race([fetchFreshData(), timeout(8000)]);
+    } catch(e){
+      if(!cached){
+        document.getElementById('loadError').style.display = 'block';
+        document.getElementById('productGrid').innerHTML = '';
+      }
+    }
   }
 
   loadData();
