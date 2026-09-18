@@ -94,9 +94,22 @@
 
     <div id="catsTab" class="tab-content">
       <div class="card">
-        <h3>اختار الأقسام اللي عايز تظهر في الموقع (اضغط عشان تفعّل أو تلغي)</h3>
+        <h3>اختار الأقسام الجاهزة اللي عايز تظهر في الموقع (اضغط عشان تفعّل أو تلغي)</h3>
         <div class="cat-options" id="catOptions"></div>
         <p class="msg" id="catsMsg"></p>
+      </div>
+      <div class="card">
+        <h3>إضافة قسم جديد بالكامل</h3>
+        <label>اسم القسم</label>
+        <input id="newCatName" placeholder="مثال: العناية بالبشرة">
+        <label>الأيقونة (اسم أيقونة من مكتبة Tabler، اختياري)</label>
+        <input id="newCatIcon" placeholder="مثال: sparkles">
+        <button class="btn btn-gold" onclick="addCustomCategory()">+ إضافة القسم</button>
+        <p class="msg" id="newCatMsg"></p>
+      </div>
+      <div class="card">
+        <h3>الأقسام المضافة يدويًا</h3>
+        <div id="customCatList"></div>
       </div>
     </div>
 
@@ -112,6 +125,10 @@
 
     <div id="ordersTab" class="tab-content">
       <div class="card">
+        <h3>إجمالي المبيعات المحققة (الطلبات المُسلَّمة فعليًا)</h3>
+        <p style="font-size:24px; font-weight:700; color:var(--success); margin:0;" id="totalRevenue">0 ج.م</p>
+      </div>
+      <div class="card">
         <h3>طلبات جديدة</h3>
         <table class="order-table"><tbody id="ordersNew"></tbody></table>
       </div>
@@ -122,6 +139,10 @@
       <div class="card">
         <h3>تم التسليم</h3>
         <table class="order-table"><tbody id="ordersDone"></tbody></table>
+      </div>
+      <div class="card">
+        <h3>طلبات مرفوضة</h3>
+        <table class="order-table"><tbody id="ordersRejected"></tbody></table>
       </div>
     </div>
   </div>
@@ -306,6 +327,7 @@
     renderCatOptions();
     renderCategorySelect();
   }
+
   function renderCatOptions(){
     const wrap = document.getElementById('catOptions');
     wrap.innerHTML = CATEGORY_OPTIONS.map(c => {
@@ -317,7 +339,45 @@
         </div>
       `;
     }).join('');
+    renderCustomCatList();
   }
+
+  function renderCustomCatList(){
+    const wrap = document.getElementById('customCatList');
+    if(!wrap) return;
+    const list = activeCategories.filter(c => c.custom);
+    wrap.innerHTML = list.map(c => `
+      <div class="prod-list-item">
+        <div class="noimg"><i class="ti ti-${c.icon}"></i></div>
+        <div class="info"><p>${c.name}</p></div>
+        <div class="prod-actions"><button class="btn btn-danger" onclick="deleteCustomCategory('${c.id}')">حذف</button></div>
+      </div>
+    `).join('') || '<p style="font-size:13px;color:var(--muted);">لا يوجد أقسام مضافة يدويًا حتى الآن</p>';
+  }
+
+  async function addCustomCategory(){
+    const name = document.getElementById('newCatName').value.trim();
+    const icon = document.getElementById('newCatIcon').value.trim() || 'category';
+    const msgEl = document.getElementById('newCatMsg');
+    if(!name){ msgEl.className = 'msg err'; msgEl.textContent = 'اكتب اسم القسم الأول'; return; }
+    const clsCycle = ['a','b','c','d','e','f','g'];
+    const cls = clsCycle[activeCategories.length % clsCycle.length];
+    const order = activeCategories.length + 1;
+    const id = 'custom_' + Date.now();
+    await db.collection('categories').doc(id).set({ id, name, icon, cls, order, custom: true });
+    document.getElementById('newCatName').value = '';
+    document.getElementById('newCatIcon').value = '';
+    msgEl.className = 'msg ok'; msgEl.textContent = 'تم إضافة القسم ✓';
+    setTimeout(() => msgEl.textContent = '', 2000);
+    await loadCategories();
+  }
+
+  async function deleteCustomCategory(id){
+    if(!confirm('متأكد إنك عايز تحذف القسم ده؟')) return;
+    await db.collection('categories').doc(id).delete();
+    await loadCategories();
+  }
+
   async function toggleCategory(id){
     const opt = CATEGORY_OPTIONS.find(c => c.id === id);
     const isActive = activeCategories.some(a => a.id === id);
@@ -459,6 +519,7 @@
             <option value="new" ${o.status==='new'?'selected':''}>جديد</option>
             <option value="processing" ${o.status==='processing'?'selected':''}>قيد التنفيذ</option>
             <option value="done" ${o.status==='done'?'selected':''}>تم التسليم</option>
+            <option value="rejected" ${o.status==='rejected'?'selected':''}>رفض الطلب</option>
           </select>
         </td>
       </tr>
@@ -468,6 +529,9 @@
     document.getElementById('ordersNew').innerHTML = orders.filter(o=>o.status==='new').map(orderRow).join('') || '<tr><td colspan="4" style="color:var(--muted);padding:10px;">لا يوجد طلبات جديدة</td></tr>';
     document.getElementById('ordersProcessing').innerHTML = orders.filter(o=>o.status==='processing').map(orderRow).join('') || '<tr><td colspan="4" style="color:var(--muted);padding:10px;">لا يوجد طلبات قيد التنفيذ</td></tr>';
     document.getElementById('ordersDone').innerHTML = orders.filter(o=>o.status==='done').map(orderRow).join('') || '<tr><td colspan="4" style="color:var(--muted);padding:10px;">لا يوجد طلبات مكتملة</td></tr>';
+    document.getElementById('ordersRejected').innerHTML = orders.filter(o=>o.status==='rejected').map(orderRow).join('') || '<tr><td colspan="4" style="color:var(--muted);padding:10px;">لا يوجد طلبات مرفوضة</td></tr>';
+    const totalRevenue = orders.filter(o=>o.status==='done').reduce((sum,o) => sum + (o.total||0), 0);
+    document.getElementById('totalRevenue').textContent = totalRevenue + ' ج.م';
   }
   async function updateOrderStatus(id, status){
     await db.collection('orders').doc(id).update({ status });
