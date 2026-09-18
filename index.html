@@ -3,14 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>صيدلية الأشرف — تصميم التطبيق</title>
+<title>صيدلية الأشرف</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <style>
 :root{
   --page:#DCE6E0; --bg:#F3F6F2; --surface:#FFFFFF; --ink:#12261F; --muted:#5B6E66; --line:#E0E8E2;
   --accent:#0C5B49; --accent-ink:#0C5B49; --on-accent:#FFFFFF; --mint:#DCEFE6; --hero:#0C5B49;
   --coral:#D23F28; --coral-wash:#FDE9E4; --sun:#F7C548; --sun-wash:#FFF3D0; --ring:#0C5B49;
   --shadow:0 1px 2px rgba(18,38,31,.05),0 10px 24px -14px rgba(18,38,31,.22);
+  --c-0:#4B6B90; --c-1:#D08A0E; --c-2:#D9412F; --c-3:#2F9E6E; --c-4:#C1691E; --c-5:#2C8C82; --c-6:#B23C74;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
@@ -40,6 +42,7 @@ h1,h2,h3,p{margin:0}
 :focus-visible{outline:3px solid var(--ring);outline-offset:2px;border-radius:12px}
 .muted{color:var(--muted)}
 .i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ti{font-size:20px;line-height:1}
 
 /* ---------- app shell ---------- */
 .app{position:relative;width:100%;max-width:430px;height:100dvh;background:var(--bg);overflow:hidden;display:flex;flex-direction:column}
@@ -50,13 +53,13 @@ h1,h2,h3,p{margin:0}
 .screen{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(112px + env(safe-area-inset-bottom));scrollbar-width:none}
 .screen::-webkit-scrollbar{display:none}
 
-/* ---------- home header ---------- */
+/* ---------- home header (brand, no delivery line) ---------- */
 .top{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 0}
-.loc{display:flex;align-items:center;gap:10px}
-.loc .pin{width:42px;height:42px;border-radius:14px;background:var(--mint);color:var(--accent-ink);display:grid;place-items:center}
-.loc small{display:block;color:var(--muted);font-size:12px;line-height:1.3}
-.loc b{font-weight:600;font-size:14px}
-.round{width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center}
+.brand{display:flex;align-items:center;gap:10px}
+.brand .logo{width:42px;height:42px;border-radius:14px;background:var(--mint);color:var(--accent-ink);display:grid;place-items:center}
+.brand b{font-weight:700;font-size:17px}
+.round{width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;position:relative}
+.round .dot{position:absolute;top:9px;left:9px;width:8px;height:8px;border-radius:50%;background:var(--coral);border:2px solid var(--surface)}
 .hello{padding:20px 20px 0}
 .hello h1{font-size:26px;font-weight:600;line-height:1.3}
 .hello p{color:var(--muted);margin-top:2px}
@@ -76,24 +79,18 @@ h1,h2,h3,p{margin:0}
 .rx .meta span{display:flex;align-items:center;gap:6px}
 .rx .meta .i{width:17px;height:17px}
 
-/* ---------- offers ---------- */
-.hs{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;padding-inline:20px}
-.hs::-webkit-scrollbar{display:none}
-.offers{padding-top:18px}
-.offer{flex:0 0 76%;scroll-snap-align:start;border-radius:22px;padding:16px;display:flex;gap:12px;align-items:center;text-align:start;border:1px solid transparent}
-.offer .oi{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;flex:none;background:rgba(255,255,255,.55);color:#16261f}
-.offer b{display:block;font-weight:600;font-size:15px;line-height:1.35}
-.offer small{color:inherit;opacity:.8;font-size:13px}
-.offer.sun{background:var(--sun-wash);color:var(--ink);border-color:color-mix(in srgb,var(--sun) 50%,transparent)}
-.offer.mint{background:var(--mint);color:var(--ink)}
-.offer.coral{background:var(--coral-wash);color:var(--ink)}
-.offer.mint .oi,.offer.coral .oi{background:var(--surface);color:var(--accent-ink)}
-.offer.coral .oi{color:var(--coral)}
+/* ---------- free-delivery banner (points removed) ---------- */
+.freeship{margin:18px 20px 0;border-radius:22px;background:var(--mint);color:var(--accent-ink);padding:16px;display:flex;align-items:center;gap:12px}
+.freeship .oi{width:44px;height:44px;border-radius:14px;background:var(--surface);color:var(--accent-ink);display:grid;place-items:center;flex:none}
+.freeship b{display:block;font-weight:700;font-size:15px}
+.freeship small{opacity:.85;font-size:13px}
 
 /* ---------- sections, categories ---------- */
 .sec{display:flex;justify-content:space-between;align-items:baseline;padding:26px 20px 12px}
 .sec h2{font-size:20px;font-weight:600}
 .sec span{font-size:13px}
+.hs{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;padding-inline:20px}
+.hs::-webkit-scrollbar{display:none}
 .cats{padding-bottom:4px}
 .cat{flex:0 0 auto;min-width:78px;padding:12px 8px 10px;border-radius:20px;background:var(--surface);border:1.5px solid var(--line);display:grid;justify-items:center;gap:8px;font-size:13px;font-weight:500}
 .cat .ic{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 14%,var(--surface));color:var(--c)}
@@ -103,7 +100,8 @@ h1,h2,h3,p{margin:0}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 20px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:8px;display:flex;flex-direction:column;box-shadow:var(--shadow);min-width:0}
 .tile{position:relative;border-radius:16px;aspect-ratio:1/.92;background:var(--mint);background:color-mix(in srgb,var(--c) 14%,var(--surface));display:grid;place-items:center;overflow:hidden}
-.tile .art{width:72%;height:auto;display:block}
+.tile img{width:100%;height:100%;object-fit:cover}
+.tile .ti{font-size:34px;color:var(--c)}
 .tile .open{position:absolute;inset:0;display:grid;place-items:center;border-radius:16px}
 .badge{position:absolute;top:8px;inset-inline-start:8px;background:var(--coral);color:#fff;font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;pointer-events:none}
 .badge.rxt{background:var(--ink);color:var(--bg)}
@@ -126,11 +124,15 @@ h1,h2,h3,p{margin:0}
 .step.lg b{min-width:26px;font-size:17px}
 .empty{grid-column:1/-1;text-align:center;padding:36px 12px;color:var(--muted)}
 .empty h3{color:var(--ink);font-size:17px;margin-bottom:4px}
+.loading{grid-column:1/-1;text-align:center;padding:36px 12px;color:var(--muted)}
 
-/* ---------- bottom nav ---------- */
+/* ---------- bottom nav + animated indicator ---------- */
 .nav{position:absolute;inset-inline:12px;bottom:calc(12px + env(safe-area-inset-bottom));height:68px;background:var(--surface);border:1px solid var(--line);border-radius:26px;box-shadow:0 12px 32px -12px rgba(0,0,0,.3);display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:6px;z-index:5}
-.nav button{position:relative;border-radius:20px;display:grid;justify-items:center;align-content:center;gap:2px;font-size:11.5px;color:var(--muted)}
-.nav button[aria-current="page"]{background:var(--mint);color:var(--accent-ink);font-weight:600}
+.nav-indicator{position:absolute;top:6px;bottom:6px;left:6px;width:calc(25% - 8px);border-radius:20px;opacity:0;transition:left .45s cubic-bezier(.34,1.56,.64,1),opacity .2s ease;pointer-events:none;z-index:0}
+.nav-indicator .blob{position:absolute;inset:0;border-radius:20px;background:var(--mint);transform-origin:center;animation:navBlobFloat 2.6s ease-in-out infinite}
+@keyframes navBlobFloat{0%,100%{transform:scale(1);border-radius:20px}50%{transform:scale(1.04);border-radius:26px 16px 24px 18px/18px 24px 16px 26px}}
+.nav button{position:relative;border-radius:20px;display:grid;justify-items:center;align-content:center;gap:2px;font-size:11.5px;color:var(--muted);z-index:1}
+.nav button[aria-current="page"]{color:var(--accent-ink);font-weight:600}
 .nav .cnt{position:absolute;top:5px;left:calc(50% + 4px);min-width:18px;height:18px;border-radius:9px;background:var(--coral);color:#fff;font-size:11px;font-weight:600;display:grid;place-items:center;padding:0 5px;font-family:'Readex Pro',sans-serif}
 
 /* ---------- page headings for tabs ---------- */
@@ -151,7 +153,7 @@ h1,h2,h3,p{margin:0}
 .lines{display:grid;gap:10px;padding:14px 20px 0}
 .line{display:grid;grid-template-columns:72px 1fr auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:10px}
 .line .tile{aspect-ratio:1;border-radius:14px}
-.line .tile .art{width:80%}
+.line .tile .ti{font-size:26px}
 .line b.n{font-weight:600;font-size:14.5px;line-height:1.4;display:block}
 .line .num{font-size:14px;color:var(--muted)}
 .line .rxok{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--accent-ink);background:var(--mint);border-radius:999px;padding:1px 8px;margin-top:4px}
@@ -164,11 +166,12 @@ h1,h2,h3,p{margin:0}
 .bar i{display:block;height:100%;background:var(--sun);border-radius:inherit;transition:width .3s}
 .box{margin:14px 20px 0;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:16px}
 .box h3{font-size:15px;font-weight:600;margin-bottom:10px}
-.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.seg button{height:48px;border-radius:14px;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;gap:8px;font-weight:500;font-size:14px}
-.seg button[aria-pressed="true"]{border-color:var(--accent);background:var(--mint);color:var(--accent-ink);font-weight:600}
-.addr{display:flex;align-items:center;gap:12px}
-.addr .pin{width:42px;height:42px;border-radius:14px;background:var(--mint);color:var(--accent-ink);display:grid;place-items:center;flex:none}
+.field{display:block;margin-bottom:10px}
+.field span{display:block;font-size:12.5px;color:var(--muted);margin-bottom:6px}
+.field input,.field textarea{width:100%;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;font:inherit;font-size:14.5px;background:var(--bg);color:var(--ink);outline:none;resize:none}
+.field input:focus,.field textarea:focus{border-color:var(--accent)}
+.field.err input,.field.err textarea{border-color:var(--coral)}
+.cashline{display:flex;align-items:center;gap:10px;height:48px;border-radius:14px;border:1.5px solid var(--accent);background:var(--mint);color:var(--accent-ink);font-weight:600;padding:0 14px}
 .rowl{display:flex;justify-content:space-between;padding:4px 0;color:var(--muted)}
 .rowl b{color:var(--ink);font-weight:500}
 .rowl.tot{border-top:1px dashed var(--line);margin-top:8px;padding-top:12px;color:var(--ink);font-weight:600;font-size:17px}
@@ -183,13 +186,10 @@ h1,h2,h3,p{margin:0}
 .zero .btn{margin-top:10px}
 .btn{height:48px;border-radius:16px;background:var(--accent);color:var(--on-accent);padding:0 22px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
 
-/* ---------- account ---------- */
+/* ---------- account / auth ---------- */
 .me{display:flex;align-items:center;gap:14px;padding:22px 20px 0}
 .av{width:60px;height:60px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-family:'Readex Pro',sans-serif;font-size:24px;font-weight:600}
 .me h1{font-size:22px;font-weight:600}
-.pts{margin:16px 20px 0;padding:16px;background:var(--mint);border-radius:22px}
-.pts .num{font-size:30px;font-weight:600;line-height:1.2}
-.pts p{font-size:13.5px;color:var(--muted)}
 .order{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:14px;display:grid;gap:8px}
 .order .h{display:flex;justify-content:space-between;align-items:baseline}
 .order .h b{font-weight:600}
@@ -207,6 +207,12 @@ h1,h2,h3,p{margin:0}
 .sw::after{content:'';position:absolute;top:3px;inset-inline-start:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:inset-inline-start .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
 .sw[data-on="1"]{background:var(--accent)}
 .sw[data-on="1"]::after{inset-inline-start:23px}
+.authbox{margin:20px 20px 0;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:18px}
+.authbox h2{font-size:18px;font-weight:600;text-align:center;margin-bottom:14px}
+.authtog{text-align:center;font-size:13px;color:var(--muted);margin-top:12px}
+.authtog b{color:var(--accent-ink);cursor:pointer}
+.authmsg{text-align:center;font-size:12.5px;color:var(--coral);margin-top:8px;min-height:16px}
+.gbtn{width:100%;height:48px;border:1.5px solid var(--line);border-radius:14px;background:var(--surface);display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;margin-top:6px}
 
 /* ---------- sheet ---------- */
 .wrap{position:absolute;inset:0;z-index:20;display:flex;align-items:flex-end;background:rgba(6,16,12,.55);opacity:0;transition:opacity .2s}
@@ -216,7 +222,7 @@ h1,h2,h3,p{margin:0}
 .grab{width:44px;height:5px;border-radius:9px;background:var(--line);margin:0 auto 14px}
 .x{position:absolute;top:14px;inset-inline-start:14px;width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;z-index:2}
 .tile.big{aspect-ratio:1/.66;border-radius:24px;margin-top:6px}
-.tile.big .art{width:44%}
+.tile.big .ti{font-size:64px}
 .pr{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-top:16px}
 .pr h2{font-size:22px;font-weight:600;line-height:1.35}
 .pr .fav{position:static;background:var(--surface);border:1px solid var(--line);flex:none}
@@ -265,10 +271,6 @@ h1,h2,h3,p{margin:0}
   <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
   <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></symbol>
   <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l1.5-2.5h7L17 8h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.5"/></symbol>
-  <symbol id="i-pill" viewBox="0 0 24 24"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></symbol>
-  <symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 14a4 4 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/></symbol>
-  <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M11 3l1.9 5.1L18 10l-5.1 1.9L11 17l-1.9-5.1L4 10l5.1-1.9z"/><path d="M19 15v5M16.5 17.5h5"/></symbol>
-  <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M3 12h4l2.5-6 4 12 2.5-6H21"/></symbol>
   <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
   <symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 6h11v10H2zM13 9h4l3 3v4h-7"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="16.5" cy="17.5" r="1.8"/></symbol>
   <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6z"/><path d="m9 12 2 2 4-4"/></symbol>
@@ -279,9 +281,7 @@ h1,h2,h3,p{margin:0}
   <symbol id="i-chev" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></symbol>
   <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h4"/></symbol>
   <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 14-5.3L20 9M20 4v5h-5M20 12a8 8 0 0 1-14 5.3L4 15M4 20v-5h5"/></symbol>
-  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></symbol>
   <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17h.01"/></symbol>
-  <symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 10h18M7 15h3"/></symbol>
   <symbol id="i-cash" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2.5"/><circle cx="12" cy="12" r="2.5"/></symbol>
 </svg>
 
@@ -291,15 +291,15 @@ h1,h2,h3,p{margin:0}
     <!-- HOME -->
     <section id="tab-home">
       <header class="top">
-        <div class="loc">
-          <span class="pin"><svg class="i" aria-hidden="true"><use href="#i-pin"/></svg></span>
-          <div><small>التوصيل إلى</small><b>مدينة نصر، القاهرة</b></div>
+        <div class="brand">
+          <span class="logo"><i class="ti ti-vaccine-bottle"></i></span>
+          <b>صيدلية الأشرف</b>
         </div>
-        <button class="round" data-act="bell" aria-label="الإشعارات"><svg class="i" aria-hidden="true"><use href="#i-bell"/></svg></button>
+        <button class="round" data-act="bell" aria-label="الإشعارات"><svg class="i" aria-hidden="true"><use href="#i-bell"/></svg><span class="dot"></span></button>
       </header>
 
       <div class="hello">
-        <h1>أهلاً يا عبدالرحمن</h1>
+        <h1 id="greetH1">أهلاً بيك</h1>
         <p>محتاج إيه النهارده؟</p>
       </div>
 
@@ -333,13 +333,16 @@ h1,h2,h3,p{margin:0}
         </div>
       </div>
 
-      <div class="hs offers" id="offers"></div>
+      <div class="freeship">
+        <span class="oi"><svg class="i" aria-hidden="true"><use href="#i-truck"/></svg></span>
+        <div><b>توصيل مجاني</b><small>لأي طلب فوق ٣٠٠ ج.م</small></div>
+      </div>
 
       <div class="sec"><h2>الأقسام</h2></div>
       <div class="hs cats" id="cats" role="group" aria-label="الأقسام"></div>
 
       <div class="sec"><h2 id="gridTitle">الأكثر طلباً</h2><span class="muted" id="gridCount"></span></div>
-      <div class="grid" id="grid"></div>
+      <div class="grid" id="grid"><p class="loading">جاري تحميل المنتجات…</p></div>
     </section>
 
     <!-- CATEGORIES -->
@@ -356,6 +359,7 @@ h1,h2,h3,p{margin:0}
   </main>
 
   <nav class="nav" aria-label="التنقل الرئيسي">
+    <div class="nav-indicator" id="navIndicator"><span class="blob"></span></div>
     <button data-act="tab" data-tab="home" aria-current="page"><svg class="i" aria-hidden="true"><use href="#i-home"/></svg>الرئيسية</button>
     <button data-act="tab" data-tab="cats"><svg class="i" aria-hidden="true"><use href="#i-grid"/></svg>الأقسام</button>
     <button data-act="tab" data-tab="cart"><svg class="i" aria-hidden="true"><use href="#i-cart"/></svg>السلة<span class="cnt" id="cnt" hidden>0</span></button>
@@ -366,9 +370,25 @@ h1,h2,h3,p{margin:0}
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
 (() => {
 'use strict';
+
+/* ================= Firebase — same project as the control panel. Do not change. ================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyCoYdxryBFUNmEv6V_aoUw7pJNhEDoF00Q",
+  authDomain: "alashraf-pharmacy.firebaseapp.com",
+  projectId: "alashraf-pharmacy",
+  storageBucket: "alashraf-pharmacy.firebasestorage.app",
+  messagingSenderId: "486283006265",
+  appId: "1:486283006265:web:307ed704c57eead2b498e8"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const auth = firebase.auth();
 
 const $ = (s, r = document) => r.querySelector(s);
 const fmt = n => Number(n).toLocaleString('ar-EG');
@@ -381,81 +401,30 @@ const store = {
 
 const FEE = 25, FREE = 300;
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const PALETTE = ['#4B6B90', '#D08A0E', '#D9412F', '#2F9E6E', '#C1691E', '#2C8C82', '#B23C74'];
 
-const CATS = [
-  { id: 'all',  n: 'الكل',      i: 'grid',    c: '#4B6B90' },
-  { id: 'meds', n: 'أدوية',     i: 'pill',    c: '#2F9E6E' },
-  { id: 'vit',  n: 'فيتامينات', i: 'heart',   c: '#D08A0E' },
-  { id: 'baby', n: 'أطفال',     i: 'smile',   c: '#D9587A' },
-  { id: 'care', n: 'عناية',     i: 'sparkle', c: '#7A56C2' },
-  { id: 'dev',  n: 'أجهزة',     i: 'pulse',   c: '#2D86C9' }
-];
-const catName = id => CATS.find(c => c.id === id).n;
+/* ================= data (loaded from the control panel's Firestore — categories/products/banner are real and must not be hardcoded) ================= */
+let CATS = [];      // {id,name,icon,c}
+let P = [];         // {id,name,cat,price,oldPrice,icon,imageUrl,desc,usage,available,rx,c}
+let byId = {};
+const catName = id => (CATS.find(c => c.id === id) || {}).name || '';
 
-const P = [
-  { id: 1,  n: 'بنادول إكسترا',          cat: 'meds', pack: '٢٤ قرص',            price: 50,  old: 55,  t: 'box',    c: '#D9412F', d: 'مسكّن للصداع وآلام الجسم وخافض للحرارة. التزم بالجرعة المكتوبة في النشرة الداخلية.' },
-  { id: 2,  n: 'شامبو مضاد للقشرة',      cat: 'care', pack: '٢٠٠ مل',            price: 65,           t: 'bottle', m: 'drop', c: '#1F8F7A', d: 'تركيبة لطيفة بتقلل القشور وبتهدّي فروة الرأس من أول استخدام.' },
-  { id: 3,  n: 'أوميجا ٣',               cat: 'vit',  pack: '٣٠ كبسولة',         price: 120, old: 126, t: 'jar',    c: '#C98A12', d: 'زيت سمك نقي لدعم القلب والتركيز. كبسولة واحدة يومياً مع الأكل.' },
-  { id: 4,  n: 'حليب أطفال ١',           cat: 'baby', pack: '٤٠٠ جم، من الولادة', price: 210,          t: 'can',    c: '#3E7CB1', d: 'تركيبة للرضّع من الولادة لحد ٦ شهور. حضّره حسب التعليمات على العلبة.' },
-  { id: 5,  n: 'فيتامين د٣ ٥٠٠٠',        cat: 'vit',  pack: '٦٠ كبسولة',         price: 95,  old: 100, t: 'jar',    c: '#E0A100', d: 'جرعة عالية لتعويض نقص فيتامين د. اسأل الصيدلي عن الجرعة المناسبة ليك.' },
-  { id: 6,  n: 'شراب كحة للأطفال',       cat: 'baby', pack: '١٠٠ مل',            price: 48,           t: 'bottle', m: 'plus', c: '#7A56C2', d: 'شراب بطعم الفراولة بيهدّي الكحة الجافة عند الأطفال. مع كل علبة كوب قياس.' },
-  { id: 7,  n: 'كريم مرطب للبشرة',       cat: 'care', pack: '٥٠ جم',             price: 95,           t: 'tube',   m: 'drop', c: '#2FA36B', d: 'ترطيب يدوم ٢٤ ساعة للبشرة الجافة والحساسة، من غير عطور.' },
-  { id: 8,  n: 'جهاز قياس الضغط',        cat: 'dev',  pack: 'رقمي للذراع',        price: 890, old: 950, t: 'device', c: '#2F4A5A', d: 'شاشة كبيرة وواضحة، بيحفظ آخر ٩٠ قراءة، وبينبّهك لو النبض مش منتظم.' },
-  { id: 9,  n: 'مضاد حيوي ٥٠٠ مجم',      cat: 'meds', pack: '١٤ كبسولة',         price: 72,           t: 'box',    c: '#0C5B49', rx: true, d: 'مضاد حيوي واسع المدى. بيتصرف بروشتة طبية، وبيتاخد كامل المدة اللي حددها الطبيب.' },
-  { id: 10, n: 'بخاخ محلول ملحي للأنف',  cat: 'meds', pack: '٣٠ مل',             price: 38,           t: 'spray',  c: '#2D86C9', d: 'بينضّف الأنف ويخفف الاحتقان من غير أدوية. مناسب للكبار والأطفال.' },
-  { id: 11, n: 'حفاضات مقاس ٣',          cat: 'baby', pack: '٥٤ حفاضة',          price: 175,          t: 'bag',    c: '#E0708A', d: 'طبقة امتصاص سريعة وبطانة ناعمة، مناسبة لوزن من ٦ لـ ١٠ كجم.' },
-  { id: 12, n: 'واقي شمس SPF 50',        cat: 'care', pack: '٦٠ مل',             price: 140, old: 165, t: 'tube',   m: 'plus', c: '#F08A24', d: 'حماية عالية من UVA وUVB، قوامه خفيف وما بيسيبش أثر أبيض.' },
-  { id: 13, n: 'بروبيوتيك ١٠ مليار',     cat: 'vit',  pack: '٣٠ كبسولة',         price: 190, old: 200, t: 'jar',    m: 'plus', c: '#2E9C8C', d: 'بكتيريا نافعة لدعم الهضم والمناعة. بتتاخد على الريق.' },
-  { id: 14, n: 'كمامات طبية',            cat: 'dev',  pack: '٥٠ قطعة',           price: 60,           t: 'box',    c: '#3C8DBC', d: 'ثلاث طبقات بفلتر، مريحة على الأذن وبتسمح بالتنفس.' }
-];
-const byId = Object.fromEntries(P.map(p => [p.id, p]));
-
-const OFFERS = [
-  { k: 'sun',   i: 'pill',  t: 'خصم ٥٪ على الفيتامينات', s: 'لحد آخر الشهر',              go: 'cat:vit' },
-  { k: 'mint',  i: 'truck', t: 'توصيل مجاني',            s: 'لأي طلب فوق ' + egp(FREE),  go: 'tab:cart' },
-  { k: 'coral', i: 'star',  t: 'نقاط الأشرف',            s: 'كل ١٠ ج.م بنقطة',           go: 'tab:me' }
-];
-
-const DEMO_ORDERS = [
-  { no: 'AS-4790', date: '١٢ سبتمبر', items: [[1, 2], [3, 1]] },
-  { no: 'AS-4713', date: '٢ سبتمبر',  items: [[10, 1], [7, 1]] }
-];
-
-/* ---------- state ---------- */
 const state = {
-  tab: 'home', cat: 'all', q: '', pay: 'cash',
+  tab: 'home', cat: 'all', q: '', addr: store.get('addr', ''), phone: store.get('phone', ''),
   cart: store.get('cart', {}),
   favs: store.get('favs', []),
   rxOk: store.get('rx', []),
-  orders: store.get('orders', DEMO_ORDERS),
-  pts: store.get('pts', 420)
+  orders: store.get('orders', []),
+  userId: null, userName: '', userEmail: ''
 };
 const save = () => {
   store.set('cart', state.cart); store.set('favs', state.favs);
-  store.set('rx', state.rxOk); store.set('orders', state.orders); store.set('pts', state.pts);
+  store.set('rx', state.rxOk); store.set('orders', state.orders);
+  store.set('addr', state.addr); store.set('phone', state.phone);
 };
-
-/* ---------- product illustrations (inline vector, no remote images) ---------- */
-function baby(x, y, c) {
-  return `<circle cx="${x}" cy="${y}" r="11" fill="${c}"/><circle cx="${x - 4}" cy="${y - 3}" r="1.8" fill="#fff"/><circle cx="${x + 4}" cy="${y - 3}" r="1.8" fill="#fff"/><path d="M${x - 5} ${y + 3}q5 4.5 10 0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>`;
-}
-function mark(kind, c, x, y) {
-  if (kind === 'drop') return `<path d="M${x} ${y - 7}c4 5 6.5 8 6.5 11.5a6.5 6.5 0 0 1-13 0c0-3.5 2.5-6.500 6.500-11.500z" fill="${c}"/>`;
-  return `<path d="M${x} ${y - 8}v16M${x - 8} ${y}h16" stroke="${c}" stroke-width="5" stroke-linecap="round"/>`;
-}
-function art(p) {
-  const c = p.c, m = p.m || 'plus';
-  const shapes = {
-    box: `<path d="M22 28l10-8h76l-10 8z" fill="#fff" opacity=".35"/><path d="M98 28l10-8v68l-10 8z" fill="#000" opacity=".2"/><rect x="22" y="28" width="76" height="68" rx="4" fill="${c}"/><rect x="22" y="54" width="76" height="26" fill="#fff" opacity=".95"/>${mark('plus', c, 60, 67)}<rect x="30" y="36" width="34" height="5" rx="2.5" fill="#fff" opacity=".7"/><rect x="30" y="86" width="24" height="4" rx="2" fill="#fff" opacity=".5"/>`,
-    bottle: `<rect x="50" y="10" width="20" height="14" rx="3" fill="#26352f"/><rect x="45" y="22" width="30" height="10" rx="3" fill="${c}" opacity=".85"/><rect x="32" y="30" width="56" height="76" rx="16" fill="${c}"/><rect x="32" y="56" width="56" height="34" fill="#fff" opacity=".95"/>${mark(m, c, 60, 73)}<rect x="39" y="38" width="8" height="14" rx="4" fill="#fff" opacity=".28"/>`,
-    jar: `<rect x="30" y="14" width="60" height="18" rx="5" fill="#26352f"/><rect x="26" y="30" width="68" height="76" rx="14" fill="${c}"/><rect x="26" y="54" width="68" height="34" fill="#fff" opacity=".95"/>${mark(m, c, 60, 71)}<rect x="33" y="38" width="8" height="10" rx="4" fill="#fff" opacity=".3"/>`,
-    tube: `<g transform="rotate(-28 60 60)"><rect x="49" y="8" width="22" height="14" rx="3" fill="#26352f"/><path d="M48 22h24l10 70H38z" fill="${c}"/><path d="M45 42h30l3 26H42z" fill="#fff" opacity=".95"/>${mark(m, c, 60, 55)}<rect x="38" y="92" width="44" height="8" rx="2" fill="${c}"/><rect x="38" y="92" width="44" height="8" rx="2" fill="#000" opacity=".22"/></g>`,
-    can: `<rect x="34" y="12" width="52" height="11" rx="4" fill="#DDE5E0"/><rect x="30" y="21" width="60" height="86" rx="10" fill="${c}"/><rect x="30" y="46" width="60" height="40" fill="#fff" opacity=".95"/>${baby(60, 66, c)}<rect x="37" y="28" width="8" height="12" rx="4" fill="#fff" opacity=".3"/>`,
-    device: `<rect x="16" y="26" width="88" height="70" rx="15" fill="${c}"/><rect x="27" y="36" width="66" height="32" rx="8" fill="#0d1a15"/><text x="60" y="60" text-anchor="middle" font-size="19" font-weight="600" fill="#7CF0C4" font-family="Readex Pro, Segoe UI, sans-serif">120/80</text><circle cx="44" cy="82" r="6" fill="#fff" opacity=".92"/><circle cx="76" cy="82" r="6" fill="#fff" opacity=".55"/>`,
-    spray: `<rect x="50" y="8" width="20" height="12" rx="3" fill="#26352f"/><rect x="54" y="18" width="12" height="12" fill="#CBD6D0"/><rect x="36" y="28" width="48" height="78" rx="14" fill="${c}"/><rect x="36" y="54" width="48" height="34" fill="#fff" opacity=".95"/>${mark('drop', c, 60, 70)}`,
-    bag: `<path d="M26 32q34-14 68 0l6 68q-40 10-80 0z" fill="${c}"/><path d="M23 56q37 10 74 0l1.500 24q-38.500 9-77 0z" fill="#fff" opacity=".95"/>${baby(60, 66, c)}`
-  };
-  return `<svg class="art" viewBox="0 0 120 120" aria-hidden="true"><ellipse cx="60" cy="110" rx="32" ry="4.5" fill="#000" opacity=".12"/>${shapes[p.t]}</svg>`;
+function persistCart() {
+  save();
+  if (state.userId) db.collection('userCarts').doc(state.userId).set({ cart: state.cart, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
 }
 
 /* ---------- helpers ---------- */
@@ -463,10 +432,9 @@ const norm = s => String(s).toLowerCase()
   .replace(/[\u064B-\u065F\u0670]/g, '').replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي')
   .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
 const cartCount = () => Object.values(state.cart).reduce((a, b) => a + b, 0);
-const subtotal = () => Object.entries(state.cart).reduce((a, [id, q]) => a + byId[id].price * q, 0);
+const subtotal = () => Object.entries(state.cart).reduce((a, [id, q]) => a + (byId[id] ? byId[id].price * q : 0), 0);
 const feeFor = sub => (sub >= FREE || sub === 0 ? 0 : FEE);
-const orderSub = o => o.items.reduce((a, [id, q]) => a + byId[id].price * q, 0);
-const disc = p => p.old ? Math.round((p.old - p.price) / p.old * 100) : 0;
+const disc = p => p.oldPrice ? Math.round((p.oldPrice - p.price) / p.oldPrice * 100) : 0;
 const isFav = id => state.favs.includes(id);
 
 let toastT;
@@ -476,6 +444,10 @@ function toast(msg) {
   clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2200);
 }
 
+function tileVisual(p) {
+  if (p.imageUrl) return `<img src="${p.imageUrl}" alt="">`;
+  return `<i class="ti ti-${p.icon || 'pill'}"></i>`;
+}
 function stepper(id, q, lg) {
   return `<div class="step${lg ? ' lg' : ''}" role="group" aria-label="الكمية">
     <button data-act="${lg ? 'sdec' : 'dec'}" data-id="${id}" aria-label="قلّل الكمية">${ic('minus')}</button>
@@ -483,54 +455,49 @@ function stepper(id, q, lg) {
     <button data-act="${lg ? 'sinc' : 'inc'}" data-id="${id}" aria-label="زوّد الكمية">${ic('plus')}</button>
   </div>`;
 }
-
 function card(p) {
   const q = state.cart[p.id] || 0, d = disc(p);
   return `<article class="card">
     <div class="tile" style="--c:${p.c}">
-      <button class="open" data-act="open" data-id="${p.id}" aria-label="تفاصيل ${p.n}">${art(p)}</button>
+      <button class="open" data-act="open" data-id="${p.id}" aria-label="تفاصيل ${p.name}">${tileVisual(p)}</button>
       ${d ? `<span class="badge">خصم ${fmt(d)}٪</span>` : ''}${p.rx ? `<span class="badge rxt">بروشتة</span>` : ''}
       <button class="fav" data-act="fav" data-id="${p.id}" aria-pressed="${isFav(p.id)}" aria-label="المفضلة">${ic('heart')}</button>
     </div>
-    <button class="nm" data-act="open" data-id="${p.id}">${p.n}</button>
-    <div class="pk">${p.pack}</div>
+    <button class="nm" data-act="open" data-id="${p.id}">${p.name}</button>
+    <div class="pk">${p.pack || catName(p.cat)}</div>
     <div class="buy">
-      <div class="price"><b>${egp(p.price)}</b>${p.old ? `<s>${egp(p.old)}</s>` : ''}</div>
-      ${q ? stepper(p.id, q) : `<button class="add" data-act="add" data-id="${p.id}" aria-label="أضف ${p.n} للسلة">${ic('plus')}</button>`}
+      <div class="price"><b>${egp(p.price)}</b>${p.oldPrice ? `<s>${egp(p.oldPrice)}</s>` : ''}</div>
+      ${q ? stepper(p.id, q) : `<button class="add" data-act="add" data-id="${p.id}" aria-label="أضف ${p.name} للسلة">${ic('plus')}</button>`}
     </div>
   </article>`;
 }
 
 /* ---------- renderers ---------- */
-function renderStatic() {
-  $('#offers').innerHTML = OFFERS.map(o => `<button class="offer ${o.k}" data-act="offer" data-go="${o.go}">
-    <span class="oi">${ic(o.i)}</span><span><b>${o.t}</b><small>${o.s}</small></span></button>`).join('');
-  $('#crows').innerHTML = CATS.filter(c => c.id !== 'all').map(c => {
+function renderCats() {
+  const html = [`<button class="cat" data-act="cat" data-id="all" aria-pressed="${state.cat === 'all'}">
+      <span class="ic" style="--c:#4B6B90"><i class="ti ti-apps"></i></span>الكل</button>`]
+    .concat(CATS.map(c => `<button class="cat" data-act="cat" data-id="${c.id}" aria-pressed="${state.cat === c.id}">
+      <span class="ic" style="--c:${c.c}"><i class="ti ti-${c.icon}"></i></span>${c.name}</button>`));
+  $('#cats').innerHTML = html.join('');
+  $('#crows').innerHTML = CATS.map(c => {
     const n = P.filter(p => p.cat === c.id).length;
     return `<button class="crow" data-act="cat" data-id="${c.id}" data-jump="1">
-      <span class="ic" style="--c:${c.c}">${ic(c.i)}</span>
-      <span><b>${c.n}</b><small>${fmt(n)} منتج</small></span>
+      <span class="ic" style="--c:${c.c}"><i class="ti ti-${c.icon}"></i></span>
+      <span><b>${c.name}</b><small>${fmt(n)} منتج</small></span>
       <svg class="i go" aria-hidden="true"><use href="#i-chev"/></svg></button>`;
   }).join('');
 }
-function renderCats() {
-  $('#cats').innerHTML = CATS.map(c => `<button class="cat" data-act="cat" data-id="${c.id}" aria-pressed="${state.cat === c.id}">
-    <span class="ic" style="--c:${c.c}">${ic(c.i)}</span>${c.n}</button>`).join('');
-}
 function filtered() {
   const q = norm(state.q.trim());
-  return P.filter(p => (state.cat === 'all' || p.cat === state.cat) && (!q || norm(p.n + ' ' + catName(p.cat)).includes(q)));
+  return P.filter(p => (state.cat === 'all' || p.cat === state.cat) && (!q || norm(p.name + ' ' + catName(p.cat)).includes(q)));
 }
 function renderGrid() {
   const list = filtered(), q = state.q.trim();
-  const title = $('#gridTitle');
-  title.textContent = q ? 'نتائج البحث' : state.cat === 'all' ? 'الأكثر طلباً' : catName(state.cat);
+  $('#gridTitle').textContent = q ? 'نتائج البحث' : state.cat === 'all' ? 'الأكثر طلباً' : catName(state.cat);
   $('#gridCount').textContent = fmt(list.length) + ' منتج';
   const g = $('#grid');
-  if (!list.length) {
-    g.innerHTML = `<div class="empty"><h3>مفيش نتيجة</h3><p>جرّب اسم تاني، أو صوّر الروشتة والصيدلي يدوّر لك.</p></div>`;
-    return;
-  }
+  if (!P.length) { g.innerHTML = `<p class="loading">جاري تحميل المنتجات…</p>`; return; }
+  if (!list.length) { g.innerHTML = `<div class="empty"><h3>مفيش نتيجة</h3><p>جرّب اسم تاني، أو صوّر الروشتة والصيدلي يدوّر لك.</p></div>`; return; }
   g.innerHTML = list.map(card).join('');
 }
 function renderBadge() {
@@ -539,7 +506,7 @@ function renderBadge() {
 }
 function renderCart() {
   const el = $('#tab-cart');
-  const items = Object.entries(state.cart).map(([id, q]) => ({ p: byId[id], q }));
+  const items = Object.entries(state.cart).map(([id, q]) => ({ p: byId[id], q })).filter(x => x.p);
   if (!items.length) {
     el.innerHTML = `<div class="zero">
       <svg viewBox="0 0 120 100" aria-hidden="true"><circle cx="60" cy="50" r="42" fill="var(--mint)"/><path d="M36 34h9l6 26h30l6-20H47" fill="none" stroke="var(--accent-ink)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="55" cy="72" r="4" fill="var(--accent-ink)"/><circle cx="77" cy="72" r="4" fill="var(--accent-ink)"/></svg>
@@ -553,46 +520,62 @@ function renderCart() {
     <div class="ph1"><h1>السلة</h1><p>${fmt(cartCount())} منتج</p></div>
     <div class="lines">${items.map(({ p, q }) => `
       <div class="line">
-        <div class="tile" style="--c:${p.c}">${art(p)}</div>
-        <div><b class="n">${p.n}</b><span class="num">${egp(p.price)}</span>
+        <div class="tile" style="--c:${p.c}">${tileVisual(p)}</div>
+        <div><b class="n">${p.name}</b><span class="num">${egp(p.price)}</span>
           ${p.rx ? `<div class="rxok">${ic('check')}تم رفع الروشتة</div>` : ''}</div>
-        <div class="side">${stepper(p.id, q)}<button class="del" data-act="del" data-id="${p.id}" aria-label="احذف ${p.n}">${ic('trash')}</button></div>
+        <div class="side">${stepper(p.id, q)}<button class="del" data-act="del" data-id="${p.id}" aria-label="احذف ${p.name}">${ic('trash')}</button></div>
       </div>`).join('')}</div>
     <div class="ship">${left ? `فاضل <b>${egp(left)}</b> ويبقى التوصيل مجاني` : `<b>التوصيل مجاني</b> على طلبك ده`}
       <div class="bar" aria-hidden="true"><i style="width:${pct}%"></i></div></div>
-    <div class="box"><h3>العنوان</h3>
-      <div class="addr"><span class="pin">${ic('pin')}</span><div><b>البيت</b><div class="muted">مدينة نصر، القاهرة</div></div></div></div>
+    <div class="box"><h3>عنوان التوصيل <span style="color:var(--coral)">*</span></h3>
+      <label class="field" id="addrField"><span>العنوان بالتفصيل (الحي، الشارع، رقم العمارة والشقة)</span>
+        <textarea id="addrInput" rows="2" placeholder="مثال: مدينة نصر، شارع مكرم عبيد، عمارة ٥، شقة ١٢">${state.addr.replace(/</g,'&lt;')}</textarea></label>
+      <label class="field" id="phoneField"><span>رقم الموبايل</span>
+        <input id="phoneInput" type="tel" inputmode="tel" placeholder="01xxxxxxxxx" value="${state.phone.replace(/</g,'&lt;')}"></label>
+    </div>
     <div class="box"><h3>طريقة الدفع</h3>
-      <div class="seg">
-        <button data-act="pay" data-v="cash" aria-pressed="${state.pay === 'cash'}">${ic('cash')}كاش عند الاستلام</button>
-        <button data-act="pay" data-v="card" aria-pressed="${state.pay === 'card'}">${ic('card')}كارت</button>
-      </div></div>
+      <div class="cashline">${ic('cash')}كاش عند الاستلام</div></div>
     <div class="box">
       <div class="rowl"><span>المجموع</span><b class="num">${egp(sub)}</b></div>
       <div class="rowl"><span>التوصيل</span><b class="num">${fee ? egp(fee) : 'مجاني'}</b></div>
       <div class="rowl tot"><span>الإجمالي</span><b class="num">${egp(total)}</b></div></div>
     <div class="ctaw"><button class="cta" data-act="checkout"><span>أكّد الطلب</span><span class="num">${egp(total)}</span></button></div>`;
+  $('#addrInput').addEventListener('input', e => { state.addr = e.target.value; save(); });
+  $('#phoneInput').addEventListener('input', e => { state.phone = e.target.value; save(); });
 }
 function renderMe() {
   const el = $('#tab-me');
+  if (!state.userId) {
+    el.innerHTML = `<div class="authbox">
+      <h2 id="authTitle">تسجيل الدخول</h2>
+      <div id="authNameField" hidden><label class="field"><span>الاسم</span><input id="authName" type="text" placeholder="اكتب اسمك" autocomplete="name"></label></div>
+      <label class="field"><span>الإيميل</span><input id="authEmail" type="email" placeholder="example@email.com" autocomplete="email"></label>
+      <label class="field"><span>كلمة المرور</span><input id="authPass" type="password" placeholder="••••••••" autocomplete="current-password"></label>
+      <button class="cta solo" data-act="authsubmit" style="margin-top:6px">دخول</button>
+      <button class="gbtn" data-act="google"><i class="ti ti-brand-google"></i>تسجيل الدخول بجوجل</button>
+      <p class="authtog" data-act="authtoggle">مالكش حساب؟ <b>سجل دلوقتي</b></p>
+      <p class="authmsg" id="authMsg"></p>
+    </div>`;
+    return;
+  }
   const favs = state.favs.map(id => byId[id]).filter(Boolean);
   const dark = isDark();
   el.innerHTML = `
-    <div class="me"><div class="av" aria-hidden="true">ع</div><div><h1>عبدالرحمن</h1><p class="muted">حسابي في صيدلية الأشرف</p></div></div>
-    <div class="pts"><p>رصيد نقاطك</p><div class="num">${fmt(state.pts)} نقطة</div><p>كل ١٠ نقاط بجنيه خصم في الطلبات الجاية.</p></div>
+    <div class="me"><div class="av" aria-hidden="true">${(state.userName || 'ص')[0]}</div><div><h1>${state.userName || 'حسابي'}</h1><p class="muted">${state.userEmail}</p></div></div>
     <div class="sec"><h2>طلباتي</h2></div>
     <div class="lines" style="padding-top:0">${state.orders.length ? state.orders.map(o => {
-      const sub = orderSub(o), tot = sub + feeFor(sub);
+      const tot = o.total;
       return `<div class="order">
         <div class="h"><b>طلب ${o.no}</b><span>${o.date}</span></div>
-        <div class="it">${o.items.map(([id, q]) => byId[id].n + (q > 1 ? ' ×' + fmt(q) : '')).join('، ')}</div>
+        <div class="it">${o.items.map(i => i.name + (i.qty > 1 ? ' ×' + fmt(i.qty) : '')).join('، ')}</div>
         <div class="f"><span class="num">${egp(tot)}</span><button class="mini" data-act="reorder" data-no="${o.no}">${ic('repeat')}اطلب تاني</button></div>
       </div>`; }).join('') : `<p class="muted">لسه ما طلبتش حاجة.</p>`}</div>
     <div class="sec"><h2>المفضلة</h2></div>
     ${favs.length ? `<div class="grid">${favs.map(card).join('')}</div>` : `<p class="muted" style="padding:0 20px">اضغط على القلب في أي منتج وهيظهر هنا.</p>`}
     <div class="rows">
-      <button data-act="theme"><span class="fi-i">${ic('moon')}</span><span>الوضع الليلي</span><span class="sw" data-on="${dark ? 1 : 0}" role="switch" aria-checked="${dark}"></span></button>
-      <button data-act="help"><span class="fi-i">${ic('help')}</span><span>كلّم الصيدلي</span>${ic('chev')}</button>
+      <button data-act="theme"><span>${ic('moon')}</span><span>الوضع الليلي</span><span class="sw" data-on="${dark ? 1 : 0}" role="switch" aria-checked="${dark}"></span></button>
+      <button data-act="help"><span>${ic('help')}</span><span>كلّم الصيدلي</span>${ic('chev')}</button>
+      <button data-act="logout"><span>${ic('x')}</span><span>تسجيل الخروج</span></button>
     </div>`;
 }
 function isDark() {
@@ -603,7 +586,7 @@ function isDark() {
 /* ---------- state changes ---------- */
 function setQty(id, q) {
   if (q <= 0) delete state.cart[id]; else state.cart[id] = Math.min(q, 10);
-  save(); refresh();
+  persistCart(); refresh();
 }
 function refresh() {
   renderBadge(); renderGrid();
@@ -613,12 +596,23 @@ function refresh() {
 function go(tab) {
   state.tab = tab;
   ['home', 'cats', 'cart', 'me'].forEach(t => { $('#tab-' + t).hidden = t !== tab; });
-  document.querySelectorAll('.nav button').forEach(b => {
+  document.querySelectorAll('.nav button[data-tab]').forEach(b => {
     if (b.dataset.tab === tab) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
   });
   if (tab === 'cart') renderCart();
   if (tab === 'me') renderMe();
+  moveIndicator();
   $('#screen').scrollTo({ top: 0 });
+}
+function moveIndicator() {
+  const ind = $('#navIndicator');
+  const active = document.querySelector('.nav button[aria-current="page"]');
+  if (!active) { ind.style.opacity = '0'; return; }
+  const nav = document.querySelector('.nav');
+  const nr = nav.getBoundingClientRect(), br = active.getBoundingClientRect();
+  ind.style.opacity = '1';
+  ind.style.width = br.width + 'px';
+  ind.style.left = (br.left - nr.left) + 'px';
 }
 function setCat(id, jump) {
   state.cat = id; state.q = ''; $('#q').value = ''; $('#qclr').hidden = true;
@@ -643,18 +637,19 @@ function closeSheet() {
 const closeBtn = `<button class="x" data-act="close" aria-label="إغلاق">${ic('x')}</button>`;
 
 function openProduct(id) {
-  const p = byId[id]; sheetId = id; sheetQty = state.cart[id] || 1;
+  const p = byId[id]; if (!p) return;
+  sheetId = id; sheetQty = state.cart[id] || 1;
   const d = disc(p), needRx = p.rx && !state.rxOk.includes(id);
   openSheet(`<div class="grab"></div>${closeBtn}
-    <div class="tile big" style="--c:${p.c}">${art(p)}${d ? `<span class="badge">خصم ${fmt(d)}٪</span>` : ''}${p.rx ? `<span class="badge rxt">بروشتة</span>` : ''}</div>
-    <div class="pr"><div><h2>${p.n}</h2><p class="muted">${catName(p.cat)}، ${p.pack}</p></div>
+    <div class="tile big" style="--c:${p.c}">${tileVisual(p)}${d ? `<span class="badge">خصم ${fmt(d)}٪</span>` : ''}${p.rx ? `<span class="badge rxt">بروشتة</span>` : ''}</div>
+    <div class="pr"><div><h2>${p.name}</h2><p class="muted">${catName(p.cat)}${p.pack ? '، ' + p.pack : ''}</p></div>
       <button class="fav" data-act="fav" data-id="${id}" aria-pressed="${isFav(id)}" aria-label="المفضلة">${ic('heart')}</button></div>
-    <div class="pp"><b>${egp(p.price)}</b>${p.old ? `<s>${egp(p.old)}</s>` : ''}</div>
-    <p class="desc">${p.d}</p>
+    <div class="pp"><b>${egp(p.price)}</b>${p.oldPrice ? `<s>${egp(p.oldPrice)}</s>` : ''}</div>
+    <p class="desc">${p.desc || ''}</p>
     <ul class="facts">
       <li><span class="fi">${ic('shield')}</span>منتج أصلي ١٠٠٪</li>
       <li><span class="fi">${ic('truck')}</span>توصيل خلال ٣٠ دقيقة</li>
-      <li><span class="fi">${ic('help')}</span>صيدلي جاهز يرد على أسئلتك</li>
+      <li><span class="fi">${ic('help')}</span>${p.usage || 'صيدلي جاهز يرد على أسئلتك'}</li>
     </ul>
     ${needRx ? `<div class="note">${ic('file')}<p>الدواء ده بيتصرف بروشتة طبية. ارفع صورة واضحة والصيدلي هيراجعها قبل التجهيز.</p></div>` : ''}
     <div class="foot">${needRx
@@ -670,7 +665,7 @@ function openRx(forId) {
   rxFor = forId || null;
   openSheet(`<div class="grab"></div>${closeBtn}
     <h2 style="font-size:22px;font-weight:600;padding-top:34px">ارفع الروشتة</h2>
-    <p class="muted" style="margin-top:6px">${rxFor ? `«${byId[rxFor].n}» لازم روشتة. ` : ''}صوّرها كاملة وفي إضاءة كويسة، والصيدلي هيراجعها ويكلّمك لو محتاج حاجة.</p>
+    <p class="muted" style="margin-top:6px">${rxFor && byId[rxFor] ? `«${byId[rxFor].name}» لازم روشتة. ` : ''}صوّرها كاملة وفي إضاءة كويسة، والصيدلي هيراجعها ويكلّمك لو محتاج حاجة.</p>
     <label class="drop"><input type="file" id="rxFile" accept="image/*" capture="environment">
       <span id="dropIn" style="display:grid;justify-items:center;gap:6px;width:100%">${ic('camera')}<b>اضغط لتصوير الروشتة أو اختيار صورة</b><small>صورة واضحة، أقصى حجم ١٠ ميجا</small></span></label>
     <ul class="facts">
@@ -683,42 +678,37 @@ function openRx(forId) {
 /* ---------- actions ---------- */
 document.addEventListener('change', e => {
   if (e.target.id !== 'rxFile') return;
-  const f = e.target.files && e.target.files[0], go = $('#rxGo'), box = $('#dropIn');
+  const f = e.target.files && e.target.files[0], goBtn = $('#rxGo'), box = $('#dropIn');
   if (!f) return;
-  if (f.size > 10 * 1024 * 1024) { toast('الصورة أكبر من ١٠ ميجا، جرّب صورة أصغر'); e.target.value = ''; go.disabled = true; return; }
+  if (f.size > 10 * 1024 * 1024) { toast('الصورة أكبر من ١٠ ميجا، جرّب صورة أصغر'); e.target.value = ''; goBtn.disabled = true; return; }
   let url = ''; try { url = URL.createObjectURL(f); } catch (err) {}
   box.innerHTML = (url ? `<img src="${url}" alt="معاينة الروشتة">` : ic('file')) + `<small>${f.name.replace(/[<>&"]/g, '')}</small><small>اضغط لتغيير الصورة</small>`;
-  go.disabled = false;
+  goBtn.disabled = false;
 });
 
-$('#q').addEventListener('input', e => {
-  state.q = e.target.value; $('#qclr').hidden = !state.q; renderGrid();
-});
+$('#q').addEventListener('input', e => { state.q = e.target.value; $('#qclr').hidden = !state.q; renderGrid(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+
+let authMode = 'login';
 
 $('#app').addEventListener('click', e => {
   const t = e.target.closest('[data-act]'); if (!t) return;
-  const a = t.dataset.act, id = Number(t.dataset.id);
+  const a = t.dataset.act, id = t.dataset.id;
   if (a === 'backdrop') { if (e.target === t) closeSheet(); return; }
   switch (a) {
     case 'tab': go(t.dataset.tab); break;
     case 'bell': toast('مفيش إشعارات جديدة'); break;
     case 'clear': $('#q').value = ''; state.q = ''; t.hidden = true; renderGrid(); $('#q').focus(); break;
     case 'cat': setCat(t.dataset.id, !!t.dataset.jump); break;
-    case 'offer': {
-      const [k, v] = t.dataset.go.split(':');
-      if (k === 'cat') setCat(v, true); else go(v);
-      break;
-    }
     case 'open': openProduct(id); break;
     case 'add': {
-      const p = byId[id];
+      const p = byId[id]; if (!p) break;
       if (p.rx && !state.rxOk.includes(id)) { openRx(id); break; }
-      setQty(id, 1); toast('أضفنا ' + p.n + ' للسلة'); break;
+      setQty(id, 1); toast('أضفنا ' + p.name + ' للسلة'); break;
     }
     case 'inc': setQty(id, (state.cart[id] || 0) + 1); break;
     case 'dec': setQty(id, (state.cart[id] || 0) - 1); break;
-    case 'del': setQty(id, 0); toast('شلنا ' + byId[id].n + ' من السلة'); break;
+    case 'del': setQty(id, 0); toast('شلنا ' + (byId[id] ? byId[id].name : '') + ' من السلة'); break;
     case 'fav': {
       const i = state.favs.indexOf(id);
       if (i >= 0) state.favs.splice(i, 1); else state.favs.push(id);
@@ -729,9 +719,7 @@ $('#app').addEventListener('click', e => {
     }
     case 'sinc': sheetQty = Math.min(10, sheetQty + 1); updateSheetQty(); break;
     case 'sdec': sheetQty = Math.max(1, sheetQty - 1); updateSheetQty(); break;
-    case 'sadd': {
-      setQty(sheetId, sheetQty); toast('السلة اتحدّثت'); closeSheet(); break;
-    }
+    case 'sadd': setQty(sheetId, sheetQty); toast('السلة اتحدّثت'); closeSheet(); break;
     case 'rx': openRx(id || null); break;
     case 'rxsend': {
       if (rxFor) {
@@ -746,25 +734,35 @@ $('#app').addEventListener('click', e => {
       break;
     }
     case 'close': closeSheet(); break;
-    case 'pay': state.pay = t.dataset.v; renderCart(); break;
     case 'reorder': {
       const o = state.orders.find(x => x.no === t.dataset.no); if (!o) break;
-      o.items.forEach(([pid, q]) => { state.cart[pid] = Math.min(10, (state.cart[pid] || 0) + q); });
-      save(); refresh(); go('cart'); toast('رجّعنا الطلب في السلة'); break;
+      o.items.forEach(i => { if (byId[i.id]) state.cart[i.id] = Math.min(10, (state.cart[i.id] || 0) + i.qty); });
+      persistCart(); refresh(); go('cart'); toast('رجّعنا الطلب في السلة'); break;
     }
     case 'checkout': {
       const sub = subtotal(); if (!sub) break;
+      const addrEl = $('#addrInput'), phoneEl = $('#phoneInput');
+      const addr = (addrEl ? addrEl.value : state.addr).trim();
+      const phone = (phoneEl ? phoneEl.value : state.phone).trim();
+      let bad = false;
+      $('#addrField')?.classList.toggle('err', !addr); if (!addr) bad = true;
+      const phoneOk = /^01[0-9]{9}$/.test(phone.replace(/\s|-/g, ''));
+      $('#phoneField')?.classList.toggle('err', !phoneOk); if (!phoneOk) bad = true;
+      if (bad) { toast('اكتب العنوان بالتفصيل ورقم موبايل صحيح'); break; }
+      state.addr = addr; state.phone = phone; save();
+      const fee = feeFor(sub), total = sub + fee;
+      const items = Object.entries(state.cart).filter(([pid]) => byId[pid]).map(([pid, q]) => ({ id: pid, name: byId[pid].name, price: byId[pid].price, qty: q }));
       const order = {
         no: 'AS-' + (4800 + Math.floor(Math.random() * 190)),
         date: new Date().toLocaleDateString('ar-EG', { day: 'numeric', month: 'long' }),
-        items: Object.entries(state.cart).map(([pid, q]) => [Number(pid), q])
+        items, subtotal: sub, delivery: fee, total, address: addr, phone, payment: 'cash', status: 'new'
       };
-      const earned = Math.floor(sub / 10);
-      state.orders.unshift(order); state.pts += earned; state.cart = {};
-      save(); refresh();
+      db.collection('orders').add({ ...order, createdAt: firebase.firestore.FieldValue.serverTimestamp() }).catch(() => {});
+      state.orders.unshift(order); state.cart = {};
+      persistCart(); refresh();
       openSheet(`<div class="grab"></div>${closeBtn}<div class="done"><span class="ok">${ic('check')}</span>
         <h2>تم استلام طلبك</h2><span class="chip">طلب ${order.no}</span>
-        <p class="muted">الصيدلي بيجهّزه دلوقتي، والتوصيل خلال ٣٠ دقيقة تقريباً.<br>كسبت ${fmt(earned)} نقطة.</p>
+        <p class="muted">الصيدلي بيجهّزه دلوقتي، والدفع كاش عند الاستلام على العنوان اللي كتبته.<br>التوصيل خلال ٣٠ دقيقة تقريباً.</p>
         <button class="cta solo" style="margin-top:14px" data-act="done">تمام</button></div>`);
       break;
     }
@@ -774,15 +772,87 @@ $('#app').addEventListener('click', e => {
       document.documentElement.dataset.theme = next; store.set('theme', next); renderMe(); break;
     }
     case 'help': toast('الصيدلي هيتواصل معاك على رقمك المسجّل'); break;
+    case 'logout': auth.signOut(); break;
+    case 'authtoggle': {
+      authMode = authMode === 'login' ? 'signup' : 'login';
+      $('#authTitle').textContent = authMode === 'login' ? 'تسجيل الدخول' : 'حساب جديد';
+      $('#authNameField').hidden = authMode === 'login';
+      t.innerHTML = authMode === 'login' ? 'مالكش حساب؟ <b>سجل دلوقتي</b>' : 'عندك حساب؟ <b>سجل الدخول</b>';
+      $('#authMsg').textContent = '';
+      break;
+    }
+    case 'authsubmit': {
+      const email = $('#authEmail').value.trim(), pass = $('#authPass').value;
+      const msg = $('#authMsg'); msg.textContent = '';
+      if (!email || !pass) { msg.textContent = 'من فضلك املأ كل الحقول'; break; }
+      if (authMode === 'signup') {
+        const name = $('#authName').value.trim();
+        if (!name) { msg.textContent = 'اكتب اسمك'; break; }
+        auth.createUserWithEmailAndPassword(email, pass)
+          .then(cred => cred.user.updateProfile({ displayName: name }))
+          .catch(() => { msg.textContent = 'تعذر إنشاء الحساب، جرّب تاني'; });
+      } else {
+        auth.signInWithEmailAndPassword(email, pass).catch(() => { msg.textContent = 'الإيميل أو كلمة المرور غلط'; });
+      }
+      break;
+    }
+    case 'google': {
+      auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(() => toast('تعذر تسجيل الدخول بجوجل'));
+      break;
+    }
   }
 });
+
+/* ---------- auth state ---------- */
+auth.onAuthStateChanged(async user => {
+  if (user) {
+    state.userId = user.uid; state.userName = user.displayName || 'صديق الصيدلية'; state.userEmail = user.email || '';
+    $('#greetH1').textContent = 'أهلاً بيك يا ' + state.userName;
+    try {
+      const doc = await db.collection('userCarts').doc(user.uid).get();
+      if (doc.exists && doc.data().cart) {
+        const remote = doc.data().cart, local = { ...state.cart };
+        state.cart = { ...remote };
+        Object.keys(local).forEach(pid => { state.cart[pid] = (state.cart[pid] || 0) + local[pid]; });
+      }
+    } catch (e) {}
+    save(); refresh();
+  } else {
+    state.userId = null; state.userName = ''; state.userEmail = '';
+    $('#greetH1').textContent = 'أهلاً بيك';
+  }
+  if (state.tab === 'me') renderMe();
+});
+
+/* ---------- data loading (categories/products/banner come from the control panel — read-only here) ---------- */
+async function fetchFreshData() {
+  const catSnap = await db.collection('categories').orderBy('order').get();
+  CATS = catSnap.docs.map((d, i) => ({ id: d.id, ...d.data(), c: PALETTE[i % PALETTE.length] }));
+  const prodSnap = await db.collection('products').orderBy('createdAt', 'desc').get();
+  const catColor = Object.fromEntries(CATS.map(c => [c.id, c.c]));
+  P = prodSnap.docs.map(d => { const data = d.data(); return { id: d.id, ...data, c: catColor[data.cat] || PALETTE[0] }; });
+  byId = Object.fromEntries(P.map(p => [p.id, p]));
+  localStorage.setItem('ashraf:cache', JSON.stringify({ CATS, P }));
+}
+async function loadData() {
+  const cached = localStorage.getItem('ashraf:cache');
+  if (cached) { try { const c = JSON.parse(cached); CATS = c.CATS || []; P = c.P || []; byId = Object.fromEntries(P.map(p => [p.id, p])); } catch (e) {} }
+  renderCats(); renderGrid();
+  const timeout = ms => new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms));
+  try { await Promise.race([fetchFreshData(), timeout(8000)]); } catch (e) {}
+  Object.keys(state.cart).forEach(k => { if (!byId[k]) delete state.cart[k]; });
+  renderCats(); renderCats(); renderGrid(); renderBadge();
+  if (state.tab === 'cart') renderCart();
+  if (state.tab === 'me') renderMe();
+}
 
 /* ---------- boot ---------- */
 const savedTheme = store.get('theme', null);
 if (savedTheme) document.documentElement.dataset.theme = savedTheme;
-// drop cart entries for unknown ids
-Object.keys(state.cart).forEach(k => { if (!byId[k]) delete state.cart[k]; });
-renderStatic(); renderCats(); renderGrid(); renderBadge();
+renderBadge();
+loadData();
+requestAnimationFrame(moveIndicator);
+window.addEventListener('resize', moveIndicator);
 })();
 </script>
 </body>
