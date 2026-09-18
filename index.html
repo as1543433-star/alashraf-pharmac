@@ -822,10 +822,10 @@ auth.onAuthStateChanged(async user => {
 /* ---------- data loading (categories/products/banner come from the control panel — read-only here) ---------- */
 async function fetchFreshData() {
   const catSnap = await db.collection('categories').orderBy('order').get();
-  CATS = catSnap.docs.map((d, i) => ({ id: d.id, ...d.data(), c: PALETTE[i % PALETTE.length] }));
+  CATS = catSnap.docs.map((d, i) => ({ ...d.data(), id: d.id, c: PALETTE[i % PALETTE.length] }));
   const prodSnap = await db.collection('products').orderBy('createdAt', 'desc').get();
   const catColor = Object.fromEntries(CATS.map(c => [c.id, c.c]));
-  P = prodSnap.docs.map(d => { const data = d.data(); return { id: d.id, ...data, c: catColor[data.cat] || PALETTE[0] }; });
+  P = prodSnap.docs.map(d => { const data = d.data(); return { ...data, id: d.id, c: catColor[data.cat] || PALETTE[0] }; });
   byId = Object.fromEntries(P.map(p => [p.id, p]));
   localStorage.setItem('ashraf:cache', JSON.stringify({ CATS, P }));
 }
