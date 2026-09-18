@@ -203,6 +203,7 @@ h1,h2,h3,p{margin:0}
 .rows button{display:flex;align-items:center;gap:12px;width:100%;padding:16px;text-align:start}
 .rows button+button{border-top:1px solid var(--line)}
 .rows button>span:nth-child(2){flex:1}
+.rows .badge2{background:var(--mint);color:var(--accent-ink);font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;font-family:'Readex Pro',sans-serif}
 .sw{width:48px;height:28px;border-radius:99px;background:var(--line);position:relative;transition:background .2s;flex:none}
 .sw::after{content:'';position:absolute;top:3px;inset-inline-start:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:inset-inline-start .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
 .sw[data-on="1"]{background:var(--accent)}
@@ -555,6 +556,13 @@ function renderCart() {
   $('#addrInput').addEventListener('input', e => { state.addr = e.target.value; save(); });
   $('#phoneInput').addEventListener('input', e => { state.phone = e.target.value; save(); });
 }
+function orderRow(o) {
+  return `<div class="order">
+    <div class="h"><b>طلب ${o.no}</b><span>${o.date}</span></div>
+    <div class="it">${o.items.map(i => i.name + (i.qty > 1 ? ' ×' + fmt(i.qty) : '')).join('، ')}</div>
+    <div class="f"><span class="num">${egp(o.total)}</span><button class="mini" data-act="reorder" data-no="${o.no}">${ic('repeat')}اطلب تاني</button></div>
+  </div>`;
+}
 function renderMe() {
   const el = $('#tab-me');
   if (!state.userId) {
@@ -570,21 +578,12 @@ function renderMe() {
     </div>`;
     return;
   }
-  const favs = state.favs.map(id => byId[id]).filter(Boolean);
   const dark = isDark();
   el.innerHTML = `
     <div class="me"><div class="av" aria-hidden="true">${(state.userName || 'ص')[0]}</div><div><h1>${state.userName || 'حسابي'}</h1><p class="muted">${state.userEmail}</p></div></div>
-    <div class="sec"><h2>طلباتي</h2></div>
-    <div class="lines" style="padding-top:0">${state.orders.length ? state.orders.map(o => {
-      const tot = o.total;
-      return `<div class="order">
-        <div class="h"><b>طلب ${o.no}</b><span>${o.date}</span></div>
-        <div class="it">${o.items.map(i => i.name + (i.qty > 1 ? ' ×' + fmt(i.qty) : '')).join('، ')}</div>
-        <div class="f"><span class="num">${egp(tot)}</span><button class="mini" data-act="reorder" data-no="${o.no}">${ic('repeat')}اطلب تاني</button></div>
-      </div>`; }).join('') : `<p class="muted">لسه ما طلبتش حاجة.</p>`}</div>
-    <div class="sec"><h2>المفضلة</h2></div>
-    ${favs.length ? `<div class="grid">${favs.map(card).join('')}</div>` : `<p class="muted" style="padding:0 20px">اضغط على القلب في أي منتج وهيظهر هنا.</p>`}
     <div class="rows">
+      <button data-act="orders"><span>${ic('file')}</span><span>طلباتي</span>${state.orders.length ? `<span class="badge2">${fmt(state.orders.length)}</span>` : ''}${ic('chev')}</button>
+      <button data-act="favs"><span>${ic('heart')}</span><span>المفضلة</span>${state.favs.length ? `<span class="badge2">${fmt(state.favs.length)}</span>` : ''}${ic('chev')}</button>
       <button data-act="theme"><span>${ic('moon')}</span><span>الوضع الليلي</span><span class="sw" data-on="${dark ? 1 : 0}" role="switch" aria-checked="${dark}"></span></button>
       <button data-act="help"><span>${ic('help')}</span><span>كلّم الصيدلي</span>${ic('chev')}</button>
       <button data-act="logout"><span>${ic('x')}</span><span>تسجيل الخروج</span></button>
@@ -686,6 +685,21 @@ function openRx(forId) {
     </ul>
     <div class="foot"><button class="cta solo" id="rxGo" data-act="rxsend" disabled>أرسل للصيدلي</button></div>`);
 }
+function openOrders() {
+  openSheet(`<div class="grab"></div>${closeBtn}
+    <h2 style="font-size:22px;font-weight:600;padding-top:34px">طلباتي</h2>
+    ${state.orders.length
+      ? `<div style="display:grid;gap:10px;padding-top:16px">${state.orders.map(orderRow).join('')}</div>`
+      : `<p class="muted" style="padding-top:10px">لسه ما طلبتش حاجة.</p>`}`);
+}
+function openFavs() {
+  const favs = state.favs.map(id => byId[id]).filter(Boolean);
+  openSheet(`<div class="grab"></div>${closeBtn}
+    <h2 style="font-size:22px;font-weight:600;padding-top:34px">المفضلة</h2>
+    ${favs.length
+      ? `<div class="grid" style="padding:16px 0 0">${favs.map(card).join('')}</div>`
+      : `<p class="muted" style="padding-top:10px">اضغط على القلب في أي منتج وهيظهر هنا.</p>`}`);
+}
 
 /* ---------- actions ---------- */
 document.addEventListener('change', e => {
@@ -746,10 +760,12 @@ $('#app').addEventListener('click', e => {
       break;
     }
     case 'close': closeSheet(); break;
+    case 'orders': openOrders(); break;
+    case 'favs': openFavs(); break;
     case 'reorder': {
       const o = state.orders.find(x => x.no === t.dataset.no); if (!o) break;
       o.items.forEach(i => { if (byId[i.id]) state.cart[i.id] = Math.min(10, (state.cart[i.id] || 0) + i.qty); });
-      persistCart(); refresh(); go('cart'); toast('رجّعنا الطلب في السلة'); break;
+      persistCart(); refresh(); closeSheet(); go('cart'); toast('رجّعنا الطلب في السلة'); break;
     }
     case 'checkout': {
       const sub = subtotal(); if (!sub) break;
