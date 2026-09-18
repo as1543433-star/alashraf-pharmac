@@ -102,6 +102,7 @@ h1,h2,h3,p{margin:0}
 .tile img{width:100%;height:100%;object-fit:cover}
 .tile .ti{font-size:34px;color:var(--c)}
 .tile .open{position:absolute;inset:0;display:grid;place-items:center;border-radius:16px}
+.catTag{margin:8px 6px 0;width:fit-content;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:color-mix(in srgb,var(--c) 16%,var(--surface));color:var(--c)}
 .badge{position:absolute;top:8px;inset-inline-start:8px;background:var(--coral);color:#fff;font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;pointer-events:none}
 .badge.rxt{background:var(--ink);color:var(--bg)}
 .fav{position:absolute;top:4px;inset-inline-end:4px;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--muted)}
@@ -404,7 +405,16 @@ const PALETTE = ['#4B6B90', '#D08A0E', '#D9412F', '#2F9E6E', '#C1691E', '#2C8C82
 let CATS = [];      // {id,name,icon,c}
 let P = [];         // {id,name,cat,price,oldPrice,icon,imageUrl,desc,usage,available,rx,c}
 let byId = {};
-const catName = id => (CATS.find(c => c.id === id) || {}).name || '';
+function resolveCat(catVal) {
+  if (!catVal) return null;
+  let c = CATS.find(x => x.id === catVal);
+  if (c) return c;
+  c = CATS.find(x => x.name === catVal);
+  if (c) return c;
+  const nv = norm(String(catVal).trim());
+  return CATS.find(x => norm(x.name || '') === nv) || null;
+}
+const catName = catVal => { const c = resolveCat(catVal); return c ? c.name : ''; };
 
 const state = {
   tab: 'home', cat: 'all', q: '', addr: store.get('addr', ''), phone: store.get('phone', ''),
@@ -460,6 +470,7 @@ function card(p) {
       ${d ? `<span class="badge">خصم ${fmt(d)}٪</span>` : ''}${p.rx ? `<span class="badge rxt">بروشتة</span>` : ''}
       <button class="fav" data-act="fav" data-id="${p.id}" aria-pressed="${isFav(p.id)}" aria-label="المفضلة">${ic('heart')}</button>
     </div>
+    <div class="catTag" style="--c:${p.c}">${catName(p.cat) || p.cat || 'بدون قسم'}</div>
     <button class="nm" data-act="open" data-id="${p.id}">${p.name}</button>
     <div class="pk">${p.pack || catName(p.cat)}</div>
     <div class="buy">
@@ -477,7 +488,7 @@ function renderCats() {
       <span class="ic" style="--c:${c.c}"><i class="ti ti-${c.icon}"></i></span>${c.name}</button>`));
   $('#cats').innerHTML = html.join('');
   $('#crows').innerHTML = CATS.map(c => {
-    const n = P.filter(p => p.cat === c.id).length;
+    const n = P.filter(p => (resolveCat(p.cat) || {}).id === c.id).length;
     return `<button class="crow" data-act="cat" data-id="${c.id}" data-jump="1">
       <span class="ic" style="--c:${c.c}"><i class="ti ti-${c.icon}"></i></span>
       <span><b>${c.name}</b><small>${fmt(n)} منتج</small></span>
@@ -486,7 +497,11 @@ function renderCats() {
 }
 function filtered() {
   const q = norm(state.q.trim());
-  return P.filter(p => (state.cat === 'all' || p.cat === state.cat) && (!q || norm(p.name + ' ' + catName(p.cat)).includes(q)));
+  return P.filter(p => {
+    const rc = resolveCat(p.cat);
+    const matchCat = state.cat === 'all' || (rc && rc.id === state.cat);
+    return matchCat && (!q || norm(p.name + ' ' + catName(p.cat)).includes(q));
+  });
 }
 function renderGrid() {
   const list = filtered(), q = state.q.trim();
@@ -824,8 +839,11 @@ async function fetchFreshData() {
   const catSnap = await db.collection('categories').orderBy('order').get();
   CATS = catSnap.docs.map((d, i) => ({ ...d.data(), id: d.id, c: PALETTE[i % PALETTE.length] }));
   const prodSnap = await db.collection('products').orderBy('createdAt', 'desc').get();
-  const catColor = Object.fromEntries(CATS.map(c => [c.id, c.c]));
-  P = prodSnap.docs.map(d => { const data = d.data(); return { ...data, id: d.id, c: catColor[data.cat] || PALETTE[0] }; });
+  P = prodSnap.docs.map(d => {
+    const data = d.data();
+    const rc = resolveCat(data.cat);
+    return { ...data, id: d.id, c: (rc && rc.c) || PALETTE[0] };
+  });
   byId = Object.fromEntries(P.map(p => [p.id, p]));
   localStorage.setItem('ashraf:cache', JSON.stringify({ CATS, P }));
 }
