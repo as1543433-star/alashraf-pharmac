@@ -372,6 +372,7 @@ h1,h2,h3,p{margin:0}
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check-compat.js"></script>
 <script>
 (() => {
 'use strict';
@@ -386,6 +387,14 @@ const firebaseConfig = {
   appId: "1:486283006265:web:307ed704c57eead2b498e8"
 };
 firebase.initializeApp(firebaseConfig);
+
+/* ---------- App Check: يثبت إن الطلبات جايّة من الموقع الحقيقي بس ---------- */
+const appCheck = firebase.appCheck();
+appCheck.activate(
+  new firebase.appCheck.ReCaptchaEnterpriseProvider('6LcSfcQtAAAAAOm1tF5EMyU3eRTS_ihSvNT9iJD6'),
+  true
+);
+
 const db = firebase.firestore();
 const auth = firebase.auth();
 
@@ -545,6 +554,7 @@ function renderCart() {
         <textarea id="addrInput" rows="2" placeholder="مثال: مدينة نصر، شارع مكرم عبيد، عمارة ٥، شقة ١٢">${state.addr.replace(/</g,'&lt;')}</textarea></label>
       <label class="field" id="phoneField"><span>رقم الموبايل</span>
         <input id="phoneInput" type="tel" inputmode="tel" placeholder="01xxxxxxxxx" value="${state.phone.replace(/</g,'&lt;')}"></label>
+      <input type="text" id="hpField" name="website" style="position:absolute;left:-9999px;opacity:0;height:0" tabindex="-1" autocomplete="off">
     </div>
     <div class="box"><h3>طريقة الدفع</h3>
       <div class="cashline">${ic('cash')}كاش عند الاستلام</div></div>
@@ -768,6 +778,8 @@ $('#app').addEventListener('click', e => {
       persistCart(); refresh(); closeSheet(); go('cart'); toast('رجّعنا الطلب في السلة'); break;
     }
     case 'checkout': {
+      const hpVal = $('#hpField')?.value;
+      if (hpVal) { toast('حصل خطأ، حاول تاني'); break; }
       const sub = subtotal(); if (!sub) break;
       const addrEl = $('#addrInput'), phoneEl = $('#phoneInput');
       const addr = (addrEl ? addrEl.value : state.addr).trim();
