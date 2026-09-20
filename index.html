@@ -128,9 +128,11 @@ h1,h2,h3,p{margin:0}
 
 /* ---------- bottom nav + animated indicator ---------- */
 .nav{position:absolute;inset-inline:12px;bottom:calc(12px + env(safe-area-inset-bottom));height:68px;background:var(--surface);border:1px solid var(--line);border-radius:26px;box-shadow:0 12px 32px -12px rgba(0,0,0,.3);display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:6px;z-index:5}
-.nav-indicator{position:absolute;top:6px;bottom:6px;left:6px;width:calc(25% - 8px);border-radius:20px;opacity:0;transition:left .45s cubic-bezier(.34,1.56,.64,1),opacity .2s ease;pointer-events:none;z-index:0}
-.nav-indicator .blob{position:absolute;inset:0;border-radius:20px;background:var(--mint);transform-origin:center;animation:navBlobFloat 2.6s ease-in-out infinite}
+.nav-indicator-wrap{position:absolute;inset:6px;z-index:0;pointer-events:none;filter:url(#navGoo)}
+.nav-indicator{position:absolute;top:0;bottom:0;left:0;width:calc(25% - 8px);border-radius:20px;opacity:0;transform:translateX(0);transition:transform .46s cubic-bezier(.2,1.65,.35,1),opacity .2s ease;will-change:transform}
+.nav-indicator .blob{position:absolute;inset:0;border-radius:inherit;background:var(--mint);transform-origin:center;animation:navBlobFloat 2.6s ease-in-out infinite}
 @keyframes navBlobFloat{0%,100%{transform:scale(1);border-radius:20px}50%{transform:scale(1.04);border-radius:26px 16px 24px 18px/18px 24px 16px 26px}}
+.goo-ghost{position:absolute;top:0;bottom:0;left:0;width:calc(25% - 8px);border-radius:20px;background:var(--mint);transform-origin:center;opacity:1;transition:transform .38s cubic-bezier(.32,0,.68,1),opacity .32s ease .06s}
 .nav button{position:relative;border-radius:20px;display:grid;justify-items:center;align-content:center;gap:2px;font-size:11.5px;color:var(--muted);z-index:1}
 .nav button[aria-current="page"]{color:var(--accent-ink);font-weight:600}
 .nav .cnt{position:absolute;top:5px;left:calc(50% + 4px);min-width:18px;height:18px;border-radius:9px;background:var(--coral);color:#fff;font-size:11px;font-weight:600;display:grid;place-items:center;padding:0 5px;font-family:'Readex Pro',sans-serif}
@@ -255,12 +257,19 @@ h1,h2,h3,p{margin:0}
 .toast{position:absolute;bottom:calc(96px + env(safe-area-inset-bottom));inset-inline:0;margin-inline:auto;width:max-content;max-width:calc(100% - 40px);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:14px;font-size:14px;z-index:30;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;pointer-events:none}
 .toast.show{opacity:1;transform:none}
 
-@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}.goo-ghost{display:none!important}}
 </style>
 </head>
 <body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="navGoo" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
+      <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9" result="goo"/>
+      <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
+    </filter>
+  </defs>
   <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
   <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
   <symbol id="i-cart" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a1 1 0 0 0 1 .8h9.1a1 1 0 0 0 1-.8L21 7H6"/></symbol>
@@ -358,7 +367,9 @@ h1,h2,h3,p{margin:0}
   </main>
 
   <nav class="nav" aria-label="التنقل الرئيسي">
-    <div class="nav-indicator" id="navIndicator"><span class="blob"></span></div>
+    <div class="nav-indicator-wrap" id="navIndicatorWrap" aria-hidden="true">
+      <div class="nav-indicator" id="navIndicator"><span class="blob"></span></div>
+    </div>
     <button data-act="tab" data-tab="home" aria-current="page"><svg class="i" aria-hidden="true"><use href="#i-home"/></svg>الرئيسية</button>
     <button data-act="tab" data-tab="cats"><svg class="i" aria-hidden="true"><use href="#i-grid"/></svg>الأقسام</button>
     <button data-act="tab" data-tab="cart"><svg class="i" aria-hidden="true"><use href="#i-cart"/></svg>السلة<span class="cnt" id="cnt" hidden>0</span></button>
@@ -622,18 +633,48 @@ function go(tab) {
   });
   if (tab === 'cart') renderCart();
   if (tab === 'me') renderMe();
-  moveIndicator();
+  moveIndicator(true);
   $('#screen').scrollTo({ top: 0 });
 }
-function moveIndicator() {
-  const ind = $('#navIndicator');
+
+/* ---------- animated nav indicator (liquid/gooey blob transition) ---------- */
+let indInit = false, indLeft = 0;
+function moveIndicator(animate) {
+  const wrap = $('#navIndicatorWrap'), main = $('#navIndicator');
   const active = document.querySelector('.nav button[aria-current="page"]');
-  if (!active) { ind.style.opacity = '0'; return; }
+  if (!active) { main.style.opacity = '0'; return; }
   const nav = document.querySelector('.nav');
   const nr = nav.getBoundingClientRect(), br = active.getBoundingClientRect();
-  ind.style.opacity = '1';
-  ind.style.width = br.width + 'px';
-  ind.style.left = (br.left - nr.left) + 'px';
+  const targetLeft = br.left - nr.left - 6; // 6 = wrap inset
+
+  if (!indInit) {
+    indInit = true; indLeft = targetLeft;
+    main.style.opacity = '1';
+    main.style.transform = `translateX(${targetLeft}px)`;
+    return;
+  }
+  if (Math.abs(targetLeft - indLeft) < 0.5) return;
+
+  if (animate && !reduce) {
+    // spawn a ghost blob frozen at the OLD spot; it shrinks/fades in place
+    // while the main pill glides to the new tab. The shared goo filter
+    // merges the two overlapping shapes into a stretchy liquid neck that
+    // thins out and snaps apart — the "melt" effect from the reference video.
+    const ghost = document.createElement('span');
+    ghost.className = 'goo-ghost';
+    ghost.style.transform = `translateX(${indLeft}px) scale(1)`;
+    wrap.appendChild(ghost);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        ghost.style.transform = `translateX(${indLeft}px) scale(.3)`;
+        ghost.style.opacity = '0';
+      });
+    });
+    setTimeout(() => ghost.remove(), 460);
+  }
+
+  main.style.transform = `translateX(${targetLeft}px)`;
+  indLeft = targetLeft;
 }
 function setCat(id, jump) {
   state.cat = id; state.q = ''; $('#q').value = ''; $('#qclr').hidden = true;
@@ -892,8 +933,8 @@ const savedTheme = store.get('theme', null);
 if (savedTheme) document.documentElement.dataset.theme = savedTheme;
 renderBadge();
 loadData();
-requestAnimationFrame(moveIndicator);
-window.addEventListener('resize', moveIndicator);
+requestAnimationFrame(() => moveIndicator(false));
+window.addEventListener('resize', () => moveIndicator(false));
 })();
 </script>
 </body>
