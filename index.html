@@ -146,6 +146,18 @@ h1,h2,h3,p{margin:0}
 .nav button[aria-current="page"]{color:var(--accent-ink);font-weight:600}
 .nav .cnt{position:absolute;top:5px;left:calc(50% + 4px);min-width:18px;height:18px;border-radius:9px;background:var(--coral);color:#fff;font-size:11px;font-weight:600;display:grid;place-items:center;padding:0 5px;font-family:'Readex Pro',sans-serif}
 
+/* ---------- add-to-cart flight: tile squish + flying clone + cart bump ---------- */
+.tile.added{animation:tileAdded .42s cubic-bezier(.4,0,.25,1)}
+@keyframes tileAdded{0%{transform:scale(1)}35%{transform:scale(.84) rotate(-2deg)}65%{transform:scale(1.05) rotate(1deg)}100%{transform:scale(1) rotate(0)}}
+.fly-ghost{position:fixed;z-index:60;border-radius:50%;display:grid;place-items:center;overflow:hidden;pointer-events:none;background:color-mix(in srgb,var(--c,var(--accent)) 20%,var(--surface));box-shadow:var(--shadow);border:1px solid var(--line)}
+.fly-ghost .ti{font-size:20px;color:var(--c,var(--accent-ink))}
+.fly-ghost img{width:100%;height:100%;object-fit:cover}
+.nav button[data-tab="cart"].bump{animation:navBump .4s cubic-bezier(.4,0,.25,1)}
+.nav .cnt.bump{animation:cntBump .4s cubic-bezier(.4,0,.25,1)}
+@keyframes navBump{0%{transform:scale(1)}30%{transform:scale(.86)}60%{transform:scale(1.22)}100%{transform:scale(1)}}
+@keyframes cntBump{0%{transform:scale(1)}30%{transform:scale(.7)}60%{transform:scale(1.4)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.fly-ghost{display:none!important}}
+
 /* ---------- page headings for tabs ---------- */
 .ph1{padding:22px 20px 4px}
 .ph1 h1{font-size:26px;font-weight:600}
@@ -692,6 +704,54 @@ function moveIndicator(animate) {
   main.style.transform = `translateX(${targetLeft}px)`;
   indLeft = targetLeft;
 }
+
+/* ---------- add-to-cart flight animation ---------- */
+function bumpCart() {
+  const cartBtn = document.querySelector('.nav button[data-tab="cart"]'), cnt = $('#cnt');
+  [cartBtn, cnt].forEach(el => {
+    if (!el) return;
+    el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump');
+  });
+}
+function flyToCart(originEl, colorHex, visualHTML) {
+  const cartBtn = document.querySelector('.nav button[data-tab="cart"]');
+  if (!originEl || !cartBtn) { bumpCart(); return; }
+  const sr = originEl.getBoundingClientRect(), er = cartBtn.getBoundingClientRect();
+  const size = Math.max(28, Math.min(sr.width, sr.height, 60));
+  const sx = sr.left + sr.width / 2 - size / 2, sy = sr.top + sr.height / 2 - size / 2;
+  const ex = er.left + er.width / 2 - size / 2, ey = er.top + er.height / 2 - size / 2;
+
+  const ghost = document.createElement('div');
+  ghost.className = 'fly-ghost';
+  ghost.style.width = ghost.style.height = size + 'px';
+  ghost.style.left = sx + 'px'; ghost.style.top = sy + 'px';
+  if (colorHex) ghost.style.setProperty('--c', colorHex);
+  ghost.innerHTML = visualHTML || `<i class="ti ti-pill"></i>`;
+  document.body.appendChild(ghost);
+
+  const dx = ex - sx, dy = ey - sy;
+  const arcHeight = -Math.max(90, Math.abs(dy) * .65); // how high it hops before dropping into the cart
+  const steps = 14, kf = [];
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const x = dx * t;
+    const y = dy * t + arcHeight * 4 * t * (1 - t); // linear travel + parabolic arc
+    const scale = 1 - 0.82 * t;
+    const opacity = t < .72 ? 1 : 1 - (t - .72) / .28;
+    kf.push({ transform: `translate(${x}px,${y}px) scale(${scale})`, opacity, offset: t });
+  }
+  const anim = ghost.animate(kf, { duration: 620, easing: 'cubic-bezier(.32,.4,.24,1)', fill: 'forwards' });
+  const done = () => { ghost.remove(); bumpCart(); };
+  if (anim.finished && anim.finished.then) anim.finished.then(done).catch(done); else setTimeout(done, 640);
+}
+function animateAddToCart(originEl, p) {
+  if (!originEl) return;
+  if (reduce) { bumpCart(); return; }
+  originEl.classList.remove('added'); void originEl.offsetWidth; originEl.classList.add('added');
+  const img = originEl.querySelector('img');
+  const visual = img ? img.outerHTML : `<i class="ti ti-${(p && p.icon) || 'pill'}"></i>`;
+  flyToCart(originEl, p && p.c, visual);
+}
 function setCat(id, jump) {
   state.cat = id; state.q = ''; $('#q').value = ''; $('#qclr').hidden = true;
   renderCats(); renderGrid();
@@ -797,7 +857,10 @@ $('#app').addEventListener('click', e => {
     case 'add': {
       const p = byId[id]; if (!p) break;
       if (p.rx && !state.rxOk.includes(id)) { openRx(id); break; }
-      setQty(id, 1); toast('أضفنا ' + p.name + ' للسلة'); break;
+      const tileEl = t.closest('.card')?.querySelector('.tile');
+      setQty(id, 1); toast('أضفنا ' + p.name + ' للسلة');
+      animateAddToCart(tileEl, p);
+      break;
     }
     case 'inc': setQty(id, (state.cart[id] || 0) + 1); break;
     case 'dec': setQty(id, (state.cart[id] || 0) - 1); break;
@@ -812,7 +875,12 @@ $('#app').addEventListener('click', e => {
     }
     case 'sinc': sheetQty = Math.min(10, sheetQty + 1); updateSheetQty(); break;
     case 'sdec': sheetQty = Math.max(1, sheetQty - 1); updateSheetQty(); break;
-    case 'sadd': setQty(sheetId, sheetQty); toast('السلة اتحدّثت'); closeSheet(); break;
+    case 'sadd': {
+      const p = byId[sheetId], tileEl = $('#sheet .tile.big');
+      setQty(sheetId, sheetQty); toast('السلة اتحدّثت');
+      animateAddToCart(tileEl, p);
+      closeSheet(); break;
+    }
     case 'rx': openRx(id || null); break;
     case 'rxsend': {
       if (rxFor) {
