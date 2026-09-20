@@ -130,6 +130,15 @@ h1,h2,h3,p{margin:0}
 .nav{position:absolute;inset-inline:12px;bottom:calc(12px + env(safe-area-inset-bottom));height:68px;background:var(--surface);border:1px solid var(--line);border-radius:26px;box-shadow:0 12px 32px -12px rgba(0,0,0,.3);display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:6px;z-index:5}
 .nav-indicator-wrap{position:absolute;inset:6px;z-index:0;pointer-events:none;filter:url(#navGoo)}
 .nav-indicator{position:absolute;top:0;bottom:0;left:0;width:calc(25% - 8px);border-radius:20px;opacity:0;transform:translateX(0);transition:transform .46s cubic-bezier(.2,1.65,.35,1),opacity .2s ease;will-change:transform}
+.nav-indicator-jump{position:absolute;inset:0;border-radius:inherit;transform-origin:center bottom}
+.nav-indicator-jump.jumping{animation:navJump .46s cubic-bezier(.3,.1,.3,1) 1}
+@keyframes navJump{
+  0%{transform:translateY(0) scaleY(1)}
+  16%{transform:translateY(2px) scaleY(.82)}
+  45%{transform:translateY(-15px) scaleY(1.14)}
+  72%{transform:translateY(1px) scaleY(.92)}
+  100%{transform:translateY(0) scaleY(1)}
+}
 .nav-indicator .blob{position:absolute;inset:0;border-radius:inherit;background:var(--mint);transform-origin:center;animation:navBlobFloat 2.6s ease-in-out infinite}
 @keyframes navBlobFloat{0%,100%{transform:scale(1);border-radius:20px}50%{transform:scale(1.04);border-radius:26px 16px 24px 18px/18px 24px 16px 26px}}
 .goo-ghost{position:absolute;top:0;bottom:0;left:0;width:calc(25% - 8px);border-radius:20px;background:var(--mint);transform-origin:center;opacity:1;transition:transform .38s cubic-bezier(.32,0,.68,1),opacity .32s ease .06s}
@@ -257,7 +266,7 @@ h1,h2,h3,p{margin:0}
 .toast{position:absolute;bottom:calc(96px + env(safe-area-inset-bottom));inset-inline:0;margin-inline:auto;width:max-content;max-width:calc(100% - 40px);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:14px;font-size:14px;z-index:30;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;pointer-events:none}
 .toast.show{opacity:1;transform:none}
 
-@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}.goo-ghost{display:none!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}.goo-ghost{display:none!important}}
 </style>
 </head>
 <body>
@@ -368,7 +377,7 @@ h1,h2,h3,p{margin:0}
 
   <nav class="nav" aria-label="التنقل الرئيسي">
     <div class="nav-indicator-wrap" id="navIndicatorWrap" aria-hidden="true">
-      <div class="nav-indicator" id="navIndicator"><span class="blob"></span></div>
+      <div class="nav-indicator" id="navIndicator"><div class="nav-indicator-jump" id="navIndicatorJump"><span class="blob"></span></div></div>
     </div>
     <button data-act="tab" data-tab="home" aria-current="page"><svg class="i" aria-hidden="true"><use href="#i-home"/></svg>الرئيسية</button>
     <button data-act="tab" data-tab="cats"><svg class="i" aria-hidden="true"><use href="#i-grid"/></svg>الأقسام</button>
@@ -671,6 +680,13 @@ function moveIndicator(animate) {
       });
     });
     setTimeout(() => ghost.remove(), 460);
+
+    // restart the vertical hop each time (remove+reflow+add, so repeated
+    // quick taps re-trigger the animation instead of being ignored)
+    const jumpEl = $('#navIndicatorJump');
+    jumpEl.classList.remove('jumping');
+    void jumpEl.offsetWidth;
+    jumpEl.classList.add('jumping');
   }
 
   main.style.transform = `translateX(${targetLeft}px)`;
